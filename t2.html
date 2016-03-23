@@ -102,27 +102,27 @@ function move(){
     switch (direction) {
         case controller.LEFT:
             var obj = document.getElementById("background");
-            obj.style.left = parseInt(obj.style.left) + 50;
+            obj.style.left = parseInt(obj.style.left) + 32;
             var obj = document.getElementById("hero");
-            obj.style.left = parseInt(obj.style.left) - 50;
+            obj.style.left = parseInt(obj.style.left) - 32;
             break;
         case controller.UP:
             var obj = document.getElementById("background");
-            obj.style.top = parseInt(obj.style.top) + 50;
+            obj.style.top = parseInt(obj.style.top) + 32;
             var obj = document.getElementById("hero");
-            obj.style.top = parseInt(obj.style.top) - 50;
+            obj.style.top = parseInt(obj.style.top) - 32;
             break;
         case controller.RIGHT:
             var obj = document.getElementById("background");
-            obj.style.left = parseInt(obj.style.left) - 50;
+            obj.style.left = parseInt(obj.style.left) - 32;
             var obj = document.getElementById("hero");
-            obj.style.left = parseInt(obj.style.left) + 50;
+            obj.style.left = parseInt(obj.style.left) + 32;
             break;
         case controller.DOWN:
             var obj = document.getElementById("background");
-            obj.style.top = parseInt(obj.style.top) - 50;
+            obj.style.top = parseInt(obj.style.top) - 32;
             var obj = document.getElementById("hero");
-            obj.style.top = parseInt(obj.style.top) + 50;
+            obj.style.top = parseInt(obj.style.top) + 32;
             break;
         case controller.NONE:
             stopMove();
@@ -148,9 +148,9 @@ function stopMove() {
 </head>
 <body>
     <div id="viewport">
-        <div id="background" style="left:-100px; top: 0px">
+        <div id="background" style="left:0px; top: 0px">
             <img src="worldmapX2.png" >
-            <img id="hero" src="images/bb.gif" style="left: 100px; top: 0px">
+            <img id="hero" src="images/bb.gif" style="left: 96px; top: 96px">
         </div>
     </div>
 </body>
