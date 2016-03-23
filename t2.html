@@ -66,8 +66,8 @@ document.onkeyup = function(e) {
     if (controller.direction == controller.NONE) {
         if (controller.mask & controller.LEFT && ! (controller.mask & controller.RIGHT)) controller.direction = controller.LEFT;
         else if (controller.mask & controller.RIGHT && ! (controller.mask & controller.LEFT)) controller.direction = controller.RIGHT;
-        else if (controller.mask & controller.TOP && ! (controller.mask & controller.DOWN)) controller.direction = controller.TOP;
-        else if (controller.mask & controller.DOWN && ! (controller.mask & controller.TOP)) controller.direction = controller.DOWN;
+        else if (controller.mask & controller.UP && ! (controller.mask & controller.DOWN)) controller.direction = controller.UP;
+        else if (controller.mask & controller.DOWN && ! (controller.mask & controller.UP)) controller.direction = controller.DOWN;
     }
 };
 document.onkeydown = function(e) {
