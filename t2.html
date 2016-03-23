@@ -1,0 +1,157 @@
+<html>
+<head>
+<style>
+    body {
+        margin: 0px;
+        padding: 0px;
+        width:  100%;
+        height: 100%;
+        overflow: hidden;
+    }
+    #viewport {
+        background-color: blue;
+        height: 200px;
+        width: 300px;
+        left: 100px;
+        top:100px;
+        position: relative;
+        overflow: hidden;
+    }
+    img {
+        position: absolute;
+    }
+    #hero {
+        left:100px;
+        transition: left 267ms, top 267ms;
+        transition-timing-function: linear;
+    }
+    #background {
+        position: absolute;
+        left: -100px;
+        transition: left 267ms, top 267ms;
+        transition-timing-function: linear;
+    }
+</style>
+<script type="text/javascript">
+
+controller = {
+    NONE : 0,
+    UP : 1,
+    DOWN : 2,
+    LEFT : 4,
+    RIGHT : 8,
+    direction : 0,
+    mask : 0
+};
+
+document.onkeyup = function(e) {
+    switch (e.keyCode) {
+        case 37:
+            controller.mask &= 11; 
+            if (controller.direction == controller.LEFT) controller.direction = controller.NONE;
+            break;
+        case 38:
+            controller.mask &= 14; 
+            if (controller.direction == controller.UP) controller.direction = controller.NONE;
+            break;
+        case 39:
+            controller.mask &= 7; 
+            if (controller.direction == controller.RIGHT) controller.direction = controller.NONE;
+            break;
+        case 40:
+            controller.mask &= 13; 
+            if (controller.direction == controller.DOWN) controller.direction = controller.NONE;
+            break;
+    }
+    if (controller.direction == controller.NONE) {
+        if (controller.mask & controller.LEFT && ! (controller.mask & controller.RIGHT)) controller.direction = controller.LEFT;
+        else if (controller.mask & controller.RIGHT && ! (controller.mask & controller.LEFT)) controller.direction = controller.RIGHT;
+        else if (controller.mask & controller.TOP && ! (controller.mask & controller.DOWN)) controller.direction = controller.TOP;
+        else if (controller.mask & controller.DOWN && ! (controller.mask & controller.TOP)) controller.direction = controller.DOWN;
+    }
+};
+document.onkeydown = function(e) {
+    switch (e.keyCode) {
+        case 37:
+            controller.mask |= controller.LEFT;
+            controller.direction = controller.LEFT;
+            startMove();
+            break;
+        case 38:
+            controller.mask |= controller.UP;
+            controller.direction = controller.UP;
+            startMove();
+            break;
+        case 39:
+            controller.mask |= controller.RIGHT;
+            controller.direction = controller.RIGHT;
+            startMove();
+            break;
+        case 40:
+            controller.mask |= controller.DOWN;
+            controller.direction = controller.DOWN;
+            startMove();
+            break;
+    }
+};
+
+function move(){
+    var direction = controller.direction;
+    if (controller.mask ^ controller.LEFT|controller.RIGHT)
+
+    switch (direction) {
+        case controller.LEFT:
+            var obj = document.getElementById("background");
+            obj.style.left = parseInt(obj.style.left) + 50;
+            var obj = document.getElementById("hero");
+            obj.style.left = parseInt(obj.style.left) - 50;
+            break;
+        case controller.UP:
+            var obj = document.getElementById("background");
+            obj.style.top = parseInt(obj.style.top) + 50;
+            var obj = document.getElementById("hero");
+            obj.style.top = parseInt(obj.style.top) - 50;
+            break;
+        case controller.RIGHT:
+            var obj = document.getElementById("background");
+            obj.style.left = parseInt(obj.style.left) - 50;
+            var obj = document.getElementById("hero");
+            obj.style.left = parseInt(obj.style.left) + 50;
+            break;
+        case controller.DOWN:
+            var obj = document.getElementById("background");
+            obj.style.top = parseInt(obj.style.top) - 50;
+            var obj = document.getElementById("hero");
+            obj.style.top = parseInt(obj.style.top) + 50;
+            break;
+        case controller.NONE:
+            stopMove();
+    }
+}
+
+moveTimer = null;
+
+function startMove() {
+    if (!moveTimer) {
+        moveTimer = setInterval(move, 267);
+        move();
+    }
+}
+function stopMove() {
+    if (moveTimer) {
+        clearInterval(moveTimer);
+        moveTimer=null;
+    }
+}
+
+</script>
+</head>
+<body>
+    <div id="viewport">
+        <div id="background" style="left:-100px; top: 0px">
+            <img src="worldmapX2.png" >
+            <img id="hero" src="images/bb.gif" style="left: 100px; top: 0px">
+        </div>
+    </div>
+</body>
+</html>
