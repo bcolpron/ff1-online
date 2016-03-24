@@ -92,7 +92,6 @@ document.onkeydown = function(e) {
 
 function move(){
     var direction = controller.direction;
-    if (controller.mask ^ controller.LEFT|controller.RIGHT)
 
     switch (direction) {
         case controller.LEFT:
@@ -101,6 +100,7 @@ function move(){
             var sprites = $(".character");
             var newVal = parseInt(sprites.get(0).style.left) - 32;
             sprites.each(function(i,e){e.style.left = newVal;});
+            sprites.find(".sprite").hide().eq(6).show();
             break;
         case controller.UP:
             var obj = document.getElementById("background");
@@ -108,6 +108,7 @@ function move(){
             var sprites = $(".character");
             var newVal = parseInt(sprites.get(0).style.top) - 32;
             sprites.each(function(i,e){e.style.top = newVal;});
+            sprites.find(".sprite").hide().eq(5).show();
             break;
         case controller.RIGHT:
             var obj = document.getElementById("background");
@@ -115,6 +116,7 @@ function move(){
             var sprites = $(".character");
             var newVal = parseInt(sprites.get(0).style.left) + 32;
             sprites.each(function(i,e){e.style.left = newVal;});
+            sprites.find(".sprite").hide().eq(7).show();
             break;
         case controller.DOWN:
             var obj = document.getElementById("background");
@@ -122,8 +124,12 @@ function move(){
             var sprites = $(".character");
             var newVal = parseInt(sprites.get(0).style.top) + 32;
             sprites.each(function(i,e){e.style.top = newVal;});
+            sprites.find(".sprite").hide().eq(4).show();
             break;
         case controller.NONE:
+            var sprites = $(".character");
+            var index = sprites.find(".sprite:visible").index();
+            sprites.find(".sprite").hide().eq(index & 3).show();
             stopMove();
     }
 }
@@ -149,14 +155,16 @@ function stopMove() {
     <div id="viewport">
         <div id="background" style="left:0px; top: 0px">
             <img src="worldmapX2.png" >
-            <img class="character" src="images/bb.gif" style="left: 96px; top: 96px">
-            <img class="character" src="images/bbup.gif" style="left: 96px; top: 96px; display: none">
-            <img class="character" src="images/bbleft.gif" style="left: 96px; top: 96px; display: none">
-            <img class="character" src="images/bbright.gif" style="left: 96px; top: 96px; display: none">
-            <img class="character" src="images/bbani.gif" style="left: 96px; top: 96px; display: none">
-            <img class="character" src="images/bbaniup.gif" style="left: 96px; top: 96px; display: none">
-            <img class="character" src="images/bbanileft.gif" style="left: 96px; top: 96px; display: none">
-            <img class="character" src="images/bbaniright.gif" style="left: 96px; top: 96px; display: none">
+            <div class="character" style="left: 96px; top: 96px">
+            <img class="sprite" src="images/bb.gif" style="">
+            <img class="sprite" src="images/bbup.gif" style="display: none">
+            <img class="sprite" src="images/bbleft.gif" style="display: none">
+            <img class="sprite" src="images/bbright.gif" style="display: none">
+            <img class="sprite" src="images/bbani.gif" style="display: none">
+            <img class="sprite" src="images/bbaniup.gif" style="display: none">
+            <img class="sprite" src="images/bbanileft.gif" style="display: none">
+            <img class="sprite" src="images/bbaniright.gif" style="display: none">
+            </div>
         </div>
     </div>
 </body>
