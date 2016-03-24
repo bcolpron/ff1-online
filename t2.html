@@ -98,22 +98,30 @@ function move(){
         case controller.LEFT:
             var obj = document.getElementById("background");
             obj.style.left = parseInt(obj.style.left) + 32;
-            $(".character").css("left", parseInt($(".character").css("left")) - 32);
+            var sprites = $(".character");
+            var newVal = parseInt(sprites.get(0).style.left) - 32;
+            sprites.each(function(i,e){e.style.left = newVal;});
             break;
         case controller.UP:
             var obj = document.getElementById("background");
             obj.style.top = parseInt(obj.style.top) + 32;
-            $(".character").css("top", parseInt($(".character").css("top")) - 32);
+            var sprites = $(".character");
+            var newVal = parseInt(sprites.get(0).style.top) - 32;
+            sprites.each(function(i,e){e.style.top = newVal;});
             break;
         case controller.RIGHT:
             var obj = document.getElementById("background");
             obj.style.left = parseInt(obj.style.left) - 32;
-            $(".character").css("left", parseInt($(".character").css("left")) + 32);
+            var sprites = $(".character");
+            var newVal = parseInt(sprites.get(0).style.left) + 32;
+            sprites.each(function(i,e){e.style.left = newVal;});
             break;
         case controller.DOWN:
             var obj = document.getElementById("background");
             obj.style.top = parseInt(obj.style.top) - 32;
-            $(".character").css("top", parseInt($(".character").css("top")) + 32);
+            var sprites = $(".character");
+            var newVal = parseInt(sprites.get(0).style.top) + 32;
+            sprites.each(function(i,e){e.style.top = newVal;});
             break;
         case controller.NONE:
             stopMove();
