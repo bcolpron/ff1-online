@@ -90,6 +90,39 @@ document.onkeydown = function(e) {
     }
 };
 
+function Character() {
+}
+
+Character.prototype.moveLeft = function() {
+    var sprites = $(".character");
+    var newVal = parseInt(sprites.get(0).style.left) - 32;
+    sprites.each(function(i,e){e.style.left = newVal;});
+    sprites.find(".sprite").hide().eq(6).show();
+};
+
+Character.prototype.moveUp = function() {
+    var sprites = $(".character");
+    var newVal = parseInt(sprites.get(0).style.top) - 32;
+    sprites.each(function(i,e){e.style.top = newVal;});
+    sprites.find(".sprite").hide().eq(5).show();
+};
+
+Character.prototype.moveRight = function() {
+    var sprites = $(".character");
+    var newVal = parseInt(sprites.get(0).style.left) + 32;
+    sprites.each(function(i,e){e.style.left = newVal;});
+    sprites.find(".sprite").hide().eq(7).show();
+};
+
+Character.prototype.moveDown = function() {
+    var sprites = $(".character");
+    var newVal = parseInt(sprites.get(0).style.top) + 32;
+    sprites.each(function(i,e){e.style.top = newVal;});
+    sprites.find(".sprite").hide().eq(4).show();
+};
+
+character = new Character();
+
 function move(){
     var direction = controller.direction;
 
@@ -97,34 +130,22 @@ function move(){
         case controller.LEFT:
             var obj = document.getElementById("background");
             obj.style.left = parseInt(obj.style.left) + 32;
-            var sprites = $(".character");
-            var newVal = parseInt(sprites.get(0).style.left) - 32;
-            sprites.each(function(i,e){e.style.left = newVal;});
-            sprites.find(".sprite").hide().eq(6).show();
+            character.moveLeft();
             break;
         case controller.UP:
             var obj = document.getElementById("background");
             obj.style.top = parseInt(obj.style.top) + 32;
-            var sprites = $(".character");
-            var newVal = parseInt(sprites.get(0).style.top) - 32;
-            sprites.each(function(i,e){e.style.top = newVal;});
-            sprites.find(".sprite").hide().eq(5).show();
+            character.moveUp();
             break;
         case controller.RIGHT:
             var obj = document.getElementById("background");
             obj.style.left = parseInt(obj.style.left) - 32;
-            var sprites = $(".character");
-            var newVal = parseInt(sprites.get(0).style.left) + 32;
-            sprites.each(function(i,e){e.style.left = newVal;});
-            sprites.find(".sprite").hide().eq(7).show();
+            character.moveRight();
             break;
         case controller.DOWN:
             var obj = document.getElementById("background");
             obj.style.top = parseInt(obj.style.top) - 32;
-            var sprites = $(".character");
-            var newVal = parseInt(sprites.get(0).style.top) + 32;
-            sprites.each(function(i,e){e.style.top = newVal;});
-            sprites.find(".sprite").hide().eq(4).show();
+            character.moveDown();
             break;
         case controller.NONE:
             var sprites = $(".character");
@@ -153,17 +174,17 @@ function stopMove() {
 </head>
 <body>
     <div id="viewport">
-        <div id="background" style="left:0px; top: 0px">
+        <div id="background" style="left: -2016px; top: -2016px">
             <img src="worldmapX2.png" >
-            <div class="character" style="left: 96px; top: 96px">
-            <img class="sprite" src="images/bb.gif" style="">
-            <img class="sprite" src="images/bbup.gif" style="display: none">
-            <img class="sprite" src="images/bbleft.gif" style="display: none">
-            <img class="sprite" src="images/bbright.gif" style="display: none">
-            <img class="sprite" src="images/bbani.gif" style="display: none">
-            <img class="sprite" src="images/bbaniup.gif" style="display: none">
-            <img class="sprite" src="images/bbanileft.gif" style="display: none">
-            <img class="sprite" src="images/bbaniright.gif" style="display: none">
+            <div class="character" style="left: 2080px; top: 2080px">
+                <img class="sprite" src="images/bb.gif" style="">
+                <img class="sprite" src="images/bbup.gif" style="display: none">
+                <img class="sprite" src="images/bbleft.gif" style="display: none">
+                <img class="sprite" src="images/bbright.gif" style="display: none">
+                <img class="sprite" src="images/bbani.gif" style="display: none">
+                <img class="sprite" src="images/bbaniup.gif" style="display: none">
+                <img class="sprite" src="images/bbanileft.gif" style="display: none">
+                <img class="sprite" src="images/bbaniright.gif" style="display: none">
             </div>
         </div>
     </div>
