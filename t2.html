@@ -90,9 +90,24 @@ document.onkeydown = function(e) {
     }
 };
 
+function Map() {
+    this.sprites = $("#background");
+    this.setPosition(146,158);
+}
+
+Map.prototype.setPosition = function(x,y) {
+    this.position = {left:x, top:y};   
+    var left = x * 32;
+    var top = y * 32;
+    this.sprites.each(function(i,e){
+        e.style.left = -left;
+        e.style.top = -top;
+    });
+};
+
 function Character() {
     this.sprites = $(".character");
-    this.setPosition(155,167);
+    this.setPosition(153,165);
 }
 
 Character.prototype.setPosition = function(x,y) {
@@ -130,23 +145,15 @@ function move(){
 
     switch (direction) {
         case controller.LEFT:
-            var obj = document.getElementById("background");
-            obj.style.left = parseInt(obj.style.left) + 32;
             character.moveLeft();
             break;
         case controller.UP:
-            var obj = document.getElementById("background");
-            obj.style.top = parseInt(obj.style.top) + 32;
             character.moveUp();
             break;
         case controller.RIGHT:
-            var obj = document.getElementById("background");
-            obj.style.left = parseInt(obj.style.left) - 32;
             character.moveRight();
             break;
         case controller.DOWN:
-            var obj = document.getElementById("background");
-            obj.style.top = parseInt(obj.style.top) - 32;
             character.moveDown();
             break;
         case controller.NONE:
@@ -154,7 +161,10 @@ function move(){
             var index = sprites.find(".sprite:visible").index();
             sprites.find(".sprite").hide().eq(index & 3).show();
             stopMove();
+        default:
+            return;
     }
+    map.setPosition(character.position.left - 7, character.position.top - 7);
 }
 
 moveTimer = null;
@@ -174,6 +184,8 @@ function stopMove() {
 
 $(function(){
     window.character = new Character();
+    window.map = new Map();
+    map.setPosition(character.position.left - 7, character.position.top - 7);
 });
 
 </script>
