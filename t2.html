@@ -11,8 +11,8 @@
     }
     #viewport {
         background-color: blue;
-        height: 384px;
-        width: 640px;
+        height: 480;
+        width: 512;
         position: relative;
         overflow: hidden;
     }
@@ -91,37 +91,39 @@ document.onkeydown = function(e) {
 };
 
 function Character() {
+    this.sprites = $(".character");
+    this.setPosition(155,167);
 }
 
+Character.prototype.setPosition = function(x,y) {
+    this.position = {left:x, top:y};   
+    var left = x * 32;
+    var top = y * 32;
+    this.sprites.each(function(i,e){
+        e.style.left = left;
+        e.style.top = top;
+    });
+};
+
 Character.prototype.moveLeft = function() {
-    var sprites = $(".character");
-    var newVal = parseInt(sprites.get(0).style.left) - 32;
-    sprites.each(function(i,e){e.style.left = newVal;});
-    sprites.find(".sprite").hide().eq(6).show();
+    this.setPosition(this.position.left - 1, this.position.top);
+    this.sprites.find(".sprite").hide().eq(6).show();
 };
 
 Character.prototype.moveUp = function() {
-    var sprites = $(".character");
-    var newVal = parseInt(sprites.get(0).style.top) - 32;
-    sprites.each(function(i,e){e.style.top = newVal;});
-    sprites.find(".sprite").hide().eq(5).show();
+    this.setPosition(this.position.left, this.position.top - 1);
+    this.sprites.find(".sprite").hide().eq(5).show();
 };
 
 Character.prototype.moveRight = function() {
-    var sprites = $(".character");
-    var newVal = parseInt(sprites.get(0).style.left) + 32;
-    sprites.each(function(i,e){e.style.left = newVal;});
-    sprites.find(".sprite").hide().eq(7).show();
+    this.setPosition(this.position.left + 1, this.position.top);
+    this.sprites.find(".sprite").hide().eq(7).show();
 };
 
 Character.prototype.moveDown = function() {
-    var sprites = $(".character");
-    var newVal = parseInt(sprites.get(0).style.top) + 32;
-    sprites.each(function(i,e){e.style.top = newVal;});
-    sprites.find(".sprite").hide().eq(4).show();
+    this.setPosition(this.position.left, this.position.top + 1);
+    this.sprites.find(".sprite").hide().eq(4).show();
 };
-
-character = new Character();
 
 function move(){
     var direction = controller.direction;
@@ -170,13 +172,18 @@ function stopMove() {
     }
 }
 
+$(function(){
+    window.character = new Character();
+});
+
 </script>
 </head>
 <body>
     <div id="viewport">
-        <div id="background" style="left: -2016px; top: -2016px">
+        <div id="background" style="left: -4672; top: -5056">
             <img src="worldmapX2.png" >
-            <div class="character" style="left: 2080px; top: 2080px">
+
+            <div class="character">
                 <img class="sprite" src="images/bb.gif" style="">
                 <img class="sprite" src="images/bbup.gif" style="display: none">
                 <img class="sprite" src="images/bbleft.gif" style="display: none">
