@@ -3,11 +3,11 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
 <style>
     body {
-        margin: 0px;
-        padding: 0px;
+        margin: 50px;
         width:  100%;
         height: 100%;
         overflow: hidden;
+        background-color: black;
     }
     #viewport {
         background-color: blue;
@@ -28,67 +28,6 @@
     }
 </style>
 <script type="text/javascript">
-
-controller = {
-    NONE : 0,
-    UP : 1,
-    DOWN : 2,
-    LEFT : 4,
-    RIGHT : 8,
-    direction : 0,
-    mask : 0
-};
-
-document.onkeyup = function(e) {
-    switch (e.keyCode) {
-        case 37:
-            controller.mask &= 11; 
-            if (controller.direction == controller.LEFT) controller.direction = controller.NONE;
-            break;
-        case 38:
-            controller.mask &= 14; 
-            if (controller.direction == controller.UP) controller.direction = controller.NONE;
-            break;
-        case 39:
-            controller.mask &= 7; 
-            if (controller.direction == controller.RIGHT) controller.direction = controller.NONE;
-            break;
-        case 40:
-            controller.mask &= 13; 
-            if (controller.direction == controller.DOWN) controller.direction = controller.NONE;
-            break;
-    }
-    if (controller.direction == controller.NONE) {
-        if (controller.mask & controller.LEFT && ! (controller.mask & controller.RIGHT)) controller.direction = controller.LEFT;
-        else if (controller.mask & controller.RIGHT && ! (controller.mask & controller.LEFT)) controller.direction = controller.RIGHT;
-        else if (controller.mask & controller.UP && ! (controller.mask & controller.DOWN)) controller.direction = controller.UP;
-        else if (controller.mask & controller.DOWN && ! (controller.mask & controller.UP)) controller.direction = controller.DOWN;
-    }
-};
-document.onkeydown = function(e) {
-    switch (e.keyCode) {
-        case 37:
-            controller.mask |= controller.LEFT;
-            controller.direction = controller.LEFT;
-            startMove();
-            break;
-        case 38:
-            controller.mask |= controller.UP;
-            controller.direction = controller.UP;
-            startMove();
-            break;
-        case 39:
-            controller.mask |= controller.RIGHT;
-            controller.direction = controller.RIGHT;
-            startMove();
-            break;
-        case 40:
-            controller.mask |= controller.DOWN;
-            controller.direction = controller.DOWN;
-            startMove();
-            break;
-    }
-};
 
 function Map() {
     this.sprites = $("#background");
@@ -140,52 +79,129 @@ Character.prototype.moveDown = function() {
     this.sprites.find(".sprite").hide().eq(4).show();
 };
 
-function move(){
-    var direction = controller.direction;
+Character.prototype.stopMoving = function() {
+    var index = this.sprites.find(".sprite:visible").index();
+    this.sprites.find(".sprite").hide().eq(index & 3).show();
+};
 
-    switch (direction) {
-        case controller.LEFT:
-            character.moveLeft();
+function Controller(map, character) {
+    this.map = map;
+    this.character = character;
+    this.mask = 0;
+    this.direction = this.NONE;
+    this.moveTimer = null;
+
+    var that = this;
+    document.onkeyup = function(e) {
+        that.onkeyup(e);
+    };
+    document.onkeydown = function(e) {
+        that.onkeydown(e);
+    };
+};
+
+Controller.prototype.NONE  = 0;
+Controller.prototype.UP    = 1;
+Controller.prototype.DOWN  = 2;
+Controller.prototype.LEFT  = 4;
+Controller.prototype.RIGHT = 8;
+
+Controller.prototype.onkeyup = function(e) {
+    switch (e.keyCode) {
+        case 37:
+            this.mask &= 11; 
+            if (this.direction == this.LEFT) this.direction = this.NONE;
             break;
-        case controller.UP:
-            character.moveUp();
+        case 38:
+            this.mask &= 14; 
+            if (this.direction == this.UP) this.direction = this.NONE;
             break;
-        case controller.RIGHT:
-            character.moveRight();
+        case 39:
+            this.mask &= 7; 
+            if (this.direction == this.RIGHT) this.direction = this.NONE;
             break;
-        case controller.DOWN:
-            character.moveDown();
+        case 40:
+            this.mask &= 13; 
+            if (this.direction == this.DOWN) this.direction = this.NONE;
             break;
-        case controller.NONE:
-            var sprites = $(".character");
-            var index = sprites.find(".sprite:visible").index();
-            sprites.find(".sprite").hide().eq(index & 3).show();
-            stopMove();
+    }
+    if (this.direction == this.NONE) {
+        if (this.mask & this.LEFT && ! (this.mask & this.RIGHT)) this.direction = this.LEFT;
+        else if (this.mask & this.RIGHT && ! (this.mask & this.LEFT)) this.direction = this.RIGHT;
+        else if (this.mask & this.UP && ! (this.mask & this.DOWN)) this.direction = this.UP;
+        else if (this.mask & this.DOWN && ! (this.mask & this.UP)) this.direction = this.DOWN;
+    }
+};
+
+Controller.prototype.onkeydown = function(e) {
+    switch (e.keyCode) {
+        case 37:
+            this.mask |= this.LEFT;
+            this.direction = this.LEFT;
+            this.startMove();
+            break;
+        case 38:
+            this.mask |= this.UP;
+            this.direction = this.UP;
+            this.startMove();
+            break;
+        case 39:
+            this.mask |= this.RIGHT;
+            this.direction = this.RIGHT;
+            this.startMove();
+            break;
+        case 40:
+            this.mask |= this.DOWN;
+            this.direction = this.DOWN;
+            this.startMove();
+            break;
+    }
+};
+
+Controller.prototype.startMove = function() {
+    if (!this.moveTimer) {
+        var that = this;
+        this.moveTimer = setInterval(function() {
+            that.move();
+        }, 267);
+        this.move();
+    }
+}
+Controller.prototype.stopMove = function() {
+    if (this.moveTimer) {
+        clearInterval(this.moveTimer);
+        this.moveTimer=null;
+    }
+}
+
+Controller.prototype.move = function() {
+    switch (this.direction) {
+        case this.LEFT:
+            this.character.moveLeft();
+            break;
+        case this.UP:
+            this.character.moveUp();
+            break;
+        case this.RIGHT:
+            this.character.moveRight();
+            break;
+        case this.DOWN:
+            this.character.moveDown();
+            break;
+        case this.NONE:
+            this.character.stopMoving();
+            this.stopMove();
         default:
             return;
     }
-    map.setPosition(character.position.left - 7, character.position.top - 7);
-}
-
-moveTimer = null;
-
-function startMove() {
-    if (!moveTimer) {
-        moveTimer = setInterval(move, 267);
-        move();
-    }
-}
-function stopMove() {
-    if (moveTimer) {
-        clearInterval(moveTimer);
-        moveTimer=null;
-    }
+    this.map.setPosition(this.character.position.left - 7, this.character.position.top - 7);
 }
 
 $(function(){
     window.character = new Character();
     window.map = new Map();
     map.setPosition(character.position.left - 7, character.position.top - 7);
+    controller = new Controller(map, character); 
 });
 
 </script>
