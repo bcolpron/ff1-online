@@ -1,6 +1,7 @@
 <html>
 <head>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+<script type="text/javascript" src="tiles.js"></script>
 <style>
     body {
         margin: 50px;
@@ -49,7 +50,16 @@ function Character() {
     this.setPosition(153,165);
 }
 
+Character.prototype.getPosition = function() {
+    return {left: this.position.left, top: this.position.top};
+}
+
 Character.prototype.setPosition = function(x,y) {
+    if  (typeof x === "object") {
+        y = x.top;
+        x = x.left;
+    }
+
     this.position = {left:x, top:y};   
     var left = x * 32;
     var top = y * 32;
@@ -60,22 +70,18 @@ Character.prototype.setPosition = function(x,y) {
 };
 
 Character.prototype.moveLeft = function() {
-    this.setPosition(this.position.left - 1, this.position.top);
     this.sprites.find(".sprite").hide().eq(6).show();
 };
 
 Character.prototype.moveUp = function() {
-    this.setPosition(this.position.left, this.position.top - 1);
     this.sprites.find(".sprite").hide().eq(5).show();
 };
 
 Character.prototype.moveRight = function() {
-    this.setPosition(this.position.left + 1, this.position.top);
     this.sprites.find(".sprite").hide().eq(7).show();
 };
 
 Character.prototype.moveDown = function() {
-    this.setPosition(this.position.left, this.position.top + 1);
     this.sprites.find(".sprite").hide().eq(4).show();
 };
 
@@ -175,17 +181,22 @@ Controller.prototype.stopMove = function() {
 }
 
 Controller.prototype.move = function() {
+    var p = this.character.getPosition();
     switch (this.direction) {
         case this.LEFT:
+            p.left--;
             this.character.moveLeft();
             break;
         case this.UP:
+            p.top--;
             this.character.moveUp();
             break;
         case this.RIGHT:
+            p.left++;
             this.character.moveRight();
             break;
         case this.DOWN:
+            p.top++;
             this.character.moveDown();
             break;
         case this.NONE:
@@ -194,6 +205,14 @@ Controller.prototype.move = function() {
         default:
             return;
     }
+    
+    if (tiles[p.left][p.top] == 0) {  // Allowed to walk
+        character.setPosition(p);
+    }
+    else {
+        this.character.stopMoving();
+    }
+        
     this.map.setPosition(this.character.position.left - 7, this.character.position.top - 7);
 }
 
