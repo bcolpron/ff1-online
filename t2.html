@@ -1,6 +1,7 @@
 <html>
 <head>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+<script src="virtualjoystick.js"></script>
 <script type="text/javascript" src="tiles.js"></script>
 <style>
     body {
@@ -104,6 +105,38 @@ function Controller(map, character) {
     document.onkeydown = function(e) {
         that.onkeydown(e);
     };
+    
+    this.joystick = new VirtualJoystick({
+            mouseSupport: true,
+            stationaryBase: true,
+            baseX: 420,
+            baseY: 545,
+            limitStickTravel: true,
+            stickRadius: 50
+        });
+        
+    var self = this;
+    function foo()
+    { 
+        if (self.joystick.left()) {
+            self.mask = self.direction = self.LEFT;
+        } else if (self.joystick.right()) {
+            self.mask = self.direction = self.RIGHT;
+        } else if (self.joystick.up()) {
+            self.mask = self.direction = self.UP;
+        } else if (self.joystick.down()) {
+            self.mask = self.direction = self.DOWN;
+        } else if (self.mask) {
+            self.mask = self.direction = 0;
+        }
+        
+        if (self.mask) {
+            self.startMove();
+        }
+        console.log(self.mask);
+    }
+    
+    setInterval(foo, 250);
 };
 
 Controller.prototype.NONE  = 0;
@@ -221,6 +254,17 @@ $(function(){
     window.map = new Map();
     map.setPosition(character.position.left - 7, character.position.top - 7);
     controller = new Controller(map, character); 
+    
+    
+    var joystick = new VirtualJoystick({
+            mouseSupport: true,
+            stationaryBase: true,
+            baseX: 420,
+            baseY: 545,
+            limitStickTravel: true,
+            stickRadius: 50
+        });
+        
 });
 
 </script>
