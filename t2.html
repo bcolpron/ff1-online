@@ -116,21 +116,27 @@ function Controller(map, character) {
         });
         
     var self = this;
+    var joystickMove = false;
     function foo()
     { 
         if (self.joystick.left()) {
             self.mask = self.direction = self.LEFT;
+            joystickMove = true;
         } else if (self.joystick.right()) {
             self.mask = self.direction = self.RIGHT;
+            joystickMove = true;
         } else if (self.joystick.up()) {
             self.mask = self.direction = self.UP;
+            joystickMove = true;
         } else if (self.joystick.down()) {
             self.mask = self.direction = self.DOWN;
-        } else if (self.mask) {
+            joystickMove = true;
+        } else if (joystickMove) {
             self.mask = self.direction = self.NONE;
+            joystickMove = false;
         }
         
-        if (self.mask) {
+        if (joystickMove && self.mask) {
             self.startMove();
         }
     }
