@@ -244,6 +244,7 @@ Controller.prototype.move = function() {
             return;
     }
     
+    console.log(p.left + " " + p.top);
     if (tiles[p.left][p.top] == 0) {  // Allowed to walk
         character.setPosition(p);
     }
