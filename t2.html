@@ -127,13 +127,12 @@ function Controller(map, character) {
         } else if (self.joystick.down()) {
             self.mask = self.direction = self.DOWN;
         } else if (self.mask) {
-            self.mask = self.direction = 0;
+            self.mask = self.direction = self.NONE;
         }
         
         if (self.mask) {
             self.startMove();
         }
-        console.log(self.mask);
     }
     
     setInterval(foo, 250);
