@@ -109,8 +109,8 @@ function Controller(map, character) {
     this.joystick = new VirtualJoystick({
             mouseSupport: true,
             stationaryBase: true,
-            baseX: 420,
-            baseY: 545,
+            baseX: 630,
+            baseY: 370,
             limitStickTravel: true,
             stickRadius: 50
         });
@@ -260,17 +260,6 @@ $(function(){
     window.map = new Map();
     map.setPosition(character.position.left - 7, character.position.top - 7);
     controller = new Controller(map, character); 
-    
-    
-    var joystick = new VirtualJoystick({
-            mouseSupport: true,
-            stationaryBase: true,
-            baseX: 420,
-            baseY: 545,
-            limitStickTravel: true,
-            stickRadius: 50
-        });
-        
 });
 
 </script>
