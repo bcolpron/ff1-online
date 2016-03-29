@@ -38,8 +38,8 @@ function Map() {
 
 Map.prototype.setPosition = function(x,y) {
     this.position = {left:x, top:y};   
-    var left = x * 32 - 9*16*32;
-    var top = y * 32 - 10*16*32;
+    var left = x * 32;
+    var top = y * 32;
     this.sprites.each(function(i,e){
         e.style.left = -left;
         e.style.top = -top;
@@ -62,8 +62,8 @@ Character.prototype.setPosition = function(x,y) {
     }
 
     this.position = {left:x, top:y};   
-    var left = x * 32 - 9*16*32;
-    var top = y * 32- 10*16*32;
+    var left = x * 32;
+    var top = y * 32;
     this.sprites.each(function(i,e){
         e.style.left = left;
         e.style.top = top;
@@ -278,7 +278,7 @@ $(function(){
 <body>
     <div id="viewport">
         <div id="background" style="left: -4672; top: -5056">
-            <img src="t.png">
+            <img src="t.png" style="position: absolute; left: 4608px; top: 5120px">
 
             <div class="character">
                 <img class="sprite" src="images/bb.gif" style="">
