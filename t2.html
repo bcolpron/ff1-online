@@ -47,19 +47,10 @@ Map.prototype.setPosition = function(x,y) {
 };
 
 function Character(area, class_, x, y, direction) {
-    this.setClass(class_);
-    var html = '<div class="character">\
-                <img class="sprite" src="images/' + this.class_ + '.gif" style="">\
-                <img class="sprite" src="images/' + this.class_ + 'up.gif" style="display: none">\
-                <img class="sprite" src="images/' + this.class_ + 'left.gif" style="display: none">\
-                <img class="sprite" src="images/' + this.class_ + 'right.gif" style="display: none">\
-                <img class="sprite" src="images/' + this.class_ + 'ani.gif" style="display: none">\
-                <img class="sprite" src="images/' + this.class_ + 'aniup.gif" style="display: none">\
-                <img class="sprite" src="images/' + this.class_ + 'anileft.gif" style="display: none">\
-                <img class="sprite" src="images/' + this.class_ + 'aniright.gif" style="display: none">\
-            </div>';
-    this.sprites = $(html);
+    this.class_ = null;
+    this.sprites = $('<div class="character"/>');
     $(area).append(this.sprites);
+    this.setClass(class_);
     this.setPosition(x,y);
     this.setDirection(direction || 0);
 }
@@ -71,13 +62,29 @@ Character.prototype.RIGHT  = 3;
 Character.prototype.ANIM    = 4;
 
 Character.prototype.setClass = function(class_) {
+    if (this.class_ === class_) {
+        return;
+    }
+    
     if (class_ != "fi" && class_ != "bb" && class_ != "th" && class_ != "wm" && 
         class_ != "bm" && class_ != "rm" && class_ != "kn" && class_ != "ma" &&
         class_ != "ni" && class_ != "ww" && class_ != "bw" && class_ != "rw") {
          throw new Error("invalid character class");
     }
     this.class_ = class_;
-}
+    
+   var html = '<img class="sprite" src="images/' + this.class_ + '.gif" style="">\
+        <img class="sprite" src="images/' + this.class_ + 'up.gif" style="display: none">\
+        <img class="sprite" src="images/' + this.class_ + 'left.gif" style="display: none">\
+        <img class="sprite" src="images/' + this.class_ + 'right.gif" style="display: none">\
+        <img class="sprite" src="images/' + this.class_ + 'ani.gif" style="display: none">\
+        <img class="sprite" src="images/' + this.class_ + 'aniup.gif" style="display: none">\
+        <img class="sprite" src="images/' + this.class_ + 'anileft.gif" style="display: none">\
+        <img class="sprite" src="images/' + this.class_ + 'aniright.gif" style="display: none">';
+                
+    this.sprites.html(html);
+    this.setDirection(this.direction);
+ }
 
 Character.prototype.getPosition = function() {
     return {left: this.position.left, top: this.position.top};
@@ -122,6 +129,21 @@ Character.prototype.moveDown = function() {
 Character.prototype.stopMoving = function() {
     this.setDirection(this.direction & 0x3);
 };
+
+Character.prototype.remove = function() {
+    this.sprites.remove();
+    this.sprites = null;
+}
+
+Character.prototype.dump = function() {
+    return {left: this.position.left, top: this.position.top, direction: this.direction, class: this.class_};
+}
+
+Character.prototype.update = function(dump) {
+    this.setPosition(dump.left, dump.top);
+    this.setDirection(dump.direction);
+    this.setClass(dump.class);
+}
 
 function Controller(map, character) {
     this.map = map;
