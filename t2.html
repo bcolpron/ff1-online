@@ -25,6 +25,7 @@
         transition-timing-function: linear;
     }
     .mapArea {
+        position: absolute; 
         z-index: -1;
     }
     #background {
@@ -36,9 +37,10 @@
 </style>
 <script type="text/javascript">
 
-function Map(element) {
+function Map(element, x, y) {
+    this.loaded = {};
     this.element = $(element)[0];
-    this.setPosition(146,158);
+    this.setPosition(x,y);
 }
 
 Map.prototype.setPosition = function(x,y) {
@@ -46,10 +48,36 @@ Map.prototype.setPosition = function(x,y) {
         y = x.top;
         x = x.left;
     }
-    this.position = {left:x, top:y};   
+    this.position = {left:x, top:y};
     this.element.style.left = -(x * 32);
     this.element.style.top = -(y * 32);
+    
+    this.showAndAround(Math.floor(x/16), Math.floor(y/16));
+    this.showAndAround(Math.floor(x/16), Math.ceil(y/16));
+    this.showAndAround(Math.ceil(x/16),  Math.floor(y/16));
+    this.showAndAround(Math.ceil(x/16),  Math.ceil(y/16));
 };
+
+Map.prototype.showAndAround = function(x,y) {
+    this.show(x,y);
+    this.show(x,y-1);
+    this.show(x,y+1);
+    this.show(x+1,y);
+    this.show(x+1,y-1);
+    this.show(x+1,y+1);
+    this.show(x-1,y);
+    this.show(x-1,y-1);
+    this.show(x-1,y+1);
+}
+
+Map.prototype.show = function(x,y) {
+    var tag = x + "x" + y;
+    if (!this.loaded[tag]) {
+        html = '<img src="maps/world/' + tag + '.png" style="left: ' + (x*16*32) + 'px; top: ' + (y*15*32) + 'px" class="mapArea">';
+        var img = this.loaded[tag] = $(html)[0];
+        this.element.appendChild(img);
+    }
+}
 
 function Character(area, class_, x, y, direction) {
     this.class_ = null;
@@ -316,7 +344,7 @@ Controller.prototype.move = function() {
 $(function(){
     var area = $("#background");
     window.character = new Character(area, "fi", 153, 165);
-    window.map = new Map(area);
+    window.map = new Map(area, 146,158);
     map.setPosition(character.position.left - 7, character.position.top - 7);
     controller = new Controller(map, character); 
 });
@@ -325,27 +353,7 @@ $(function(){
 </head>
 <body>
     <div id="viewport">
-        <div id="background" style="left: -4672; top: -5056">
-            <img class="mapArea" src="maps/world/8x9.png" style="position: absolute; left: 4096px; top: 4320px">
-            <img class="mapArea" src="maps/world/8x10.png" style="position: absolute; left: 4096px; top: 4800px">
-            <img class="mapArea" src="maps/world/8x11.png" style="position: absolute; left: 4096px; top: 5280px">
-            <img class="mapArea" src="maps/world/8x12.png" style="position: absolute; left: 4096px; top: 5760px">
-
-            <img class="mapArea" src="maps/world/9x9.png" style="position: absolute; left: 4608px; top: 4320px">
-            <img class="mapArea" src="maps/world/9x10.png" style="position: absolute; left: 4608px; top: 4800px">
-            <img class="mapArea" src="maps/world/9x11.png" style="position: absolute; left: 4608px; top: 5280px">
-            <img class="mapArea" src="maps/world/9x12.png" style="position: absolute; left: 4608px; top: 5760px">
-            
-            <img class="mapArea" src="maps/world/10x9.png" style="position: absolute; left: 5120px; top: 4320px">
-            <img class="mapArea" src="maps/world/10x10.png" style="position: absolute; left: 5120px; top: 4800px">
-            <img class="mapArea" src="maps/world/10x11.png" style="position: absolute; left: 5120px; top: 5280px">
-            <img class="mapArea" src="maps/world/10x12.png" style="position: absolute; left: 5120px; top: 5760px">
-
-            <img class="mapArea" src="maps/world/11x9.png" style="position: absolute; left: 5632px; top: 4320px">
-            <img class="mapArea" src="maps/world/11x10.png" style="position: absolute; left: 563px; top: 4800px">
-            <img class="mapArea" src="maps/world/11x11.png" style="position: absolute; left: 5632px; top: 5280px">
-            <img class="mapArea" src="maps/world/11x12.png" style="position: absolute; left: 5632px; top: 5760px">
-
+        <div id="background">
         </div>
     </div>
 </body>
