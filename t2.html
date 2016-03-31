@@ -17,16 +17,21 @@
         width: 512;
         position: relative;
         overflow: hidden;
+        z-index: -1000;
     }
     .character {
         position: absolute;
         transition: left 267ms, top 267ms;
         transition-timing-function: linear;
     }
+    .mapArea {
+        z-index: -1;
+    }
     #background {
         position: absolute;
         transition: left 267ms, top 267ms;
         transition-timing-function: linear;
+        z-index: -2;
     }
 </style>
 <script type="text/javascript">
@@ -321,25 +326,25 @@ $(function(){
 <body>
     <div id="viewport">
         <div id="background" style="left: -4672; top: -5056">
-            <img src="maps/world/8x9.png" style="position: absolute; left: 4096px; top: 4320px">
-            <img src="maps/world/8x10.png" style="position: absolute; left: 4096px; top: 4800px">
-            <img src="maps/world/8x11.png" style="position: absolute; left: 4096px; top: 5280px">
-            <img src="maps/world/8x12.png" style="position: absolute; left: 4096px; top: 5760px">
+            <img class="mapArea" src="maps/world/8x9.png" style="position: absolute; left: 4096px; top: 4320px">
+            <img class="mapArea" src="maps/world/8x10.png" style="position: absolute; left: 4096px; top: 4800px">
+            <img class="mapArea" src="maps/world/8x11.png" style="position: absolute; left: 4096px; top: 5280px">
+            <img class="mapArea" src="maps/world/8x12.png" style="position: absolute; left: 4096px; top: 5760px">
 
-            <img src="maps/world/9x9.png" style="position: absolute; left: 4608px; top: 4320px">
-            <img src="maps/world/9x10.png" style="position: absolute; left: 4608px; top: 4800px">
-            <img src="maps/world/9x11.png" style="position: absolute; left: 4608px; top: 5280px">
-            <img src="maps/world/9x12.png" style="position: absolute; left: 4608px; top: 5760px">
+            <img class="mapArea" src="maps/world/9x9.png" style="position: absolute; left: 4608px; top: 4320px">
+            <img class="mapArea" src="maps/world/9x10.png" style="position: absolute; left: 4608px; top: 4800px">
+            <img class="mapArea" src="maps/world/9x11.png" style="position: absolute; left: 4608px; top: 5280px">
+            <img class="mapArea" src="maps/world/9x12.png" style="position: absolute; left: 4608px; top: 5760px">
             
-            <img src="maps/world/10x9.png" style="position: absolute; left: 5120px; top: 4320px">
-            <img src="maps/world/10x10.png" style="position: absolute; left: 5120px; top: 4800px">
-            <img src="maps/world/10x11.png" style="position: absolute; left: 5120px; top: 5280px">
-            <img src="maps/world/10x12.png" style="position: absolute; left: 5120px; top: 5760px">
+            <img class="mapArea" src="maps/world/10x9.png" style="position: absolute; left: 5120px; top: 4320px">
+            <img class="mapArea" src="maps/world/10x10.png" style="position: absolute; left: 5120px; top: 4800px">
+            <img class="mapArea" src="maps/world/10x11.png" style="position: absolute; left: 5120px; top: 5280px">
+            <img class="mapArea" src="maps/world/10x12.png" style="position: absolute; left: 5120px; top: 5760px">
 
-            <img src="maps/world/11x9.png" style="position: absolute; left: 5632px; top: 4320px">
-            <img src="maps/world/11x10.png" style="position: absolute; left: 563px; top: 4800px">
-            <img src="maps/world/11x11.png" style="position: absolute; left: 5632px; top: 5280px">
-            <img src="maps/world/11x12.png" style="position: absolute; left: 5632px; top: 5760px">
+            <img class="mapArea" src="maps/world/11x9.png" style="position: absolute; left: 5632px; top: 4320px">
+            <img class="mapArea" src="maps/world/11x10.png" style="position: absolute; left: 563px; top: 4800px">
+            <img class="mapArea" src="maps/world/11x11.png" style="position: absolute; left: 5632px; top: 5280px">
+            <img class="mapArea" src="maps/world/11x12.png" style="position: absolute; left: 5632px; top: 5760px">
 
         </div>
     </div>
