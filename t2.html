@@ -51,23 +51,24 @@ Map.prototype.setPosition = function(x,y) {
     this.position = {left:x, top:y};
     this.element.style.left = -(x * 32);
     this.element.style.top = -(y * 32);
-    
-    this.showAndAround(Math.floor(x/16), Math.floor(y/16));
-    this.showAndAround(Math.floor(x/16), Math.ceil(y/16));
-    this.showAndAround(Math.ceil(x/16),  Math.floor(y/16));
-    this.showAndAround(Math.ceil(x/16),  Math.ceil(y/16));
+
+    this.showAreaAndAround(Math.floor(x/16),Math.floor(y/15));
 };
 
-Map.prototype.showAndAround = function(x,y) {
+Map.prototype.showAreaAndAround = function(x,y) {
+    this.show(x-1,y);
+    this.show(x-1,y-1);
+    this.show(x-1,y+2);
     this.show(x,y);
     this.show(x,y-1);
     this.show(x,y+1);
     this.show(x+1,y);
     this.show(x+1,y-1);
     this.show(x+1,y+1);
-    this.show(x-1,y);
-    this.show(x-1,y-1);
-    this.show(x-1,y+1);
+    this.show(x+1,y+2);
+    this.show(x+2,y);
+    this.show(x+2,y-1);
+    this.show(x+2,y+1);
 }
 
 Map.prototype.show = function(x,y) {
