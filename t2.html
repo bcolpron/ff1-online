@@ -1,8 +1,8 @@
 <html>
 <head>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
-<script type="text/javascript" src="https://rawgit.com/bcolpron/ff1-online/master/virtualjoystick.js"></script>
-<script type="text/javascript" src="https://rawgit.com/bcolpron/ff1-online/master/tiles.js"></script>
+<script type="text/javascript" src="virtualjoystick.js"></script>
+<script type="text/javascript" src="tiles.js"></script>
 <style>
     body {
         margin: 50px;
@@ -31,24 +31,52 @@
 </style>
 <script type="text/javascript">
 
-function Map() {
-    this.sprites = $("#background");
+function Map(element) {
+    this.element = $(element)[0];
     this.setPosition(146,158);
 }
 
 Map.prototype.setPosition = function(x,y) {
+    if  (typeof x === "object") {
+        y = x.top;
+        x = x.left;
+    }
     this.position = {left:x, top:y};   
-    var left = x * 32;
-    var top = y * 32;
-    this.sprites.each(function(i,e){
-        e.style.left = -left;
-        e.style.top = -top;
-    });
+    this.element.style.left = -(x * 32);
+    this.element.style.top = -(y * 32);
 };
 
-function Character() {
-    this.sprites = $(".character");
-    this.setPosition(153,165);
+function Character(area, class_, x, y, direction) {
+    this.setClass(class_);
+    var html = '<div class="character">\
+                <img class="sprite" src="images/' + this.class_ + '.gif" style="">\
+                <img class="sprite" src="images/' + this.class_ + 'up.gif" style="display: none">\
+                <img class="sprite" src="images/' + this.class_ + 'left.gif" style="display: none">\
+                <img class="sprite" src="images/' + this.class_ + 'right.gif" style="display: none">\
+                <img class="sprite" src="images/' + this.class_ + 'ani.gif" style="display: none">\
+                <img class="sprite" src="images/' + this.class_ + 'aniup.gif" style="display: none">\
+                <img class="sprite" src="images/' + this.class_ + 'anileft.gif" style="display: none">\
+                <img class="sprite" src="images/' + this.class_ + 'aniright.gif" style="display: none">\
+            </div>';
+    this.sprites = $(html);
+    $(area).append(this.sprites);
+    this.setPosition(x,y);
+    this.setDirection(direction || 0);
+}
+
+Character.prototype.DOWN = 0;
+Character.prototype.UP       = 1;
+Character.prototype.LEFT    = 2;
+Character.prototype.RIGHT  = 3;
+Character.prototype.ANIM    = 4;
+
+Character.prototype.setClass = function(class_) {
+    if (class_ != "fi" && class_ != "bb" && class_ != "th" && class_ != "wm" && 
+        class_ != "bm" && class_ != "rm" && class_ != "kn" && class_ != "ma" &&
+        class_ != "ni" && class_ != "ww" && class_ != "bw" && class_ != "rw") {
+         throw new Error("invalid character class");
+    }
+    this.class_ = class_;
 }
 
 Character.prototype.getPosition = function() {
@@ -70,25 +98,29 @@ Character.prototype.setPosition = function(x,y) {
     });
 };
 
+Character.prototype.setDirection = function(direction) {
+    this.direction = direction;
+    this.sprites.find(".sprite").hide().eq(direction).show();
+}
+
 Character.prototype.moveLeft = function() {
-    this.sprites.find(".sprite").hide().eq(6).show();
+    this.setDirection(this.LEFT | this.ANIM);
 };
 
 Character.prototype.moveUp = function() {
-    this.sprites.find(".sprite").hide().eq(5).show();
+    this.setDirection(this.UP | this.ANIM);
 };
 
 Character.prototype.moveRight = function() {
-    this.sprites.find(".sprite").hide().eq(7).show();
+    this.setDirection(this.RIGHT | this.ANIM);
 };
 
 Character.prototype.moveDown = function() {
-    this.sprites.find(".sprite").hide().eq(4).show();
+    this.setDirection(this.DOWN | this.ANIM);
 };
 
 Character.prototype.stopMoving = function() {
-    var index = this.sprites.find(".sprite:visible").index();
-    this.sprites.find(".sprite").hide().eq(index & 3).show();
+    this.setDirection(this.direction & 0x3);
 };
 
 function Controller(map, character) {
@@ -244,7 +276,6 @@ Controller.prototype.move = function() {
             return;
     }
     
-    console.log(p.left + " " + p.top);
     if (tiles[p.left][p.top] == 0) {  // Allowed to walk
         character.setPosition(p);
     }
@@ -256,8 +287,9 @@ Controller.prototype.move = function() {
 }
 
 $(function(){
-    window.character = new Character();
-    window.map = new Map();
+    var area = $("#background");
+    window.character = new Character(area, "fi", 153, 165);
+    window.map = new Map(area);
     map.setPosition(character.position.left - 7, character.position.top - 7);
     controller = new Controller(map, character); 
 });
@@ -287,16 +319,6 @@ $(function(){
             <img src="maps/world/11x11.png" style="position: absolute; left: 5632px; top: 5280px">
             <img src="maps/world/11x12.png" style="position: absolute; left: 5632px; top: 5760px">
 
-            <div class="character">
-                <img class="sprite" src="images/fi.gif" style="">
-                <img class="sprite" src="images/fiup.gif" style="display: none">
-                <img class="sprite" src="images/fileft.gif" style="display: none">
-                <img class="sprite" src="images/firight.gif" style="display: none">
-                <img class="sprite" src="images/fiani.gif" style="display: none">
-                <img class="sprite" src="images/fianiup.gif" style="display: none">
-                <img class="sprite" src="images/fianileft.gif" style="display: none">
-                <img class="sprite" src="images/fianiright.gif" style="display: none">
-            </div>
         </div>
     </div>
 </body>
