@@ -4,6 +4,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.7.0/lodash.min.js"></script>
 <script type="text/javascript" src="virtualjoystick.js"></script>
 <script type="text/javascript" src="tiles.js"></script>
+<script type="text/javascript" src="bot.js"></script>
 <style>
     body {
         margin: 50px;
@@ -388,6 +389,7 @@ $(function(){
     window.map = new Map(area, 146,158);
     map.setPosition(character.position.left - 7, character.position.top - 7);
     controller = new Controller(map, character); 
+    startBot();
 });
 
 </script>

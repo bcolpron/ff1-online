@@ -159,8 +159,8 @@ botMoves = [
 ];
 
 function startBot() {
-    character = new Character($('#background'), "wm", 0, 0);
-    i = 0;
+    var character = new Character($('#background'), "wm", 0, 0);
+    var i = 0;
     setInterval(function() {
         character.update(botMoves[i++]);
         if (i >= botMoves.length) i = 0;
