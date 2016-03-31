@@ -1,6 +1,7 @@
 <html>
 <head>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.7.0/lodash.min.js"></script>
 <script type="text/javascript" src="virtualjoystick.js"></script>
 <script type="text/javascript" src="tiles.js"></script>
 <style>
@@ -39,6 +40,7 @@
 
 function Map(element, x, y) {
     this.loaded = {};
+    this.area = null;
     this.element = $(element)[0];
     this.setPosition(x,y);
 }
@@ -52,31 +54,69 @@ Map.prototype.setPosition = function(x,y) {
     this.element.style.left = -(x * 32);
     this.element.style.top = -(y * 32);
 
-    this.showAreaAndAround(Math.floor(x/16),Math.floor(y/15));
+    var newArea = {x: Math.floor(x/16), y:Math.floor(y/15)};
+    if (!_.isEqual(this.area, newArea)) {
+        this.area = newArea;
+        this.showAreaAndAround(this.area.x, this.area.y);
+    }
 };
 
 Map.prototype.showAreaAndAround = function(x,y) {
-    this.show(x-1,y);
     this.show(x-1,y-1);
+    this.show(x-1,y);
+    this.show(x-1,y+1);
     this.show(x-1,y+2);
-    this.show(x,y);
     this.show(x,y-1);
+    this.show(x,y);
     this.show(x,y+1);
-    this.show(x+1,y);
+    this.show(x,y+2);
     this.show(x+1,y-1);
+    this.show(x+1,y);
     this.show(x+1,y+1);
     this.show(x+1,y+2);
-    this.show(x+2,y);
     this.show(x+2,y-1);
+    this.show(x+2,y);
     this.show(x+2,y+1);
+    this.show(x+2,y+2);
+    
+    // cleanup
+    this.unshow(x-2, y-2);
+    this.unshow(x-2, y-1);
+    this.unshow(x-2, y);
+    this.unshow(x-2, y+1);
+    this.unshow(x-2, y+2);
+    this.unshow(x-1, y-2);
+    this.unshow(x-1, y+3);
+    this.unshow(x, y-2);
+    this.unshow(x, y+3);
+    this.unshow(x+1, y-2);
+    this.unshow(x+1, y+3);
+    this.unshow(x+2, y-2);
+    this.unshow(x+2, y+3);
+    this.unshow(x+3, y-2);
+    this.unshow(x+3, y-1);
+    this.unshow(x+3, y);
+    this.unshow(x+3, y+1);
+    this.unshow(x+3, y+2);
+    this.unshow(x+3, y+3);
 }
 
 Map.prototype.show = function(x,y) {
     var tag = x + "x" + y;
     if (!this.loaded[tag]) {
+        console.log("loading map " + tag);
         html = '<img src="maps/world/' + tag + '.png" style="left: ' + (x*16*32) + 'px; top: ' + (y*15*32) + 'px" class="mapArea">';
         var img = this.loaded[tag] = $(html)[0];
         this.element.appendChild(img);
+    }
+}
+
+Map.prototype.unshow = function(x,y) {
+    var tag = x + "x" + y;
+    if (this.loaded[tag]) {
+        console.log("releading map " + tag);
+        $(this.loaded[tag]).remove();
+        delete this.loaded[tag];
     }
 }
 
