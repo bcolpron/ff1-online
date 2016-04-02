@@ -1,5 +1,6 @@
 <html>
 <head>
+<meta name="mobile-web-app-capable" content="yes">
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.7.0/lodash.min.js"></script>
 <script type="text/javascript" src="tiles.js"></script>
@@ -10,7 +11,15 @@
         height: 100%;
         overflow: hidden;
         background-color: black;
+        text-align:center;
     }
+    .main-panel {
+        margin:auto;
+        vertical-align: middle;
+        width: 679px;
+        height: 480px;
+        display: inline-block;
+        }
     #viewport {
         background-color: blue;
         height: 480;
@@ -421,15 +430,15 @@ Controller.prototype.initJoystick = function(joystick) {
         move(e.originalEvent.touches[0]);
     });
     $(document).on("touchend", function(e) {
+        e.preventDefault();
         if (moving) {
-            e.preventDefault();
             moving = false;
             controller.stop();
         }
     });
     $(document).on("touchmove", function(e) {
+        e.preventDefault();
         if (moving) {
-            e.preventDefault();
             move(e.originalEvent.touches[0]);
          }
     });
@@ -437,6 +446,11 @@ Controller.prototype.initJoystick = function(joystick) {
 
 
 $(function(){
+    $(window).resize(function() {
+        $(".main-panel").css("margin-top", ($("body").height() - $(".main-panel").height())/2);
+    });
+    $(".main-panel").css("margin-top", ($("body").height() - $(".main-panel").height())/2);
+
     var area = $("#background");
     window.character = new Character(area, "fi", 153, 165);
     window.map = new Map(area, 146,158);
@@ -447,14 +461,16 @@ $(function(){
 </script>
 </head>
 <body>
-    <div class="left-border">
-        <img src="images/title.png">
-        <div class="joystick">
-            <img src="images/arrows.png">
+    <div class="main-panel">
+        <div class="left-border">
+            <img src="images/title.png">
+            <div class="joystick">
+                <img src="images/arrows.png">
+            </div>
         </div>
-    </div>
-    <div id="viewport">
-        <div id="background">
+        <div id="viewport">
+            <div id="background">
+            </div>
         </div>
     </div>
     <div id="message" style="background-color: white;"/>
