@@ -252,6 +252,10 @@ function Controller(map, character) {
     document.onkeydown = function(e) {
         that.onkeydown(e);
     };
+    
+    this.initJoystick($(".joystick"));
+    
+    map.setPosition(character.position.left - 7, character.position.top - 7);
 };
 
 Controller.prototype.NONE  = 0;
@@ -384,7 +388,8 @@ Controller.prototype.move = function() {
     this.map.setPosition(this.character.position.left - 7, this.character.position.top - 7);
 }
 
-function initJoystick(joystick, controller) {
+Controller.prototype.initJoystick = function(joystick) {
+    var controller = this;
     var moving = false;
     function move(e) {
         if (moving) {
@@ -403,7 +408,6 @@ function initJoystick(joystick, controller) {
     });
     $(document).on("mouseup", function(e) {
         e.preventDefault();
-        console.log("stopped");
         moving = false;
         controller.stop();
     });
@@ -431,13 +435,12 @@ function initJoystick(joystick, controller) {
     });
 }
 
+
 $(function(){
     var area = $("#background");
     window.character = new Character(area, "fi", 153, 165);
     window.map = new Map(area, 146,158);
-    map.setPosition(character.position.left - 7, character.position.top - 7);
     window.controller = new Controller(map, character); 
-    initJoystick($(".joystick"), controller);
     startBot();
 });
 
