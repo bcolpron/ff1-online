@@ -7,18 +7,15 @@
 <script type="text/javascript" src="bot.js"></script>
 <style>
     body {
-        width:  100%;
         height: 100%;
         overflow: hidden;
         background-color: black;
-        text-align:center;
     }
     .main-panel {
         margin:auto;
-        vertical-align: middle;
-        width: 679px;
+        width: 672px;
         height: 480px;
-        display: inline-block;
+        display: flex;
         }
     #viewport {
         background-color: blue;
@@ -26,7 +23,6 @@
         width: 512;
         position: relative;
         overflow: hidden;
-        display: inline-block;
         z-index: -1000;
     }
     .character {
@@ -52,8 +48,6 @@
     }
     .left-border {
         position: relative;
-        height: 480;
-        display: inline-block;
         margin-right: 10px;
     }
     .left-border img {
@@ -446,15 +440,17 @@ Controller.prototype.initJoystick = function(joystick) {
 
 
 $(function(){
-    $(window).resize(function() {
-        $(".main-panel").css("margin-top", ($("body").height() - $(".main-panel").height())/2);
-    });
-    $(".main-panel").css("margin-top", ($("body").height() - $(".main-panel").height())/2);
+    function adjust() {
+        $("body").css("margin-top", ($("body").height() - $(".main-panel").height())/2);
+    }
+    $(window).resize(adjust);
+    adjust();
 
     var area = $("#background");
     window.character = new Character(area, "fi", 153, 165);
     window.map = new Map(area, 146,158);
     window.controller = new Controller(map, character); 
+    
     startBot();
 });
 
