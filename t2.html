@@ -2,12 +2,10 @@
 <head>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.7.0/lodash.min.js"></script>
-<script type="text/javascript" src="virtualjoystick.js"></script>
 <script type="text/javascript" src="tiles.js"></script>
 <script type="text/javascript" src="bot.js"></script>
 <style>
     body {
-        margin: 50px;
         width:  100%;
         height: 100%;
         overflow: hidden;
@@ -19,6 +17,7 @@
         width: 512;
         position: relative;
         overflow: hidden;
+        display: inline-block;
         z-index: -1000;
     }
     .character {
@@ -35,6 +34,25 @@
         transition: left 267ms, top 267ms;
         transition-timing-function: linear;
         z-index: -2;
+    }
+    .joystick {
+        position: absolute;
+        width: 100%;
+        bottom: 0px;
+        margin-bottom: 30px;
+    }
+    .left-border {
+        position: relative;
+        height: 480;
+        display: inline-block;
+        margin-right: 10px;
+    }
+    .left-border img {
+        display: block;
+        margin: auto;
+    }.left-border img {
+        display: block;
+        margin: auto;
     }
 </style>
 <script type="text/javascript">
@@ -234,43 +252,6 @@ function Controller(map, character) {
     document.onkeydown = function(e) {
         that.onkeydown(e);
     };
-    
-    this.joystick = new VirtualJoystick({
-            mouseSupport: true,
-            stationaryBase: true,
-            baseX: 630,
-            baseY: 370,
-            limitStickTravel: true,
-            stickRadius: 50
-        });
-        
-    var self = this;
-    var joystickMove = false;
-    function foo()
-    { 
-        if (self.joystick.left()) {
-            self.mask = self.direction = self.LEFT;
-            joystickMove = true;
-        } else if (self.joystick.right()) {
-            self.mask = self.direction = self.RIGHT;
-            joystickMove = true;
-        } else if (self.joystick.up()) {
-            self.mask = self.direction = self.UP;
-            joystickMove = true;
-        } else if (self.joystick.down()) {
-            self.mask = self.direction = self.DOWN;
-            joystickMove = true;
-        } else if (joystickMove) {
-            self.mask = self.direction = self.NONE;
-            joystickMove = false;
-        }
-        
-        if (joystickMove && self.mask) {
-            self.startMove();
-        }
-    }
-    
-    setInterval(foo, 250);
 };
 
 Controller.prototype.NONE  = 0;
@@ -347,6 +328,26 @@ Controller.prototype.stopMove = function() {
     }
 }
 
+Controller.prototype.left = function() {
+    this.direction = this.LEFT;
+    this.startMove();
+}
+Controller.prototype.right = function() {
+    this.direction = this.RIGHT;
+    this.startMove();
+}
+Controller.prototype.up = function() {
+    this.direction = this.UP;
+    this.startMove();
+}
+Controller.prototype.down = function() {
+    this.direction = this.DOWN;
+    this.startMove();
+}
+Controller.prototype.stop = function() {
+    this.direction = this.NONE;
+}
+
 Controller.prototype.move = function() {
     var p = this.character.getPosition();
     switch (this.direction) {
@@ -383,21 +384,76 @@ Controller.prototype.move = function() {
     this.map.setPosition(this.character.position.left - 7, this.character.position.top - 7);
 }
 
+function initJoystick(joystick, controller) {
+    var moving = false;
+    function move(e) {
+        if (moving) {
+            var offset = joystick.offset();
+            var x = e.pageX - offset.left - joystick.width()/2;
+            var y = e.pageY - offset.top - joystick.height()/2;
+            if (Math.abs(x)>Math.abs(y)) if (x > 0) controller.right(); else controller.left();
+            else if (y > 0) controller.down(); else controller.up();
+        }
+    }
+    
+    joystick.on("mousedown", function(e) {
+        e.preventDefault();
+        moving = true;
+        move(e);
+    });
+    $(document).on("mouseup", function(e) {
+        e.preventDefault();
+        console.log("stopped");
+        moving = false;
+        controller.stop();
+    });
+    $(document).on("mousemove", function(e) {
+        e.preventDefault();
+        move(e);
+    });
+    joystick.on("touchstart", function(e) {
+        e.preventDefault();
+        moving = true;
+        move(e.originalEvent.touches[0]);
+    });
+    $(document).on("touchend", function(e) {
+        if (moving) {
+            e.preventDefault();
+            moving = false;
+            controller.stop();
+        }
+    });
+    $(document).on("touchmove", function(e) {
+        if (moving) {
+            e.preventDefault();
+            move(e.originalEvent.touches[0]);
+         }
+    });
+}
+
 $(function(){
     var area = $("#background");
     window.character = new Character(area, "fi", 153, 165);
     window.map = new Map(area, 146,158);
     map.setPosition(character.position.left - 7, character.position.top - 7);
-    controller = new Controller(map, character); 
+    window.controller = new Controller(map, character); 
+    initJoystick($(".joystick"), controller);
     startBot();
 });
 
 </script>
 </head>
 <body>
+    <div class="left-border">
+        <img src="images/title.png">
+        <div class="joystick">
+            <img src="images/arrows.png">
+        </div>
+    </div>
     <div id="viewport">
         <div id="background">
         </div>
     </div>
+    <div id="message" style="background-color: white;"/>
 </body>
 </html>
