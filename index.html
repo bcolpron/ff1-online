@@ -56,9 +56,15 @@
     .left-border img {
         display: block;
         margin: auto;
-    }.left-border img {
+    }
+    .left-border img {
         display: block;
         margin: auto;
+    }
+    .status {
+        margin-top: 200px;
+        color: gray;
+        text-align: center;
     }
 </style>
 <script type="text/javascript">
@@ -441,6 +447,41 @@ Controller.prototype.initJoystick = function(joystick) {
     });
 }
 
+function ServerConnection(url) {
+    this.url = url;
+    this.connect();
+}
+
+ServerConnection.prototype.connect = function() {
+    this.ws = new WebSocket(this.url);
+    $(".status").text("Connecting...");
+
+    this.ws.onopen = $.proxy(this.onopen, this);
+    this.ws.onclose = $.proxy(this.onclose, this);
+    this.ws.onmessage = $.proxy(this.onmessage, this);
+}
+
+ServerConnection.prototype.onopen = function() {
+    console.log("Connected!")
+    $(".status").text("Connected");
+}
+
+ServerConnection.prototype.onmessage = function(e) {
+    console.log("message: " + e.data);
+}
+
+ServerConnection.prototype.send = function(msg) {
+    this.ws.send(msg);
+}
+
+ServerConnection.prototype.onclose = function() {
+    console.log("connection closed. Reconnecting...")
+    $(".status").text("Disconnected");
+    var that = this;
+    setTimeout(function() {
+        that.connect();
+    }, 1000);
+}
 
 $(function(){
     function adjust() {
@@ -455,6 +496,8 @@ $(function(){
     window.controller = new Controller(map, character); 
     
     startBot();
+    
+    ws = new ServerConnection("ws://" + location.host + "/" + location.pathname + "/ws");
 });
 
 </script>
@@ -462,6 +505,7 @@ $(function(){
 <body>
     <div class="main-panel">
         <div class="left-border">
+            <div class="status">Not Connected</div>
             <div class="joystick">
                 <img src="images/arrows.png">
             </div>
