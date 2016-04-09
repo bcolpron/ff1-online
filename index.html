@@ -69,6 +69,16 @@
 </style>
 <script type="text/javascript">
 
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+    s4() + '-' + s4() + s4() + s4();
+}
+
 function Map(element, x, y) {
     this.loaded = {};
     this.area = null;
@@ -250,9 +260,10 @@ Character.prototype.update = function(dump) {
     this.setClass(dump.class);
 }
 
-function Controller(map, character) {
+function Controller(map, character, server) {
     this.map = map;
     this.character = character;
+    this.server = server;
     this.mask = 0;
     this.direction = this.NONE;
     this.moveTimer = null;
@@ -398,6 +409,8 @@ Controller.prototype.move = function() {
     }
         
     this.map.setPosition(this.character.position.left - 7, this.character.position.top - 7);
+    
+    this.server.send({update: this.character.dump()});
 }
 
 Controller.prototype.initJoystick = function(joystick) {
@@ -447,8 +460,9 @@ Controller.prototype.initJoystick = function(joystick) {
     });
 }
 
-function ServerConnection(url) {
+function ServerConnection(url, id) {
     this.url = url;
+    this.id = id;
     this.connect();
 }
 
@@ -470,8 +484,8 @@ ServerConnection.prototype.onmessage = function(e) {
     console.log("message: " + e.data);
 }
 
-ServerConnection.prototype.send = function(msg) {
-    this.ws.send(msg);
+ServerConnection.prototype.send = function(data) {
+    this.ws.send(JSON.stringify({from: this.id, payload: data}));
 }
 
 ServerConnection.prototype.onclose = function() {
@@ -493,11 +507,10 @@ $(function(){
     var area = $("#background");
     window.character = new Character(area, "fi", 153, 165);
     window.map = new Map(area, 146,158);
-    window.controller = new Controller(map, character); 
+    window.ws = new ServerConnection("ws://" + location.host + "/" + location.pathname + "/ws", guid());
+    window.controller = new Controller(map, character, ws); 
     
     startBot();
-    
-    ws = new ServerConnection("ws://" + location.host + "/" + location.pathname + "/ws");
 });
 
 </script>
