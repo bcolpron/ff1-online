@@ -460,9 +460,10 @@ Controller.prototype.initJoystick = function(joystick) {
     });
 }
 
-function ServerConnection(url, id) {
+function ServerConnection(url, id, manager) {
     this.url = url;
     this.id = id;
+    this.manager = manager;
     this.connect();
 }
 
@@ -478,10 +479,13 @@ ServerConnection.prototype.connect = function() {
 ServerConnection.prototype.onopen = function() {
     console.log("Connected!")
     $(".status").text("Connected");
+    this.manager.clear();
 }
 
 ServerConnection.prototype.onmessage = function(e) {
     console.log("message: " + e.data);
+    var data = JSON.parse(e.data);
+    this.manager.addOrUpdate(data.from, data.payload.update);
 }
 
 ServerConnection.prototype.send = function(data) {
@@ -497,6 +501,26 @@ ServerConnection.prototype.onclose = function() {
     }, 1000);
 }
 
+function CharacterManager(area) {
+    this.area = area;
+    this.characters = {};
+}
+
+CharacterManager.prototype.addOrUpdate = function(id, data) {
+    var found = this.characters[id];
+    if (!found) {
+        this.characters[id] = new Character(this.area, data.class, data.left, data.top, data.direction);
+    } else {
+        found.update(data);
+    }    
+}
+
+CharacterManager.prototype.clear = function() {
+    for (i in this.characters) {
+        this.characters[i].remove();
+    }
+}
+
 $(function(){
     function adjust() {
         $("body").css("margin-top", ($("body").height() - $(".main-panel").height())/2);
@@ -507,7 +531,8 @@ $(function(){
     var area = $("#background");
     window.character = new Character(area, "fi", 153, 165);
     window.map = new Map(area, 146,158);
-    window.ws = new ServerConnection("ws://" + location.host + "/" + location.pathname + "/ws", guid());
+    window.manager = new CharacterManager(area);
+    window.ws = new ServerConnection("ws://" + location.host + "/" + location.pathname + "/ws", guid(), manager);
     window.controller = new Controller(map, character, ws); 
     
     startBot();
