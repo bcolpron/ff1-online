@@ -532,7 +532,11 @@ $(function(){
     window.character = new Character(area, "fi", 153, 165);
     window.map = new Map(area, 146,158);
     window.manager = new CharacterManager(area);
-    window.ws = new ServerConnection("ws://" + location.host + "/" + location.pathname + "/ws", guid(), manager);
+    
+    
+    var protocol = location.protocol === "https:" ? "wss" : "ws";
+    window.ws = new ServerConnection(protocol + "://" + location.host + "/" + location.pathname + "/ws", guid(), manager);
+
     window.controller = new Controller(map, character, ws); 
     
     startBot();
