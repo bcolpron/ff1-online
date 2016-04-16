@@ -175,15 +175,14 @@ Character.prototype.UP       = 1;
 Character.prototype.LEFT    = 2;
 Character.prototype.RIGHT  = 3;
 Character.prototype.ANIM    = 4;
+Character.prototype.classes = ["fi", "bb", "th", "wm", "bm", "rm", "kn", "ma", "ni", "ww", "bw", "rw"];
 
 Character.prototype.setClass = function(class_) {
     if (this.class_ === class_) {
         return;
     }
     
-    if (class_ != "fi" && class_ != "bb" && class_ != "th" && class_ != "wm" && 
-        class_ != "bm" && class_ != "rm" && class_ != "kn" && class_ != "ma" &&
-        class_ != "ni" && class_ != "ww" && class_ != "bw" && class_ != "rw") {
+    if (!this.classes.find(function(e) { return e === class_; })) {
          throw new Error("invalid character class");
     }
     this.class_ = class_;
@@ -529,7 +528,10 @@ $(function(){
     adjust();
 
     var area = $("#background");
-    window.character = new Character(area, "fi", 153, 165);
+    
+    var charClass = Character.prototype.classes[Math.floor(Math.random() * Character.prototype.classes.length)];
+    window.character = new Character(area, charClass, 153, 165);
+    
     window.map = new Map(area, 146,158);
     window.manager = new CharacterManager(area);
     
