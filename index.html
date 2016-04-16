@@ -584,17 +584,17 @@ $(function(){
 
     window.controller = new Controller(map, character, ws); 
     
-    $(".character-picker-button").click(function(e) {
+    $(".character-picker-button").on("click touchstart", "", function(e) {
         $(".dialog-background").show();
         $(".character-picker").show();
     });
     
-    $(".dialog-background").click(function() {
+    $(".dialog-background").on("click touchstart", "", function() {
         $(".dialog-background").hide();
         $(".character-picker").hide();
     });
     
-    $(".character-button").click(function(e) {
+    $(".character-button").on("click touchstart", "", function(e) {
         $(".dialog-background").hide();
         $(".character-picker").hide();
         character.setClass($(e.target).data().class);
