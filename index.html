@@ -15,12 +15,12 @@
         position: relative;
         margin:auto;
         width: 832px;
-        height: 480px;
+        height: 448px;
         display: flex;
         }
     #viewport {
         background-color: blue;
-        height: 480;
+        height: 448px;
         width: 512;
         position: relative;
         overflow: hidden;
@@ -136,7 +136,7 @@ Map.prototype.setPosition = function(x,y) {
     }
     this.position = {left:x, top:y};
     this.element.style.left = -(x * 32);
-    this.element.style.top = -(y * 32);
+    this.element.style.top = -(y * 32) - 16;
 
     var newArea = {x: Math.floor(x/16), y:Math.floor(y/15)};
     if (!_.isEqual(this.area, newArea)) {
