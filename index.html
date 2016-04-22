@@ -506,6 +506,7 @@ function ServerConnection(url, id, manager) {
     this.url = url;
     this.id = id;
     this.manager = manager;
+    this._onConnectCallback = function() {};
     this.connect();
 }
 
@@ -513,18 +514,27 @@ ServerConnection.prototype.connect = function() {
     this.ws = new WebSocket(this.url);
     $(".status").text("Connecting...");
 
-    this.ws.onopen = $.proxy(this.onopen, this);
-    this.ws.onclose = $.proxy(this.onclose, this);
-    this.ws.onmessage = $.proxy(this.onmessage, this);
+    this.ws.onopen = $.proxy(this._onopen, this);
+    this.ws.onclose = $.proxy(this._onclose, this);
+    this.ws.onerror = function() {alert("ws error");};
+    this.ws.onmessage = $.proxy(this._onmessage, this);
 }
 
-ServerConnection.prototype.onopen = function() {
+ServerConnection.prototype._onopen = function() {
     console.log("Connected!")
     $(".status").text("Connected");
     this.manager.clear();
+    this._onConnectCallback();
 }
 
-ServerConnection.prototype.onmessage = function(e) {
+ServerConnection.prototype.onConnect = function(callback) {
+    this._onConnectCallback = callback;
+    if (this.ws.readyState === this.ws.OPEN) {
+        callback();
+    }
+}
+
+ServerConnection.prototype._onmessage = function(e) {
     console.log("message: " + e.data);
     var data = JSON.parse(e.data);
     this.manager.addOrUpdate(data.from, data.payload.update);
@@ -534,7 +544,7 @@ ServerConnection.prototype.send = function(data) {
     this.ws.send(JSON.stringify({from: this.id, payload: data}));
 }
 
-ServerConnection.prototype.onclose = function() {
+ServerConnection.prototype._onclose = function() {
     console.log("connection closed. Reconnecting...")
     $(".status").text("Disconnected");
     var that = this;
@@ -561,6 +571,26 @@ CharacterManager.prototype.clear = function() {
     for (i in this.characters) {
         this.characters[i].remove();
     }
+    this.characters = {};
+}
+
+function initCharacterPicker(character, server) {
+    $(".character-picker-button").on("click touchstart", "", function(e) {
+        $(".dialog-background").show();
+        $(".character-picker").show();
+    });
+    
+    $(".dialog-background").on("click touchstart", "", function() {
+        $(".dialog-background").hide();
+        $(".character-picker").hide();
+    });
+    
+    $(".character-button").on("click touchstart", "", function(e) {
+        $(".dialog-background").hide();
+        $(".character-picker").hide();
+        character.setClass($(e.target).data().class);
+        server.send({update: character.dump()});
+    });
 }
 
 $(function(){
@@ -578,27 +608,16 @@ $(function(){
     window.map = new Map(area, 146,158);
     window.manager = new CharacterManager(area);
     
-    
     var protocol = location.protocol === "https:" ? "wss" : "ws";
     window.ws = new ServerConnection(protocol + "://" + location.host + "/" + location.pathname + "/ws", guid(), manager);
+    
+    ws.onConnect(function() {
+        ws.send({update: character.dump()});
+    });
 
     window.controller = new Controller(map, character, ws); 
     
-    $(".character-picker-button").on("click touchstart", "", function(e) {
-        $(".dialog-background").show();
-        $(".character-picker").show();
-    });
-    
-    $(".dialog-background").on("click touchstart", "", function() {
-        $(".dialog-background").hide();
-        $(".character-picker").hide();
-    });
-    
-    $(".character-button").on("click touchstart", "", function(e) {
-        $(".dialog-background").hide();
-        $(".character-picker").hide();
-        character.setClass($(e.target).data().class);
-    });
+    initCharacterPicker(character, ws);
     
     startBot();
 });
