@@ -158,12 +158,14 @@ botMoves = [
     {"left":153,"top":159,"direction":1,"class":"wm"}
 ];
 
-function startBot() {
+function startBot(manager) {
     var character = new Character($('#background'), "wm", 0, 0);
     var i = 0;
     setInterval(function() {
-        character.update(botMoves[i++]);
-        if (i >= botMoves.length) i = 0;
+        if (manager.isFree(botMoves[i].left, botMoves[i].top)) {
+            character.update(botMoves[i++]);
+            if (i >= botMoves.length) i = 0;
+        }
     }, 400);
 }
 

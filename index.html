@@ -553,9 +553,10 @@ ServerConnection.prototype._onclose = function() {
     }, 1000);
 }
 
-function CharacterManager(area) {
+function CharacterManager(area, player) {
     this.area = area;
     this.characters = {};
+    this.playerCharacter = player;
 }
 
 CharacterManager.prototype.addOrUpdate = function(id, data) {
@@ -572,6 +573,17 @@ CharacterManager.prototype.clear = function() {
         this.characters[i].remove();
     }
     this.characters = {};
+}
+
+CharacterManager.prototype.isFree = function(x, y) {
+    if (this.playerCharacter.position.left == x && this.playerCharacter.position.top == y) return false;
+
+    for (i in this.characters) {
+        if (this.characters[i].position.left == x && this.characters[i].position.top == y) {
+            return false;
+            }
+    }
+    return true;
 }
 
 function initCharacterPicker(character, server) {
@@ -606,7 +618,7 @@ $(function(){
     window.character = new Character(area, charClass, 153, 165);
     
     window.map = new Map(area, 146,158);
-    window.manager = new CharacterManager(area);
+    window.manager = new CharacterManager(area, character);
     
     var protocol = location.protocol === "https:" ? "wss" : "ws";
     window.ws = new ServerConnection(protocol + "://" + location.host + "/" + location.pathname + "/ws", guid(), manager);
@@ -619,7 +631,7 @@ $(function(){
     
     initCharacterPicker(character, ws);
     
-    startBot();
+    startBot(manager);
 });
 
 </script>
