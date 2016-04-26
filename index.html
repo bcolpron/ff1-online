@@ -283,6 +283,10 @@ Character.prototype.moveDown = function() {
     this.setDirection(this.DOWN | this.ANIM);
 };
 
+Character.prototype.setMoving = function() {
+    this.setDirection(this.direction | this.ANIM);
+};
+
 Character.prototype.stopMoving = function() {
     this.setDirection(this.direction & 0x3);
 };
@@ -333,50 +337,42 @@ Controller.prototype.onkeyup = function(e) {
     switch (e.keyCode) {
         case 37:
             this.mask &= 11; 
-            if (this.direction == this.LEFT) this.direction = this.NONE;
             break;
         case 38:
             this.mask &= 14; 
-            if (this.direction == this.UP) this.direction = this.NONE;
             break;
         case 39:
             this.mask &= 7; 
-            if (this.direction == this.RIGHT) this.direction = this.NONE;
             break;
         case 40:
             this.mask &= 13; 
-            if (this.direction == this.DOWN) this.direction = this.NONE;
             break;
     }
-    if (this.direction == this.NONE) {
-        if (this.mask & this.LEFT && ! (this.mask & this.RIGHT)) this.direction = this.LEFT;
-        else if (this.mask & this.RIGHT && ! (this.mask & this.LEFT)) this.direction = this.RIGHT;
-        else if (this.mask & this.UP && ! (this.mask & this.DOWN)) this.direction = this.UP;
-        else if (this.mask & this.DOWN && ! (this.mask & this.UP)) this.direction = this.DOWN;
-    }
+    
+    if (this.mask & this.LEFT && ! (this.mask & this.RIGHT)) this.left();
+    else if (this.mask & this.RIGHT && ! (this.mask & this.LEFT)) this.right();
+    else if (this.mask & this.UP && ! (this.mask & this.DOWN)) this.up();
+    else if (this.mask & this.DOWN && ! (this.mask & this.UP)) this.down();
+    else this.stop();
 };
 
 Controller.prototype.onkeydown = function(e) {
     switch (e.keyCode) {
         case 37:
             this.mask |= this.LEFT;
-            this.direction = this.LEFT;
-            this.startMove();
+            this.left();
             break;
         case 38:
             this.mask |= this.UP;
-            this.direction = this.UP;
-            this.startMove();
+            this.up();
             break;
         case 39:
             this.mask |= this.RIGHT;
-            this.direction = this.RIGHT;
-            this.startMove();
+            this.right();
             break;
         case 40:
             this.mask |= this.DOWN;
-            this.direction = this.DOWN;
-            this.startMove();
+            this.down();
             break;
     }
 };
@@ -562,10 +558,11 @@ function CharacterManager(area, player) {
 CharacterManager.prototype.addOrUpdate = function(id, data) {
     var found = this.characters[id];
     if (!found) {
-        this.characters[id] = new Character(this.area, data.class, data.left, data.top, data.direction);
+        found = this.characters[id] = new Character(this.area, data.class, data.left, data.top, data.direction);
     } else {
         found.update(data);
-    }    
+    }
+    found.setMoving();
 }
 
 CharacterManager.prototype.clear = function() {
