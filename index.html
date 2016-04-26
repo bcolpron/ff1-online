@@ -306,13 +306,8 @@ Character.prototype.update = function(dump) {
     this.setClass(dump.class);
 }
 
-function Controller(map, character, server) {
-    this.map = map;
-    this.character = character;
-    this.server = server;
-    this.mask = 0;
-    this.direction = this.NONE;
-    this.moveTimer = null;
+function KeyboardController(controller) {
+    this.controller = controller;
 
     var that = this;
     document.onkeyup = function(e) {
@@ -321,19 +316,14 @@ function Controller(map, character, server) {
     document.onkeydown = function(e) {
         that.onkeydown(e);
     };
-    
-    this.initJoystick($(".joystick"));
-    
-    map.setPosition(character.position.left - 7, character.position.top - 7);
 };
 
-Controller.prototype.NONE  = 0;
-Controller.prototype.UP    = 1;
-Controller.prototype.DOWN  = 2;
-Controller.prototype.LEFT  = 4;
-Controller.prototype.RIGHT = 8;
+KeyboardController.prototype.UP    = 1;
+KeyboardController.prototype.DOWN  = 2;
+KeyboardController.prototype.LEFT  = 4;
+KeyboardController.prototype.RIGHT = 8;
 
-Controller.prototype.onkeyup = function(e) {
+KeyboardController.prototype.onkeyup = function(e) {
     switch (e.keyCode) {
         case 37:
             this.mask &= 11; 
@@ -349,33 +339,49 @@ Controller.prototype.onkeyup = function(e) {
             break;
     }
     
-    if (this.mask & this.LEFT && ! (this.mask & this.RIGHT)) this.left();
-    else if (this.mask & this.RIGHT && ! (this.mask & this.LEFT)) this.right();
-    else if (this.mask & this.UP && ! (this.mask & this.DOWN)) this.up();
-    else if (this.mask & this.DOWN && ! (this.mask & this.UP)) this.down();
-    else this.stop();
+    if (this.mask & this.LEFT && ! (this.mask & this.RIGHT)) this.controller.left();
+    else if (this.mask & this.RIGHT && ! (this.mask & this.LEFT)) this.controller.right();
+    else if (this.mask & this.UP && ! (this.mask & this.DOWN)) this.controller.up();
+    else if (this.mask & this.DOWN && ! (this.mask & this.UP)) this.controller.down();
+    else this.controller.stop();
 };
 
-Controller.prototype.onkeydown = function(e) {
+KeyboardController.prototype.onkeydown = function(e) {
     switch (e.keyCode) {
         case 37:
             this.mask |= this.LEFT;
-            this.left();
+            this.controller.left();
             break;
         case 38:
             this.mask |= this.UP;
-            this.up();
+            this.controller.up();
             break;
         case 39:
             this.mask |= this.RIGHT;
-            this.right();
+            this.controller.right();
             break;
         case 40:
             this.mask |= this.DOWN;
-            this.down();
+            this.controller.down();
             break;
     }
 };
+
+function Controller(map, character, server) {
+    this.map = map;
+    this.character = character;
+    this.server = server;
+    this.direction = this.NONE;
+    this.moveTimer = null;
+
+    map.setPosition(character.position.left - 7, character.position.top - 7);
+};
+
+Controller.prototype.NONE  = 0;
+Controller.prototype.UP    = 1;
+Controller.prototype.DOWN  = 2;
+Controller.prototype.LEFT  = 4;
+Controller.prototype.RIGHT = 8;
 
 Controller.prototype.startMove = function() {
     if (!this.moveTimer) {
@@ -386,6 +392,7 @@ Controller.prototype.startMove = function() {
         this.move();
     }
 }
+
 Controller.prototype.stopMove = function() {
     if (this.moveTimer) {
         clearInterval(this.moveTimer);
@@ -451,8 +458,7 @@ Controller.prototype.move = function() {
     this.server.send({update: this.character.dump()});
 }
 
-Controller.prototype.initJoystick = function(joystick) {
-    var controller = this;
+function Joystick(joystick, controller) {
     var moving = false;
     function move(e) {
         if (moving) {
@@ -626,6 +632,9 @@ $(function(){
 
     window.controller = new Controller(map, character, ws); 
     
+    new KeyboardController(controller);
+    new Joystick($(".joystick"), controller);
+
     initCharacterPicker(character, ws);
     
     startBot(manager);
