@@ -367,10 +367,11 @@ KeyboardController.prototype.onkeydown = function(e) {
     }
 };
 
-function Controller(map, character, server) {
+function Controller(map, character, server, manager) {
     this.map = map;
     this.character = character;
     this.server = server;
+    this.manager = manager;
     this.direction = this.NONE;
     this.moveTimer = null;
 
@@ -446,7 +447,8 @@ Controller.prototype.move = function() {
             return;
     }
     
-    if (tiles[p.left][p.top] == 0) {  // Allowed to walk
+    if (tiles[p.left][p.top] == 0  // Allowed to walk
+        && this.manager.isFree(p.left, p.top)) {
         character.setPosition(p);
     }
     else {
@@ -630,7 +632,7 @@ $(function(){
         ws.send({update: character.dump()});
     });
 
-    window.controller = new Controller(map, character, ws); 
+    window.controller = new Controller(map, character, ws, manager); 
     
     new KeyboardController(controller);
     new Joystick($(".joystick"), controller);
