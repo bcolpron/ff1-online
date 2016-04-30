@@ -4,7 +4,6 @@
 <script type="text/javascript" src="3rd/jquery-2.2.2.min.js"></script>
 <script type="text/javascript" src="3rd/lodash-4.7.0.min.js"></script>
 <script type="text/javascript" src="tiles.js"></script>
-<script type="text/javascript" src="bot.js"></script>
 <style>
     body {
         height: 100%;
@@ -520,7 +519,7 @@ ServerConnection.prototype.connect = function() {
 
     this.ws.onopen = $.proxy(this._onopen, this);
     this.ws.onclose = $.proxy(this._onclose, this);
-    this.ws.onerror = function() {alert("ws error");};
+    this.ws.onerror = function(e) {console.error("ws error: " + e);};
     this.ws.onmessage = $.proxy(this._onmessage, this);
 }
 
@@ -638,8 +637,6 @@ $(function(){
     new Joystick($(".joystick"), controller);
 
     initCharacterPicker(character, ws);
-    
-    startBot(manager);
 });
 
 </script>
