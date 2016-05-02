@@ -456,7 +456,7 @@ Controller.prototype.move = function() {
         
     this.map.setPosition(this.character.position.left - 7, this.character.position.top - 7);
     
-    this.server.send({update: this.character.dump()});
+    this.server.send(this.character.dump());
 }
 
 function Joystick(joystick, controller) {
@@ -540,11 +540,11 @@ ServerConnection.prototype.onConnect = function(callback) {
 ServerConnection.prototype._onmessage = function(e) {
     console.log("message: " + e.data);
     var data = JSON.parse(e.data);
-    this.manager.addOrUpdate(data.from, data.payload.update);
+    this.manager.addOrUpdate(data.from, data.update);
 }
 
 ServerConnection.prototype.send = function(data) {
-    this.ws.send(JSON.stringify({from: this.id, payload: data}));
+    this.ws.send(JSON.stringify({from: this.id, update: data}));
 }
 
 ServerConnection.prototype._onclose = function() {
@@ -605,7 +605,7 @@ function initCharacterPicker(character, server) {
         $(".dialog-background").hide();
         $(".character-picker").hide();
         character.setClass($(e.target).data().class);
-        server.send({update: character.dump()});
+        server.send(character.dump());
     });
 }
 
@@ -628,7 +628,7 @@ $(function(){
     window.ws = new ServerConnection(protocol + "://" + location.host + "/" + location.pathname + "/ws", guid(), manager);
     
     ws.onConnect(function() {
-        ws.send({update: character.dump()});
+        ws.send(character.dump());
     });
 
     window.controller = new Controller(map, character, ws, manager); 
