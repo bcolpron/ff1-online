@@ -29,6 +29,7 @@
         position: absolute;
         transition: left 267ms, top 267ms;
         transition-timing-function: linear;
+        overflow: hidden;
     }
     .mapArea {
         position: absolute; 
@@ -254,7 +255,7 @@ Character.prototype.setPosition = function(x,y) {
 
     this.position = {left:x, top:y};   
     var left = x * 32;
-    var top = y * 32;
+    var top = y * 32 - 6;
     this.sprites.each(function(i,e){
         e.style.left = left;
         e.style.top = top;
@@ -538,7 +539,6 @@ ServerConnection.prototype.onConnect = function(callback) {
 }
 
 ServerConnection.prototype._onmessage = function(e) {
-    console.log("message: " + e.data);
     var data = JSON.parse(e.data);
     this.manager.addOrUpdate(data.from, data.update);
 }
