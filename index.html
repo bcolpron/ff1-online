@@ -581,7 +581,7 @@ CharacterManager.prototype.remove = function(id) {
     var found = this.characters[id];
     if (found) {
         found.remove();
-        delete this.characters[found];
+        delete this.characters[id];
     }
 }
 
