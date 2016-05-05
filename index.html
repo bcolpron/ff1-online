@@ -540,11 +540,16 @@ ServerConnection.prototype.onConnect = function(callback) {
 
 ServerConnection.prototype._onmessage = function(e) {
     var data = JSON.parse(e.data);
-    this.manager.addOrUpdate(data.from, data.update);
+    for(var i in data.update) {
+        this.manager.addOrUpdate(data.id, data.update[i]);
+    }
+    for(var i in data.removal) {
+        this.manager.remove(data.removal[i]);
+    }
 }
 
 ServerConnection.prototype.send = function(data) {
-    this.ws.send(JSON.stringify({from: this.id, update: data}));
+    this.ws.send(JSON.stringify({id: this.id, update: [data], removal: [] }));
 }
 
 ServerConnection.prototype._onclose = function() {
@@ -570,6 +575,14 @@ CharacterManager.prototype.addOrUpdate = function(id, data) {
         found.update(data);
     }
     found.setMoving();
+}
+
+CharacterManager.prototype.remove = function(id) {
+    var found = this.characters[id];
+    if (found) {
+        found.remove();
+        delete this.characters[found];
+    }
 }
 
 CharacterManager.prototype.clear = function() {
