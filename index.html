@@ -383,13 +383,14 @@ Controller.prototype.UP    = 1;
 Controller.prototype.DOWN  = 2;
 Controller.prototype.LEFT  = 4;
 Controller.prototype.RIGHT = 8;
+Controller.prototype.SPEED = 1;
 
 Controller.prototype.startMove = function() {
     if (!this.moveTimer) {
         var that = this;
         this.moveTimer = setInterval(function() {
             that.move();
-        }, 267);
+        }, 267/this.SPEED);
         this.move();
     }
 }
