@@ -320,6 +320,10 @@ Character.prototype.update = function(dump) {
     this.setClass(dump.class);
 }
 
+Character.prototype.setTruncated = function(value) {
+    this.sprites.height(value ? 16 : 32);
+}
+
 function KeyboardController(controller) {
     this.controller = controller;
 
@@ -400,6 +404,7 @@ Controller.prototype.RIGHT = 8;
 Controller.prototype.SPEED = 1;
 
 Controller.prototype.WALKABLE = 1;
+Controller.prototype.DENSE_FOREST = 2;
 
 Controller.prototype.startMove = function() {
     if (!this.moveTimer) {
@@ -470,6 +475,13 @@ Controller.prototype.move = function() {
     }
     else {
         this.character.stopMoving();
+    }
+    
+    if (tiles[p.left][p.top] & this.DENSE_FOREST) {
+        var that = this;
+        setTimeout(function() {that.character.setTruncated(true);}, 267/this.SPEED);
+    } else {
+        this.character.setTruncated(false);
     }
         
     this.map.setPosition(this.character.position.left - 7, this.character.position.top - 7);
