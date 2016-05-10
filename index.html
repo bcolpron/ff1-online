@@ -41,6 +41,20 @@
         transition-timing-function: linear;
         z-index: -2;
     }
+    .curtain {
+        position: absolute;
+        height: 50%;
+        width: 100%;
+        background-color: black;
+        transition: height 1000ms;
+        transition-timing-function: linear;
+    }
+    .curtain-top {
+        top:0px;
+    }
+    .curtain-bottom {
+        bottom:0px;
+    }
     .joystick {
         position: absolute;
         width: 100%;
@@ -623,6 +637,24 @@ function initCharacterPicker(character, server) {
     });
 }
 
+function waitAllImagesLoaded(then) {
+    var img$ = $("img");
+    var count = img$.length;
+    function imgLoaded() {
+        if (--count === 0) {
+            then();
+        }
+    }
+    img$.each(function() {
+        var $this = $(this);
+        $this.one("load", imgLoaded);
+        if (this.complete) {
+            $this.trigger("load");
+        }
+    });
+    console.log(count + " images still to load...");
+}
+
 $(function(){
     function adjust() {
         $("body").css("margin-top", ($("body").height() - $(".main-panel").height())/2);
@@ -651,6 +683,10 @@ $(function(){
     new Joystick($(".joystick"), controller);
 
     initCharacterPicker(character, ws);
+    
+    waitAllImagesLoaded(function() {
+        $(".curtain").height(0);
+    });
 });
 
 </script>
@@ -664,8 +700,9 @@ $(function(){
             </div>
         </div>
         <div id="viewport">
-            <div id="background">
-            </div>
+            <div id="background"></div>
+            <div class="curtain curtain-top"></div>
+            <div class="curtain curtain-bottom"></div>
         </div>
     <div class="right-border">
         <div class="character-picker-button"></div>
