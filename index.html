@@ -474,6 +474,7 @@ Controller.prototype.move = function() {
         character.setPosition(p);
     }
     else {
+        p = this.character.getPosition();
         this.character.stopMoving();
     }
     
