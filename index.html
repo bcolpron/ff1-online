@@ -399,6 +399,8 @@ Controller.prototype.LEFT  = 4;
 Controller.prototype.RIGHT = 8;
 Controller.prototype.SPEED = 1;
 
+Controller.prototype.WALKABLE = 1;
+
 Controller.prototype.startMove = function() {
     if (!this.moveTimer) {
         var that = this;
@@ -462,7 +464,7 @@ Controller.prototype.move = function() {
             return;
     }
     
-    if (tiles[p.left][p.top] == 0  // Allowed to walk
+    if (tiles[p.left][p.top] & this.WALKABLE
         && this.manager.isFree(p.left, p.top)) {
         character.setPosition(p);
     }
