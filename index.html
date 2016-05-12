@@ -232,7 +232,8 @@ Character.prototype.UP       = 1;
 Character.prototype.LEFT    = 2;
 Character.prototype.RIGHT  = 3;
 Character.prototype.ANIM    = 4;
-Character.prototype.classes = ["fi", "bb", "th", "wm", "bm", "rm", "kn", "ma", "ni", "ww", "bw", "rw"];
+Character.prototype.classes = ["fi", "bb", "th", "wm", "bm", "rm", "kn", "ma", "ni", "ww", "bw", "rw",
+                               "ship"];
 
 Character.prototype.setClass = function(class_) {
     if (this.class_ === class_) {
@@ -679,7 +680,7 @@ $(function(){
 
     var area = $("#background");
     
-    var charClass = Character.prototype.classes[Math.floor(Math.random() * Character.prototype.classes.length)];
+    var charClass = Character.prototype.classes[Math.floor(Math.random() * 12)];
     window.character = new Character(area, charClass, 153, 165);
     
     window.map = new Map(area, 146,158);
