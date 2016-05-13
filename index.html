@@ -235,6 +235,9 @@ Character.prototype.ANIM    = 4;
 Character.prototype.classes = ["fi", "bb", "th", "wm", "bm", "rm", "kn", "ma", "ni", "ww", "bw", "rw",
                                "ship"];
 
+Character.prototype.CHARACTER_TRAITS = {verticalAdjustment: -6 };
+Character.prototype.SHIP_TRAITS      = {verticalAdjustment: -2 };
+
 Character.prototype.setClass = function(class_) {
     if (this.class_ === class_) {
         return;
@@ -256,6 +259,12 @@ Character.prototype.setClass = function(class_) {
                 
     this.sprites.html(html);
     this.setDirection(this.direction);
+
+    if (Character.prototype.classes.indexOf(class_) < 12) {
+        this.traits = this.CHARACTER_TRAITS;
+    } else if (class_ == "ship") {
+        this.traits = this.SHIP_TRAITS;
+    }
  }
 
 Character.prototype.getPosition = function() {
@@ -270,7 +279,7 @@ Character.prototype.setPosition = function(x,y) {
 
     this.position = {left:x, top:y};   
     var left = x * 32;
-    var top = y * 32 - 6;
+    var top = y * 32 + this.traits.verticalAdjustment;
     this.sprites.each(function(i,e){
         e.style.left = left;
         e.style.top = top;
@@ -694,6 +703,8 @@ $(function(){
     });
 
     window.controller = new Controller(map, character, ws, manager); 
+
+    window.ship = new Character(area, "ship", 210, 153, Character.prototype.RIGHT);
     
     new KeyboardController(controller);
     new Joystick($(".joystick"), controller);
