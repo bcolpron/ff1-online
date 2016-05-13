@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import sys
 import re
 
@@ -134,7 +136,7 @@ terrains = {
     "fe8050b5fd8a9cf35ec5dfbf07fa52f2": 0,
     
     #Bridge
-    "99999999999999999999999999999999": WALKABLE,
+    "99999999999999999999999999999999": WALKABLE | SAILABLE,
     }
 
 tiles = {}
