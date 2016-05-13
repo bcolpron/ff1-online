@@ -235,8 +235,11 @@ Character.prototype.ANIM    = 4;
 Character.prototype.classes = ["fi", "bb", "th", "wm", "bm", "rm", "kn", "ma", "ni", "ww", "bw", "rw",
                                "ship"];
 
-Character.prototype.CHARACTER_TRAITS = {verticalAdjustment: -6 };
-Character.prototype.SHIP_TRAITS      = {verticalAdjustment: -2 };
+Character.prototype.WALKABLE = 1;
+Character.prototype.SAILABLE = 4;
+
+Character.prototype.CHARACTER_TRAITS = {verticalAdjustment: -6, isMoveable(x,y) {return tiles[x][y] & Character.prototype.WALKABLE;} };
+Character.prototype.SHIP_TRAITS      = {verticalAdjustment: -2, isMoveable(x,y) {return tiles[x][y] & Character.prototype.SAILABLE;} };
 
 Character.prototype.setClass = function(class_) {
     if (this.class_ === class_) {
@@ -413,7 +416,6 @@ Controller.prototype.LEFT  = 4;
 Controller.prototype.RIGHT = 8;
 Controller.prototype.SPEED = 1;
 
-Controller.prototype.WALKABLE = 1;
 Controller.prototype.DENSE_FOREST = 2;
 
 Controller.prototype.startMove = function() {
@@ -479,7 +481,7 @@ Controller.prototype.move = function() {
             return;
     }
     
-    if (tiles[p.left][p.top] & this.WALKABLE
+    if (character.traits.isMoveable(p.left, p.top)
         && this.manager.isFree(p.left, p.top)) {
         character.setPosition(p);
     }
