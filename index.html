@@ -139,8 +139,20 @@ function guid() {
 function Map(element, x, y) {
     this.loaded = {};
     this.area = null;
-    this.element = $(element)[0];
+    this.$element = $(element);
+    this.element = this.$element[0];
     this.setPosition(x,y);
+
+    this.putShip(210, 153);
+}
+
+Map.prototype.takeShip = function() {
+    this.ship.remove();
+    this.ship = null;
+}
+
+Map.prototype.putShip = function(x,y) {
+    this.ship = new Character(this.$element, "ship", x, y, Character.prototype.RIGHT);
 }
 
 Map.prototype.setPosition = function(x,y) {
@@ -417,6 +429,7 @@ Controller.prototype.RIGHT = 8;
 Controller.prototype.SPEED = 1;
 
 Controller.prototype.DENSE_FOREST = 2;
+Controller.prototype.DOCKABLE = 64;
 
 Controller.prototype.startMove = function() {
     if (!this.moveTimer) {
@@ -484,8 +497,13 @@ Controller.prototype.move = function() {
     if (character.traits.isMoveable(p.left, p.top)
         && this.manager.isFree(p.left, p.top)) {
         character.setPosition(p);
-    }
-    else {
+    } else if (this.map.ship && _.isEqual(p, this.map.ship.position)) {
+        character.setPosition(p);
+        this.boardShip();
+    } else if (tiles[p.left][p.top] & this.DOCKABLE) {
+        this.unboardShip();
+        character.setPosition(p);
+    } else {
         p = this.character.getPosition();
         this.character.stopMoving();
     }
@@ -500,6 +518,18 @@ Controller.prototype.move = function() {
     this.map.setPosition(this.character.position.left - 7, this.character.position.top - 7);
     
     this.server.send(this.character.dump());
+}
+
+Controller.prototype.boardShip = function() {
+    this.characterClass = this.character.class_;
+    this.character.setClass("ship");
+    this.character.stopMoving();
+    this.map.takeShip();
+}
+
+Controller.prototype.unboardShip = function() {
+    this.character.setClass(this.characterClass);
+    this.map.putShip(this.character.position.left, this.character.position.top);
 }
 
 function Joystick(joystick, controller) {
@@ -706,8 +736,6 @@ $(function(){
 
     window.controller = new Controller(map, character, ws, manager); 
 
-    window.ship = new Character(area, "ship", 210, 153, Character.prototype.RIGHT);
-    
     new KeyboardController(controller);
     new Joystick($(".joystick"), controller);
 
