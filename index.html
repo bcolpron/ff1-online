@@ -529,9 +529,11 @@ Controller.prototype.move = function() {
     } else if (this.map.ship && _.isEqual(p, this.map.ship.position)) {
         character.setPosition(p);
         this.boardShip();
+        this.stopMove();
     } else if (tiles[p.left][p.top] & this.DOCKABLE) {
         this.unboardShip();
         character.setPosition(p);
+        this.stopMove();
     } else {
         p = this.character.getPosition();
         this.character.stopMoving();
