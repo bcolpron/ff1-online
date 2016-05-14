@@ -133,6 +133,12 @@
         font-size: xx-small;
         clear: both;
     }
+    .bridge {
+        position: absolute;
+        left: 4864;
+        top: 4864;
+        z-index: 2;
+    }
 </style>
 <script type="text/javascript">
 
@@ -268,6 +274,7 @@ Character.prototype.SAILABLE = 4;
 Character.prototype.CHARACTER_TRAITS = {
     verticalAdjustment: -6,
     speed: 1,
+    zIndex: 3,
     isMoveable(x,y) {
         return tiles[x][y] & Character.prototype.WALKABLE;
     }
@@ -276,6 +283,7 @@ Character.prototype.CHARACTER_TRAITS = {
 Character.prototype.SHIP_TRAITS = {
     verticalAdjustment: -2,
     speed: 2,
+    zIndex: 1,
     isMoveable(x,y) {
         return tiles[x][y] & Character.prototype.SAILABLE;
     }
@@ -309,6 +317,7 @@ Character.prototype.setClass = function(class_) {
         this.traits = this.SHIP_TRAITS;
     }
     
+    this.sprites.css({"z-index": this.traits.zIndex});
     this.sprites.css({transition: "left " + 267/this.traits.speed + "ms, top " + 267/this.traits.speed + "ms", "transition-timing-function": "linear"});
  }
 
@@ -790,7 +799,9 @@ $(function(){
             </div>
         </div>
         <div id="viewport">
-            <div id="background"></div>
+            <div id="background">
+                <img class="bridge" src="maps/bridge.png">
+            </div>
             <div class="curtain curtain-top"></div>
             <div class="curtain curtain-bottom"></div>
         </div>
