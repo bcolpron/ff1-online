@@ -155,6 +155,11 @@ Map.prototype.putShip = function(x,y) {
     this.ship = new Character(this.$element, "ship", x, y, Character.prototype.RIGHT);
 }
 
+Map.prototype.setScrollSpeed = function(speed) {
+    this.$element.css({transition: "left " + 267/speed + "ms, top " + 267/speed + "ms",
+                       "transition-timing-function": "linear"});
+}
+
 Map.prototype.setPosition = function(x,y) {
     if  (typeof x === "object") {
         y = x.top;
@@ -250,8 +255,21 @@ Character.prototype.classes = ["fi", "bb", "th", "wm", "bm", "rm", "kn", "ma", "
 Character.prototype.WALKABLE = 1;
 Character.prototype.SAILABLE = 4;
 
-Character.prototype.CHARACTER_TRAITS = {verticalAdjustment: -6, isMoveable(x,y) {return tiles[x][y] & Character.prototype.WALKABLE;} };
-Character.prototype.SHIP_TRAITS      = {verticalAdjustment: -2, isMoveable(x,y) {return tiles[x][y] & Character.prototype.SAILABLE;} };
+Character.prototype.CHARACTER_TRAITS = {
+    verticalAdjustment: -6,
+    speed: 1,
+    isMoveable(x,y) {
+        return tiles[x][y] & Character.prototype.WALKABLE;
+    }
+};
+
+Character.prototype.SHIP_TRAITS = {
+    verticalAdjustment: -2,
+    speed: 2,
+    isMoveable(x,y) {
+        return tiles[x][y] & Character.prototype.SAILABLE;
+    }
+};
 
 Character.prototype.setClass = function(class_) {
     if (this.class_ === class_) {
@@ -280,6 +298,8 @@ Character.prototype.setClass = function(class_) {
     } else if (class_ == "ship") {
         this.traits = this.SHIP_TRAITS;
     }
+    
+    this.sprites.css({transition: "left " + 267/this.traits.speed + "ms, top " + 267/this.traits.speed + "ms", "transition-timing-function": "linear"});
  }
 
 Character.prototype.getPosition = function() {
@@ -426,7 +446,6 @@ Controller.prototype.UP    = 1;
 Controller.prototype.DOWN  = 2;
 Controller.prototype.LEFT  = 4;
 Controller.prototype.RIGHT = 8;
-Controller.prototype.SPEED = 1;
 
 Controller.prototype.DENSE_FOREST = 2;
 Controller.prototype.DOCKABLE = 64;
@@ -436,7 +455,7 @@ Controller.prototype.startMove = function() {
         var that = this;
         this.moveTimer = setInterval(function() {
             that.move();
-        }, 267/this.SPEED);
+        }, 267/this.character.traits.speed);
         this.move();
     }
 }
@@ -510,7 +529,7 @@ Controller.prototype.move = function() {
     
     if (tiles[p.left][p.top] & this.DENSE_FOREST) {
         var that = this;
-        setTimeout(function() {that.character.setTruncated(true);}, 267/this.SPEED);
+        setTimeout(function() {that.character.setTruncated(true);}, 267/this.character.traits.speed);
     } else {
         this.character.setTruncated(false);
     }
@@ -525,11 +544,13 @@ Controller.prototype.boardShip = function() {
     this.character.setClass("ship");
     this.character.stopMoving();
     this.map.takeShip();
+    this.map.setScrollSpeed(this.character.traits.speed);
 }
 
 Controller.prototype.unboardShip = function() {
     this.character.setClass(this.characterClass);
     this.map.putShip(this.character.position.left, this.character.position.top);
+    this.map.setScrollSpeed(this.character.traits.speed);
 }
 
 function Joystick(joystick, controller) {
