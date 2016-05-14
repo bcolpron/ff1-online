@@ -120,6 +120,23 @@
         border-width: 5px;
         border-radius: 5px;
     }
+    .loading-box {
+        background-color: blue;
+        position: absolute;
+        left: 0px;
+        right: 0px;
+        top: 0px;
+        bottom: 0px;
+        margin: auto;
+        width: 150px;
+        height: 75px;
+        text-align: center;
+        color: white;
+        border-style: solid;
+        border-width: 5px;
+        border-radius: 5px;
+        border-color: lightgray;
+    }
     .character-button {
         padding: 25px;
         padding-top: 10px;
@@ -797,6 +814,7 @@ $(function(){
     new Joystick($(".joystick"), controller);
 
     waitAllImagesLoaded(function() {
+        $(".loading-box").hide();
         $(".curtain").height(0);
     });
 });
@@ -837,6 +855,9 @@ $(function(){
             <img class="character-button" data-class="ww" src="images/wwfight.gif">
             <img class="character-button" data-class="bw" src="images/bwfight.gif">
         </div>
+    </div>
+    <div class="loading-box">
+        <br>Loading...
     </div>
     <div class="copyright">Final Fantasy is copyright (c) SQUARE ENIX Co., Ltd.</div>
 </body>
