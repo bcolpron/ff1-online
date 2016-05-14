@@ -535,14 +535,11 @@ Controller.prototype.move = function() {
     
     if (character.traits.isMoveable(p.left, p.top)
         && this.manager.isFree(p.left, p.top)) {
-        character.setPosition(p);
     } else if (this.map.ship && _.isEqual(p, this.map.ship.position)) {
-        character.setPosition(p);
         this.boardShip();
         this.stopMove();
     } else if (tiles[p.left][p.top] & this.DOCKABLE) {
         this.unboardShip();
-        character.setPosition(p);
         this.stopMove();
     } else {
         p = this.character.getPosition();
@@ -556,6 +553,7 @@ Controller.prototype.move = function() {
         this.character.setTruncated(false);
     }
         
+    character.setPosition(p);
     this.map.setPosition(this.character.position.left - 7, this.character.position.top - 7);
     
     this.server.send(this.character.dump());
