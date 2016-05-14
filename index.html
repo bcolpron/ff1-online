@@ -449,11 +449,12 @@ KeyboardController.prototype.onkeydown = function(e) {
     }
 };
 
-function Controller(map, character, server, manager) {
+function Controller(map, character, server, manager, classPicker) {
     this.map = map;
     this.character = character;
     this.server = server;
     this.manager = manager;
+    this.classPicker = classPicker;
     this.direction = this.NONE;
     this.moveTimer = null;
 
@@ -566,12 +567,14 @@ Controller.prototype.boardShip = function() {
     this.character.stopMoving();
     this.map.takeShip();
     this.map.setScrollSpeed(this.character.traits.speed);
+    this.classPicker.enable(false);
 }
 
 Controller.prototype.unboardShip = function() {
     this.character.setClass(this.characterClass);
     this.map.putShip(this.character.position.left, this.character.position.top);
     this.map.setScrollSpeed(this.character.traits.speed);
+    this.classPicker.enable(true);
 }
 
 function Joystick(joystick, controller) {
@@ -717,10 +720,17 @@ CharacterManager.prototype.isFree = function(x, y) {
     return true;
 }
 
-function initCharacterPicker(character, server) {
+function CharacterPicker(character, server) {
+
+    var that = this;
+    this.enabled = true;
+
     $(".character-picker-button").on("click touchstart", "", function(e) {
-        $(".dialog-background").show();
-        $(".character-picker").show();
+        if (that.enabled)
+        {
+            $(".dialog-background").show();
+            $(".character-picker").show();
+        }
     });
     
     $(".dialog-background").on("click touchstart", "", function() {
@@ -734,6 +744,11 @@ function initCharacterPicker(character, server) {
         character.setClass($(e.target).data().class);
         server.send(character.dump());
     });
+}
+
+CharacterPicker.prototype.enable = function(val) {
+    this.enabled = val;
+    $(".character-picker-button").css({opacity: val ? 1 : .5});
 }
 
 function waitAllImagesLoaded(then) {
@@ -776,13 +791,13 @@ $(function(){
         ws.send(character.dump());
     });
 
-    window.controller = new Controller(map, character, ws, manager); 
+    var picker = new CharacterPicker(character, ws);
+
+    window.controller = new Controller(map, character, ws, manager, picker); 
 
     new KeyboardController(controller);
     new Joystick($(".joystick"), controller);
 
-    initCharacterPicker(character, ws);
-    
     waitAllImagesLoaded(function() {
         $(".curtain").height(0);
     });
