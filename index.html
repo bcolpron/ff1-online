@@ -15,7 +15,6 @@
         margin:auto;
         width: 832px;
         height: 448px;
-        display: flex;
         }
     #viewport {
         background-color: blue;
@@ -24,6 +23,7 @@
         position: relative;
         overflow: hidden;
         z-index: -1000;
+        float: left;
     }
     .character {
         position: absolute;
@@ -67,11 +67,14 @@
         width: 150;
         background-image: url("images/title.png");
         background-repeat: no-repeat;
+        height: 100%;
+        float: left;
     }
     .right-border {
         position: relative;
         margin-left: 10px;
         width: 150;
+        float: left;
      }
      .character-picker-button {
         width: 64px;
@@ -122,6 +125,13 @@
         padding-top: 10px;
         padding-bottom: 10px;
         float: left;
+    }
+    .copyright {
+        text-align: center;
+        margin-top: 25px;
+        color: darkgray;
+        font-size: xx-small;
+        clear: both;
     }
 </style>
 <script type="text/javascript">
@@ -786,21 +796,22 @@ $(function(){
         <div class="character-picker-button"></div>
     </div>
     </div>
-        <div class="dialog-background">
-            <div class="character-picker">
-                <img class="character-button" data-class="fi" src="images/fifight.gif">
-                <img class="character-button" data-class="bb" src="images/bbfight.gif">
-                <img class="character-button" data-class="kn" src="images/knfight.gif">
-                <img class="character-button" data-class="ma" src="images/mafight.gif">
-                <img class="character-button" data-class="th" src="images/thfight.gif">
-                <img class="character-button" data-class="rm" src="images/rmfight.gif">
-                <img class="character-button" data-class="ni" src="images/nifight.gif">
-                <img class="character-button" data-class="rw" src="images/rwfight.gif">
-                <img class="character-button" data-class="wm" src="images/wmfight.gif">
-                <img class="character-button" data-class="bm" src="images/bmfight.gif">
-                <img class="character-button" data-class="ww" src="images/wwfight.gif">
-                <img class="character-button" data-class="bw" src="images/bwfight.gif">
-            </div>
+    <div class="dialog-background">
+        <div class="character-picker">
+            <img class="character-button" data-class="fi" src="images/fifight.gif">
+            <img class="character-button" data-class="bb" src="images/bbfight.gif">
+            <img class="character-button" data-class="kn" src="images/knfight.gif">
+            <img class="character-button" data-class="ma" src="images/mafight.gif">
+            <img class="character-button" data-class="th" src="images/thfight.gif">
+            <img class="character-button" data-class="rm" src="images/rmfight.gif">
+            <img class="character-button" data-class="ni" src="images/nifight.gif">
+            <img class="character-button" data-class="rw" src="images/rwfight.gif">
+            <img class="character-button" data-class="wm" src="images/wmfight.gif">
+            <img class="character-button" data-class="bm" src="images/bmfight.gif">
+            <img class="character-button" data-class="ww" src="images/wwfight.gif">
+            <img class="character-button" data-class="bw" src="images/bwfight.gif">
         </div>
+    </div>
+    <div class="copyright">Final Fantasy is copyright (c) SQUARE ENIX Co., Ltd.</div>
 </body>
 </html>
