@@ -1,0 +1,344 @@
+<html>
+<head>
+<script src="3rd/jquery-2.2.2.min.js"></script>
+<script>
+
+fontGlyphes = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,_!'?-";
+fontClasses = [
+	"char-A", "char-B", "char-C", "char-D", "char-E", "char-F", "char-G", "char-H", "char-I", "char-J", 
+	"char-K", "char-L", "char-M", "char-N", "char-O", "char-P", "char-Q", "char-R", "char-S", "char-T",
+	"char-U", "char-V", "char-W", "char-X", "char-Y", "char-Z",
+	"char-a_lo", "char-b_lo", "char-c_lo", "char-d_lo", "char-e_lo", "char-f_lo", "char-g_lo",
+	"char-h_lo", "char-i_lo", "char-j_lo", "char-k_lo", "char-l_lo", "char-m_lo", "char-n_lo",
+	"char-o_lo", "char-p_lo", "char-q_lo", "char-r_lo", "char-s_lo", "char-t_lo", "char-u_lo",
+	"char-v_lo", "char-w_lo", "char-x_lo", "char-y_lo", "char-z_lo", 
+	"char-0", "char-1", "char-2", "char-3", "char-4", "char-5", "char-6", "char-7", "char-8", "char-9", 
+	"char-period", "char-comma", "char-ellipsis", "char-exclamation",
+	"char-apostrophe", "char-question", "char-dash"
+];
+
+$(function(){
+	var dest = $("#all-glyphes");
+
+    dest.append($('<div class="glyph char-A">'));
+    dest.append($('<div class="glyph char-B">'));
+    dest.append($('<div class="glyph char-C">'));
+    dest.append($('<div class="glyph char-D">'));
+    dest.append($('<div class="glyph char-E">'));
+    dest.append($('<div class="glyph char-F">'));
+    dest.append($('<div class="glyph char-G">'));
+    dest.append($('<div class="glyph char-H">'));
+    dest.append($('<div class="glyph char-I">'));
+    dest.append($('<div class="glyph char-J">'));
+	dest.append($("<br>"));
+    dest.append($('<div class="glyph char-K">'));
+    dest.append($('<div class="glyph char-L">'));
+    dest.append($('<div class="glyph char-M">'));
+    dest.append($('<div class="glyph char-N">'));
+    dest.append($('<div class="glyph char-O">'));
+    dest.append($('<div class="glyph char-P">'));
+    dest.append($('<div class="glyph char-Q">'));
+    dest.append($('<div class="glyph char-R">'));
+    dest.append($('<div class="glyph char-S">'));
+    dest.append($('<div class="glyph char-T">'));
+	dest.append($("<br>"));
+    dest.append($('<div class="glyph char-U">'));
+    dest.append($('<div class="glyph char-V">'));
+    dest.append($('<div class="glyph char-W">'));
+    dest.append($('<div class="glyph char-X">'));
+    dest.append($('<div class="glyph char-Y">'));
+    dest.append($('<div class="glyph char-Z">'));
+    dest.append($('<div class="glyph char-a_lo">'));
+    dest.append($('<div class="glyph char-b_lo">'));
+    dest.append($('<div class="glyph char-c_lo">'));
+    dest.append($('<div class="glyph char-d_lo">'));
+	dest.append($("<br>"));
+    dest.append($('<div class="glyph char-e_lo">'));
+    dest.append($('<div class="glyph char-f_lo">'));
+    dest.append($('<div class="glyph char-g_lo">'));
+    dest.append($('<div class="glyph char-h_lo">'));
+    dest.append($('<div class="glyph char-i_lo">'));
+    dest.append($('<div class="glyph char-j_lo">'));
+    dest.append($('<div class="glyph char-k_lo">'));
+    dest.append($('<div class="glyph char-l_lo">'));
+    dest.append($('<div class="glyph char-m_lo">'));
+    dest.append($('<div class="glyph char-n_lo">'));
+	dest.append($("<br>"));
+    dest.append($('<div class="glyph char-o_lo">'));
+    dest.append($('<div class="glyph char-p_lo">'));
+    dest.append($('<div class="glyph char-q_lo">'));
+    dest.append($('<div class="glyph char-r_lo">'));
+    dest.append($('<div class="glyph char-s_lo">'));
+    dest.append($('<div class="glyph char-t_lo">'));
+    dest.append($('<div class="glyph char-u_lo">'));
+    dest.append($('<div class="glyph char-v_lo">'));
+    dest.append($('<div class="glyph char-w_lo">'));
+    dest.append($('<div class="glyph char-x_lo">'));
+	dest.append($("<br>"));
+    dest.append($('<div class="glyph char-y_lo">'));
+    dest.append($('<div class="glyph char-z_lo">'));
+    dest.append($('<div class="glyph char-period">'));
+    dest.append($('<div class="glyph char-comma">'));
+    dest.append($('<div class="glyph char-ellipsis">'));
+    dest.append($('<div class="glyph char-exclamation">'));
+    dest.append($('<div class="glyph char-apostrophe">'));
+    dest.append($('<div class="glyph char-question">'));
+    dest.append($('<div class="glyph char-dash">'));
+    dest.append($('<div class="glyph char-unknown">'));
+	dest.append($("<br>"));
+    dest.append($('<div class="glyph char-0">'));
+    dest.append($('<div class="glyph char-1">'));
+    dest.append($('<div class="glyph char-2">'));
+    dest.append($('<div class="glyph char-3">'));
+    dest.append($('<div class="glyph char-4">'));
+    dest.append($('<div class="glyph char-5">'));
+    dest.append($('<div class="glyph char-6">'));
+    dest.append($('<div class="glyph char-7">'));
+    dest.append($('<div class="glyph char-8">'));
+    dest.append($('<div class="glyph char-9">'));
+
+	function fillTextBox(dest, text) {
+		dest.text('');
+		for (i in text) {
+			var found = fontGlyphes.indexOf(text[i]);
+			if (found != -1) {
+				dest.append('<div class="glyph ' + fontClasses[found] + '">');
+			}
+			else {
+				if (text[i] == ' ') {
+					dest.append('<div class="glyph char-whitespace">');
+				} else if (text[i] == '\n') {
+					dest.append('<br>');
+				}
+			}
+		}
+	}
+
+	function dialog(text) {
+		fillTextBox($("#dialogbox>div>div>div"), text);
+	}
+	
+	dialog("allo");
+	
+	$(".dialog").each(function(i, e) {
+		var dest = $(e).find(".output");
+		var text = $(e).find(".content").text();
+		fillTextBox(dest, text);
+	});
+	
+	$('pre').on('click', function(e) {dialog($(e.target).text());});
+	
+});
+
+</script>
+
+<style>
+body {
+	position: relative;
+}
+
+.glyph {
+  height: 16px;
+  width: 16px;
+  background-image: url('images/font/fontX2.png');
+  background-repeat: no-repeat;
+  background-position: -144px -80px;
+  display: inline-block;
+}
+
+.char-A { background-position:  0px   0px; }
+.char-B { background-position: -16px  0px; }
+.char-C { background-position: -32px  0px; }
+.char-D { background-position: -48px  0px; }
+.char-E { background-position: -64px  0px; }
+.char-F { background-position: -80px  0px; }
+.char-G { background-position: -96px  0px; }
+.char-H { background-position: -112px 0px; }
+.char-I { background-position: -128px 0px; }
+.char-J { background-position: -144px 0px; }
+.char-K { background-position:  0px   -16px; }
+.char-L { background-position: -16px  -16px; }
+.char-M { background-position: -32px  -16px; }
+.char-N { background-position: -48px  -16px; }
+.char-O { background-position: -64px  -16px; }
+.char-P { background-position: -80px  -16px; }
+.char-Q { background-position: -96px  -16px; }
+.char-R { background-position: -112px -16px; }
+.char-S { background-position: -128px -16px; }
+.char-T { background-position: -144px -16px; }
+.char-U { background-position:  0px   -32px }
+.char-V { background-position: -16px  -32px }
+.char-W { background-position: -32px  -32px }
+.char-X { background-position: -48px  -32px }
+.char-Y { background-position: -64px  -32px }
+.char-Z { background-position: -80px  -32px }
+.char-a_lo { background-position: -96px  -32px }
+.char-b_lo { background-position: -112px -32px }
+.char-c_lo { background-position: -128px -32px }
+.char-d_lo { background-position: -144px -32px }
+.char-e_lo { background-position:  0px   -48px }
+.char-f_lo { background-position: -16px  -48px }
+.char-g_lo { background-position: -32px  -48px }
+.char-h_lo { background-position: -48px  -48px }
+.char-i_lo { background-position: -64px  -48px }
+.char-j_lo { background-position: -80px  -48px }
+.char-k_lo { background-position: -96px  -48px }
+.char-l_lo { background-position: -112px -48px }
+.char-m_lo { background-position: -128px -48px }
+.char-n_lo { background-position: -144px -48px }
+.char-o_lo { background-position:  0px   -64px }
+.char-p_lo { background-position: -16px  -64px }
+.char-q_lo { background-position: -32px  -64px }
+.char-r_lo { background-position: -48px  -64px }
+.char-s_lo { background-position: -64px  -64px }
+.char-t_lo { background-position: -80px  -64px }
+.char-u_lo { background-position: -96px  -64px }
+.char-v_lo { background-position: -112px -64px }
+.char-w_lo { background-position: -128px -64px }
+.char-x_lo { background-position: -144px -64px }
+.char-y_lo { background-position:  0px   -80px }
+.char-z_lo { background-position: -16px  -80px }
+.char-period { background-position: -32px  -80px }
+.char-comma { background-position: -48px  -80px }
+.char-ellipsis { background-position: -64px  -80px }
+.char-exclamation { background-position: -80px  -80px }
+.char-apostrophe { background-position: -96px  -80px }
+.char-question { background-position: -112px -80px }
+.char-dash { background-position: -128px -80px }
+.char-unknown { background-position: -144px -80px }
+.char-0 { background-position:  0px   -96px }
+.char-1 { background-position: -16px  -96px }
+.char-2 { background-position: -32px  -96px }
+.char-3 { background-position: -48px  -96px }
+.char-4 { background-position: -64px  -96px }
+.char-5 { background-position: -80px  -96px }
+.char-6 { background-position: -96px  -96px }
+.char-7 { background-position: -112px -96px }
+.char-8 { background-position: -128px -96px }
+.char-9 { background-position: -144px -96px }
+
+.char-whitespace {
+  height: 16px;
+  width: 16px;
+  background: none;
+  display: inline-block;
+}
+
+.dialog-content {
+	background-color: #0000FF;
+	width: 384px;
+	height: 114px;
+	padding-bottom: 20px;
+	padding-top: 20px;
+	padding-left: 22px;
+	padding-right: 22px;
+}
+
+pre {
+	width: 16em;
+	display: inline-block;
+}
+div {
+	display: inline-block;
+}
+
+#all-glyphes {
+	margin-top: 200px;
+}
+
+.dialogbox {
+	background-color: black;
+	position: absolute;
+	width: 448px;
+	height: 176px;
+	left: 32px;
+	top: 16px;
+}
+.dialogbox>div {
+	background-color: #7F7F7F;
+	width: 444px;
+	height: 168px;
+	position: relative;
+	margin-top: 6px;
+	margin-bottom: 2px;
+	margin-left: 2px;
+	margin-right: 2px;
+}
+.dialogbox>div>img {
+	position: absolute;
+}
+.dialogbox>div>img.topleft {
+	top: 0px;
+	left: 0px;
+}
+.dialogbox>div>img.topright {
+	top: 0px;
+	right: 0px;
+}
+.dialogbox>div>img.bottomleft {
+	bottom: 0px;
+	left: 0px;
+}
+.dialogbox>div>img.bottomright {
+	bottom: 0px;
+	right: 0px;
+}
+.dialogbox>div>div {
+	border-color: white;
+	border-style: solid;
+	border-width: 2px;
+	width: 428px;
+	height: 152px;
+	margin: 2px;
+	padding: 4px;
+}
+</style>
+
+</head>
+<body>
+<hr>
+<div id="all-glyphes" class="dialog-content"></div>
+<hr>
+<div class="dialog">
+	<pre class="content">From this window one can
+see the entire world.
+The Four Forces are
+flowing together, into
+the center of the Four
+Altars. Into the Temple
+of FIENDS.
+</pre>
+	<div class="output dialog-content"></div>
+</div>
+
+<div class="dialog">
+	<pre class="content">Where is my CRYSTAL?
+I can't see anything
+without it__ Who Stole
+my CRYSTAL?
+</pre>
+	<div class="output dialog-content"></div>
+</div>
+
+<div class="dialog">
+	<pre class="content">This is a well. You
+might think that there
+is something to it__
+But in fact it is just
+an ordinary well.
+</pre>
+	<div class="output dialog-content"></div>
+</div>
+
+<div id="dialogbox" class="dialogbox">
+<div>
+	<img class="topleft" src="images/dialogbox-corner-topleft.png">
+	<img class="topright" src="images/dialogbox-corner-topright.png">
+	<img class="bottomleft" src="images/dialogbox-corner-bottomleft.png">
+	<img class="bottomright" src="images/dialogbox-corner-bottomright.png">
+	<div><div class="dialog-content"></div></div>
+</div>
+</div>
+
+</body>
+</html>
