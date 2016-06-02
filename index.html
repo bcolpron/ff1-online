@@ -250,7 +250,15 @@ Map.prototype.showAreaAndAround = function(x,y) {
 }
 
 Map.prototype.show = function(x,y) {
-    var tag = x + "x" + y;
+
+	// normalize
+	function wrapOver(v, max) {
+		if (v < 0) return v + max;
+		else if (v >= max) return v - max;
+		else return v;
+	}
+
+    var tag = wrapOver(x, 16) + "x" + wrapOver(y,17);
     if (!this.loaded[tag]) {
         console.log("loading map " + tag);
         html = '<img src="maps/world/' + tag + '.png" style="left: ' + (x*16*32) + 'px; top: ' + (y*15*32) + 'px" class="mapArea">';
@@ -550,12 +558,26 @@ Controller.prototype.move = function() {
             return;
     }
     
-    if (character.traits.isMoveable(p.left, p.top)
-        && this.manager.isFree(p.left, p.top)) {
-    } else if (this.map.ship && _.isEqual(p, this.map.ship.position)) {
+	function normalize(p) {
+		p = {left: p.left, top: p.top};
+		
+		if (p.left < 0) p.left += 256;
+		else if (p.left >= 256) p.left -= 256;
+		
+		if (p.top < 0) p.top += 255;
+		else if (p.top >= 255) p.top -= 255;
+		
+		return p;
+	};
+	
+	var normalizedPos = normalize(p);
+
+    if (character.traits.isMoveable(normalizedPos.left, normalizedPos.top)
+        && this.manager.isFree(normalizedPos.left, normalizedPos.top)) {
+    } else if (this.map.ship && _.isEqual(normalizedPos, this.map.ship.position)) {
         this.boardShip();
         this.stopMove();
-    } else if (tiles[p.left][p.top] & this.DOCKABLE) {
+    } else if (tiles[normalizedPos.left][normalizedPos.top] & this.DOCKABLE) {
         this.unboardShip();
         this.stopMove();
     } else {
@@ -563,7 +585,7 @@ Controller.prototype.move = function() {
         this.character.stopMoving();
     }
     
-    if (tiles[p.left][p.top] & this.DENSE_FOREST) {
+    if (tiles[normalizedPos.left][normalizedPos.top] & this.DENSE_FOREST) {
         var that = this;
         setTimeout(function() {that.character.setTruncated(true);}, 267/this.character.traits.speed);
     } else {
