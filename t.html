@@ -115,7 +115,11 @@ $(function(){
 	}
 
 	function dialog(text) {
-		fillTextBox($("#dialogbox>div>div>div"), text);
+		var dest = $("#dialogbox");
+		fillTextBox(dest.find("div>div>div"), text);
+		dest.show();
+		dest.height(176);
+		
 	}
 	
 	dialog("allo");
@@ -124,9 +128,18 @@ $(function(){
 		var dest = $(e).find(".output");
 		var text = $(e).find(".content").text();
 		fillTextBox(dest, text);
+		
 	});
 	
 	$('pre').on('click', function(e) {dialog($(e.target).text());});
+	
+	$('#dialogbox').on('click', function() {
+		var dest = $("#dialogbox");
+		dest.height(20);
+		setTimeout(function() {
+			dest.hide();
+		}, 1000);
+	});
 	
 });
 
@@ -253,6 +266,9 @@ div {
 	height: 176px;
 	left: 32px;
 	top: 16px;
+	overflow: hidden;
+	transition: height 1000ms;
+	transition-timing-function: linear;
 }
 .dialogbox>div {
 	background-color: #7F7F7F;
