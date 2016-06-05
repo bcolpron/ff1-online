@@ -579,15 +579,14 @@ Controller.prototype.move = function() {
 		
 		return p;
 	};
-	
-	var normalizedPos = normalize(p);
+	p = normalize(p);
 
-    if (character.traits.isMoveable(normalizedPos.x, normalizedPos.y)
-        && this.manager.isFree(normalizedPos.x, normalizedPos.y)) {
-    } else if (this.map.ship && _.isEqual(normalizedPos, this.map.ship.position)) {
+    if (character.traits.isMoveable(p.x, p.y)
+        && this.manager.isFree(p.x, p.y)) {
+    } else if (this.map.ship && _.isEqual(p, this.map.ship.position)) {
         this.boardShip();
         this.stopMove();
-    } else if (tiles[normalizedPos.x][normalizedPos.y] & this.DOCKABLE) {
+    } else if (tiles[p.x][p.y] & this.DOCKABLE) {
         this.unboardShip();
         this.stopMove();
     } else {
@@ -595,14 +594,14 @@ Controller.prototype.move = function() {
         this.character.stopMoving();
     }
     
-    if (tiles[normalizedPos.x][normalizedPos.y] & this.DENSE_FOREST) {
+    if (tiles[p.x][p.y] & this.DENSE_FOREST) {
         var that = this;
         setTimeout(function() {that.character.setTruncated(true);}, 267/this.character.traits.speed);
     } else {
         this.character.setTruncated(false);
     }
         
-    character.setPosition(p);
+    this.character.setPosition(p);
     this.map.setPosition(this.character.position.x - 7, this.character.position.y - 7);
     
     this.server.send(this.character.dump());
