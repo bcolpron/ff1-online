@@ -127,7 +127,7 @@ terrains = {
     "a43195a4a1ac7c7caf39b6086c604390": 0,
     "0035251095af27df284fe2031ee45f41": 0,
     
-    # City
+    # Buildings and walls
     "e2177180befd6e6cae275cf0155117a7": 0,
     "0e39a95909ebeb650fc1f431a03772f4": 0,
     "54706dea371549dea10ac399b481d9ec": 0,
@@ -152,6 +152,45 @@ terrains = {
     "9ae8894dc2ea6c6e1f6d1a633595ad24": 0,
     "88ccec61979535899b214a4ce49af298": 0,
     "c3813000ddbe5d17c0eccadb9732219f": 0,
+    
+    # Cities
+    "094fb9962356e624fe6dffdd7b7e49a5": WALKABLE,
+    "1782878b13f2c685acd6ed500e755921": 0,
+    "185de20e7837f2d3c1a4e22d1145911a": 0,
+    "1fa81067abb1eb65d542cf0ccdf4863e": 0,
+    "2becf825628896edc1012ecba51eb88e": 0,
+    "336f6dd8c38e74f7e65b7bfb3103931a": 0,
+    "3c7383b16aff73128b4b59d1e030fd0f": 0,
+    "4700be03be5af3347ba7b3d3dea89126": 0,
+    "4ae182619762f8256e4df0ce5017c046": 0,
+    "4bd975ac90ab657bf951bdde86fc5a75": 0,
+    "566a2795b25c388fd59889cd91ac2f84": WALKABLE,
+    "59d629cae3c2c3e33111459eb7cfdc77": 0,
+    "5e35f38b1bb23a3a8091f2766d511ed4": 0,
+    "5e851be478878c2edfabcebc0f486b94": 0,
+    "5f297b5cc1cbcd5d52f3b8e2059fe697": 0,
+    "6dddf91eb4579fbb6f7aa47b2fa7d625": 0,
+    "76faa50583f007a66226130000aa4661": 0,
+    "7a843d76a3580e5fe4d94449fdbaa7b5": WALKABLE,
+    "9490c3305138581f1f947bb8023d3430": 0,
+    "999f1890b5bc52f30fbd96c3495e62d9": 0,
+    "9c77735a0e73500edf8591ef5fb42234": WALKABLE,
+    "ae53f81d03e314134f054a4caa35fbfc": 0,
+    "b45bdeac8aa53978947aa9ec74958ffd": WALKABLE,
+    "b4a66e0a2baf515f5c9487e097a3ac01": 0,
+    "b6b00d2ee16ecb58d650b96803f54728": WALKABLE,
+    "b8a5ad1e0d6065584b1b5922af0fa50c": 0,
+    "c7065d1ff46bb5925193b1db5c69f005": 0,
+    "cdc0383e683e3b1b25ec60cc6d9d8eda": 0,
+    "d7390ee58e5765422f9af72b6ef32aff": 0,
+    "dd6d6fdd61a5903fb3e487fdf9b8453a": WALKABLE,
+    "e5d221b38477bbec76ba1ee0fdd14632": 0,
+    "e6b851c5c7a8cc48becb70744d785ad6": 0,
+    "e71458a7d6abd8c91600f47301854cb3": 0,
+    "eb266a0c789ed729ef664f133308eb84": 0,
+    "ee882a3db4ef62978086bc8c496d0ec7": WALKABLE,
+    "f09156dba089dedb4e9a73c7fa9ce21d": 0
+
     }
 
 tiles = {}
@@ -166,10 +205,10 @@ def parseTilesFiles(path):
                 raise ValueError("terrain " + m.group(1) + " unknown")
             tiles.setdefault(int(m.group(2)), {}).update({int(m.group(3)): code})
             
-def genTilesJs():
+def genTilesJs(maxX, maxY):
     print ("[")
     firstRow = True
-    for i in range(256):
+    for i in range(maxX):
         if firstRow:
             firstRow = False
         else:
@@ -177,7 +216,7 @@ def genTilesJs():
         print ''
         sys.stdout.write('     [')
         firstCol = True;
-        for j in range(256):
+        for j in range(maxY):
             if firstCol:
                 firstCol = False
             else:
@@ -188,5 +227,10 @@ def genTilesJs():
     print ("]")
 
 if __name__ == "__main__":
-    parseTilesFiles(sys.argv[1])
-    genTilesJs()
+
+    tilesFile = sys.argv[1]
+    maxX = int(sys.argv[2])
+    maxY = int(sys.argv[3])
+    
+    parseTilesFiles(tilesFile)
+    genTilesJs(maxX, maxY)
