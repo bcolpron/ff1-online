@@ -276,10 +276,25 @@ Map.prototype.unshow = function(x,y) {
     }
 }
 
-function Character(area, class_, x, y, direction) {
+Map.prototype.add = function(sprites) {
+	this.$element.append(sprites);
+}
+
+Map.prototype.update = function(character) {
+    var left = character.position.left * 32;
+    var top = character.position.top * 32 + character.traits.verticalAdjustment;
+	
+    character.sprites.each(function(i,e){
+        e.style.left = left;
+        e.style.top = top;
+    });
+}
+
+function Character(map, class_, x, y, direction) {
+	this.map = map;
     this.class_ = null;
     this.sprites = $('<div class="character"/>');
-    $(area).append(this.sprites);
+    this.map.add(this.sprites);
     this.setClass(class_);
     this.setPosition(x,y);
     this.setDirection(direction || 0);
@@ -357,12 +372,7 @@ Character.prototype.setPosition = function(x,y) {
     }
 
     this.position = {left:x, top:y};   
-    var left = x * 32;
-    var top = y * 32 + this.traits.verticalAdjustment;
-    this.sprites.each(function(i,e){
-        e.style.left = left;
-        e.style.top = top;
-    });
+	this.map.update(this);
 };
 
 Character.prototype.setDirection = function(direction) {
