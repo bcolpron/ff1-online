@@ -167,14 +167,26 @@ def parseTilesFiles(path):
             tiles.setdefault(int(m.group(2)), {}).update({int(m.group(3)): code})
             
 def genTilesJs():
-    print ("var tiles= [")
+    print ("[")
+    firstRow = True
     for i in range(256):
+        if firstRow:
+            firstRow = False
+        else:
+            sys.stdout.write(',')
+        print ''
         sys.stdout.write('     [')
+        firstCol = True;
         for j in range(256):
-            sys.stdout.write(str(tiles[i][j]) + ',')
-        print ("],")
-    print ("];")
+            if firstCol:
+                firstCol = False
+            else:
+                sys.stdout.write(',')
+            sys.stdout.write(str(tiles[i][j]))
+        sys.stdout.write("]")
+    print ''
+    print ("]")
 
 if __name__ == "__main__":
-    parseTilesFiles("tiles.txt")
+    parseTilesFiles(sys.argv[1])
     genTilesJs()

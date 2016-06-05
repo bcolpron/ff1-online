@@ -3,7 +3,6 @@
 <meta name="mobile-web-app-capable" content="yes">
 <script type="text/javascript" src="3rd/jquery-2.2.2.min.js"></script>
 <script type="text/javascript" src="3rd/lodash-4.7.0.min.js"></script>
-<script type="text/javascript" src="maps/world/tiles.js"></script>
 <style>
     body {
         height: 100%;
@@ -177,6 +176,13 @@ function Map(element, x, y) {
     this.setPosition(x,y);
 
     this.putShip(210, 153);
+    
+    this.loaded = $.Deferred();
+    var that = this;
+    $.getJSON("maps/world/tiles.json", null, function(data) {
+        that.tiles = data;
+        that.loaded.resolve();
+    });
 }
 
 Map.prototype.takeShip = function() {
@@ -315,7 +321,7 @@ Character.prototype.CHARACTER_TRAITS = {
     verticalAdjustment: -6,
     speed: 1,
     zIndex: 3,
-    isMoveable(x,y) {
+    isMoveable(x,y, tiles) {
         return tiles[x][y] & Character.prototype.WALKABLE;
     }
 };
@@ -324,7 +330,7 @@ Character.prototype.SHIP_TRAITS = {
     verticalAdjustment: -2,
     speed: 2,
     zIndex: 1,
-    isMoveable(x,y) {
+    isMoveable(x,y, tiles) {
         return tiles[x][y] & Character.prototype.SAILABLE;
     }
 };
@@ -581,12 +587,12 @@ Controller.prototype.move = function() {
 	};
 	p = normalize(p);
 
-    if (character.traits.isMoveable(p.x, p.y)
+    if (character.traits.isMoveable(p.x, p.y, this.map.tiles)
         && this.manager.isFree(p.x, p.y)) {
     } else if (this.map.ship && _.isEqual(p, this.map.ship.position)) {
         this.boardShip();
         this.stopMove();
-    } else if (tiles[p.x][p.y] & this.DOCKABLE) {
+    } else if (this.map.tiles[p.x][p.y] & this.DOCKABLE) {
         this.unboardShip();
         this.stopMove();
     } else {
@@ -594,7 +600,7 @@ Controller.prototype.move = function() {
         this.character.stopMoving();
     }
     
-    if (tiles[p.x][p.y] & this.DENSE_FOREST) {
+    if (this.map.tiles[p.x][p.y] & this.DENSE_FOREST) {
         var that = this;
         setTimeout(function() {that.character.setTruncated(true);}, 267/this.character.traits.speed);
     } else {
@@ -844,9 +850,11 @@ $(function(){
     new KeyboardController(controller);
     new Joystick($(".joystick"), controller);
 
-    waitAllImagesLoaded(function() {
-        $(".loading-box").hide();
-        $(".curtain").height(0);
+    $.when(map.loaded).then(function() {
+        waitAllImagesLoaded(function() {
+            $(".loading-box").hide();
+            $(".curtain").height(0);
+        });
     });
 });
 
