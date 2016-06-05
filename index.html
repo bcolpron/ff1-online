@@ -3,7 +3,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <script type="text/javascript" src="3rd/jquery-2.2.2.min.js"></script>
 <script type="text/javascript" src="3rd/lodash-4.7.0.min.js"></script>
-<script type="text/javascript" src="tiles.js"></script>
+<script type="text/javascript" src="maps/world/tiles.js"></script>
 <style>
     body {
         height: 100%;
@@ -185,7 +185,7 @@ Map.prototype.takeShip = function() {
 }
 
 Map.prototype.putShip = function(x,y) {
-    this.ship = new Character(this.$element, "ship", x, y, Character.prototype.RIGHT);
+    this.ship = new Character(this, "ship", x, y, Character.prototype.RIGHT);
 }
 
 Map.prototype.setScrollSpeed = function(speed) {
@@ -724,8 +724,8 @@ ServerConnection.prototype._onclose = function() {
     }, 1000);
 }
 
-function CharacterManager(area, player) {
-    this.area = area;
+function CharacterManager(map, player) {
+    this.map = map;
     this.characters = {};
     this.playerCharacter = player;
 }
@@ -733,7 +733,7 @@ function CharacterManager(area, player) {
 CharacterManager.prototype.addOrUpdate = function(id, data) {
     var found = this.characters[id];
     if (!found) {
-        found = this.characters[id] = new Character(this.area, data.class, data.left, data.top, data.direction);
+        found = this.characters[id] = new Character(this.map, data.class, data.left, data.top, data.direction);
     } else {
         found.update(data);
     }
@@ -823,12 +823,12 @@ $(function(){
     adjust();
 
     var area = $("#background");
+    window.map = new Map(area, 146,158);
     
     var charClass = Character.prototype.classes[Math.floor(Math.random() * 12)];
-    window.character = new Character(area, charClass, 153, 165);
+    window.character = new Character(map, charClass, 153, 165);
     
-    window.map = new Map(area, 146,158);
-    window.manager = new CharacterManager(area, character);
+    window.manager = new CharacterManager(map, character);
     
     var protocol = location.protocol === "https:" ? "wss" : "ws";
     window.ws = new ServerConnection(protocol + "://" + location.host + "/" + location.pathname + "/ws", guid(), manager);
