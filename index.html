@@ -195,10 +195,10 @@ Map.prototype.setScrollSpeed = function(speed) {
 
 Map.prototype.setPosition = function(x,y) {
     if  (typeof x === "object") {
-        y = x.top;
-        x = x.left;
+        y = x.y;
+        x = x.x;
     }
-    this.position = {left:x, top:y};
+    this.position = {x:x, y:y};
     this.element.style.left = -(x * 32);
     this.element.style.top = -(y * 32) - 16;
 
@@ -281,8 +281,8 @@ Map.prototype.add = function(sprites) {
 }
 
 Map.prototype.update = function(character) {
-    var left = character.position.left * 32;
-    var top = character.position.top * 32 + character.traits.verticalAdjustment;
+    var left = character.position.x * 32;
+    var top = character.position.y * 32 + character.traits.verticalAdjustment;
 	
     character.sprites.each(function(i,e){
         e.style.left = left;
@@ -362,16 +362,16 @@ Character.prototype.setClass = function(class_) {
  }
 
 Character.prototype.getPosition = function() {
-    return {left: this.position.left, top: this.position.top};
+    return {x: this.position.x, y: this.position.y};
 }
 
 Character.prototype.setPosition = function(x,y) {
     if  (typeof x === "object") {
-        y = x.top;
-        x = x.left;
+        y = x.y;
+        x = x.x;
     }
 
-    this.position = {left:x, top:y};   
+    this.position = {x:x, y:y};   
 	this.map.update(this);
 };
 
@@ -410,7 +410,7 @@ Character.prototype.remove = function() {
 }
 
 Character.prototype.dump = function() {
-    return {left: this.position.left, top: this.position.top, direction: this.direction, class: this.class_};
+    return {left: this.position.x, top: this.position.y, direction: this.direction, class: this.class_};
 }
 
 Character.prototype.update = function(dump) {
@@ -493,7 +493,7 @@ function Controller(map, character, server, manager, classPicker) {
     this.direction = this.NONE;
     this.moveTimer = null;
 
-    map.setPosition(character.position.left - 7, character.position.top - 7);
+    map.setPosition(character.position.x - 7, character.position.y - 7);
 };
 
 Controller.prototype.NONE  = 0;
@@ -546,19 +546,19 @@ Controller.prototype.move = function() {
     var p = this.character.getPosition();
     switch (this.direction) {
         case this.LEFT:
-            p.left--;
+            p.x--;
             this.character.moveLeft();
             break;
         case this.UP:
-            p.top--;
+            p.y--;
             this.character.moveUp();
             break;
         case this.RIGHT:
-            p.left++;
+            p.x++;
             this.character.moveRight();
             break;
         case this.DOWN:
-            p.top++;
+            p.y++;
             this.character.moveDown();
             break;
         case this.NONE:
@@ -569,25 +569,25 @@ Controller.prototype.move = function() {
     }
     
 	function normalize(p) {
-		p = {left: p.left, top: p.top};
+		p = {x: p.x, y: p.y};
 		
-		if (p.left < 0) p.left += 256;
-		else if (p.left >= 256) p.left -= 256;
+		if (p.x < 0) p.x += 256;
+		else if (p.x >= 256) p.x -= 256;
 		
-		if (p.top < 0) p.top += 255;
-		else if (p.top >= 255) p.top -= 255;
+		if (p.y < 0) p.y += 255;
+		else if (p.y >= 255) p.y -= 255;
 		
 		return p;
 	};
 	
 	var normalizedPos = normalize(p);
 
-    if (character.traits.isMoveable(normalizedPos.left, normalizedPos.top)
-        && this.manager.isFree(normalizedPos.left, normalizedPos.top)) {
+    if (character.traits.isMoveable(normalizedPos.x, normalizedPos.y)
+        && this.manager.isFree(normalizedPos.x, normalizedPos.y)) {
     } else if (this.map.ship && _.isEqual(normalizedPos, this.map.ship.position)) {
         this.boardShip();
         this.stopMove();
-    } else if (tiles[normalizedPos.left][normalizedPos.top] & this.DOCKABLE) {
+    } else if (tiles[normalizedPos.x][normalizedPos.y] & this.DOCKABLE) {
         this.unboardShip();
         this.stopMove();
     } else {
@@ -595,7 +595,7 @@ Controller.prototype.move = function() {
         this.character.stopMoving();
     }
     
-    if (tiles[normalizedPos.left][normalizedPos.top] & this.DENSE_FOREST) {
+    if (tiles[normalizedPos.x][normalizedPos.y] & this.DENSE_FOREST) {
         var that = this;
         setTimeout(function() {that.character.setTruncated(true);}, 267/this.character.traits.speed);
     } else {
@@ -603,7 +603,7 @@ Controller.prototype.move = function() {
     }
         
     character.setPosition(p);
-    this.map.setPosition(this.character.position.left - 7, this.character.position.top - 7);
+    this.map.setPosition(this.character.position.x - 7, this.character.position.y - 7);
     
     this.server.send(this.character.dump());
 }
@@ -619,7 +619,7 @@ Controller.prototype.boardShip = function() {
 
 Controller.prototype.unboardShip = function() {
     this.character.setClass(this.characterClass);
-    this.map.putShip(this.character.position.left, this.character.position.top);
+    this.map.putShip(this.character.position.x, this.character.position.y);
     this.map.setScrollSpeed(this.character.traits.speed);
     this.classPicker.enable(true);
 }
@@ -757,10 +757,10 @@ CharacterManager.prototype.clear = function() {
 }
 
 CharacterManager.prototype.isFree = function(x, y) {
-    if (this.playerCharacter.position.left == x && this.playerCharacter.position.top == y) return false;
+    if (this.playerCharacter.position.x == x && this.playerCharacter.position.y == y) return false;
 
     for (i in this.characters) {
-        if (this.characters[i].position.left == x && this.characters[i].position.top == y) {
+        if (this.characters[i].position.x == x && this.characters[i].position.y == y) {
             return false;
             }
     }
