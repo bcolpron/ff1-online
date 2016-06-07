@@ -179,7 +179,7 @@ function Map(element, x, y) {
     
     this.loaded = $.Deferred();
     var that = this;
-    $.getJSON("maps/world/tiles.json", null, function(data) {
+    $.getJSON("maps/cornelia/tiles.json", null, function(data) {
         that.tiles = data;
         that.loaded.resolve();
     });
@@ -265,9 +265,14 @@ Map.prototype.show = function(x,y) {
 	}
 
     var tag = wrapOver(x, 16) + "x" + wrapOver(y,17);
+    var tag2 = tag;
+    if (x < 0 || y < 0 || x >= 3 || y >= 2) {
+        tag2 = "pad";
+    }
+    
     if (!this.loaded[tag]) {
         console.log("loading map " + tag);
-        html = '<img src="maps/world/' + tag + '.png" style="left: ' + (x*16*32) + 'px; top: ' + (y*15*32) + 'px" class="mapArea">';
+        html = '<img src="maps/cornelia/' + tag2 + '.png" style="left: ' + (x*16*32) + 'px; top: ' + (y*15*32) + 'px" class="mapArea">';
         var img = this.loaded[tag] = $(html)[0];
         this.element.appendChild(img);
     }
@@ -832,7 +837,7 @@ $(function(){
     window.map = new Map(area, 146,158);
     
     var charClass = Character.prototype.classes[Math.floor(Math.random() * 12)];
-    window.character = new Character(map, charClass, 153, 165);
+    window.character = new Character(map, charClass, 18, 25);
     
     window.manager = new CharacterManager(map, character);
     
