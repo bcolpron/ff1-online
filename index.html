@@ -168,6 +168,14 @@ function guid() {
     s4() + '-' + s4() + s4() + s4();
 }
 
+function loadJSON(url) {
+    var loaded = $.Deferred();
+    $.getJSON(url, null, function(data) {
+        loaded.resolve(data);
+    });
+    return loaded;
+}
+
 function Map(element, x, y) {
     this.loaded = {};
     this.area = null;
@@ -176,12 +184,18 @@ function Map(element, x, y) {
     this.setPosition(x,y);
 
     this.putShip(210, 153);
-    
     this.loaded = $.Deferred();
+    
     var that = this;
-    $.getJSON("maps/world/tiles.json", null, function(data) {
-        that.tiles = data;
-        that.loaded.resolve();
+    $.when(
+        loadJSON("maps/world/tiles.json").then(function(data) {
+            that.tiles = data;
+        }),
+        loadJSON("maps/world/location.json").then(function(data) {
+            that.location = data;
+        })
+        ).then(function(data) {
+            that.loaded.resolve();
     });
 }
 
