@@ -1,4 +1,4 @@
-function CharacterPicker(character, server) {
+function CharacterPicker(controller) {
 
     var that = this;
     this.enabled = true;
@@ -19,8 +19,7 @@ function CharacterPicker(character, server) {
     $(".character-button").on("click touchstart", "", function(e) {
         $(".dialog-background").hide();
         $(".character-picker").hide();
-        character.setClass($(e.target).data().class);
-        server.send(character.dump());
+        controller.setClass($(e.target).data().class);
     });
 }
 

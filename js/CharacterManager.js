@@ -1,7 +1,6 @@
-function CharacterManager(map, player) {
+function CharacterManager(map) {
     this.map = map;
     this.characters = {};
-    this.playerCharacter = player;
 }
 
 CharacterManager.prototype.addOrUpdate = function(id, data) {
@@ -30,8 +29,6 @@ CharacterManager.prototype.clear = function() {
 }
 
 CharacterManager.prototype.isFree = function(x, y) {
-    if (this.playerCharacter.position.x == x && this.playerCharacter.position.y == y) return false;
-
     for (i in this.characters) {
         if (this.characters[i].position.x == x && this.characters[i].position.y == y) {
             return false;

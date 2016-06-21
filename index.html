@@ -176,12 +176,13 @@ function loadJSON(url) {
     return loaded;
 }
 
-function waitAllImagesLoaded(then) {
+function whenAllImagesLoaded() {
+    var deferred = $.Deferred();
     var img$ = $("img");
     var count = img$.length;
     function imgLoaded() {
         if (--count === 0) {
-            then();
+            deferred.resolve();
         }
     }
     img$.each(function() {
@@ -192,10 +193,12 @@ function waitAllImagesLoaded(then) {
         }
     });
     console.log(count + " images still to load...");
+    return deferred;
 }
 
 </script>
 <script type="text/javascript" src="js/Map.js"></script>
+<script type="text/javascript" src="js/Location.js"></script>
 <script type="text/javascript" src="js/Character.js"></script>
 <script type="text/javascript" src="js/KeyboardController.js"></script>
 <script type="text/javascript" src="js/Controller.js"></script>
@@ -213,32 +216,30 @@ $(function(){
     adjust();
 
     var area = $("#background");
-    window.map = new Map(area, 146,158);
+    
+    window.map = new Map(area);
+    window.manager = new CharacterManager(map);
+    
+    var loc = new Location("world");
+    map.setLocation(loc);
     
     var charClass = Character.prototype.classes[Math.floor(Math.random() * 12)];
     window.character = new Character(map, charClass, 153, 165);
     
-    window.manager = new CharacterManager(map, character);
-    
     var protocol = location.protocol === "https:" ? "wss" : "ws";
-    window.ws = new ServerConnection(protocol + "://" + location.host + "/" + location.pathname + "/ws", guid(), manager);
-    
-    ws.onConnect(function() {
-        ws.send(character.dump());
-    });
+    window.ws = new ServerConnection(protocol + "://" + location.host + "/" + location.pathname + "/ws/foobar", guid(), manager);
 
-    var picker = new CharacterPicker(character, ws);
-
-    window.controller = new Controller(map, character, ws, manager, picker); 
-
+    window.controller = new Controller(map, character, ws, manager); 
     new KeyboardController(controller);
     new Joystick($(".joystick"), controller);
+    var picker = new CharacterPicker(controller);
+    
+    // todo: fix me
+    window.controller.classPicker = picker;
 
-    $.when(map.loaded).then(function() {
-        waitAllImagesLoaded(function() {
-            $(".loading-box").hide();
-            $(".curtain").height(0);
-        });
+    $.when(location.loaded, whenAllImagesLoaded()).then(function() {
+        $(".loading-box").hide();
+        $(".curtain").height(0);
     });
 });
 

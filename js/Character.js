@@ -1,5 +1,5 @@
 function Character(map, class_, x, y, direction) {
-	this.map = map;
+    this.map = map;
     this.class_ = null;
     this.sprites = $('<div class="character"/>');
     this.map.add(this.sprites);

@@ -1,33 +1,15 @@
-function Map(element, x, y) {
-    this.loaded = {};
+function Map(element) {
+    this.areaCache = {};
     this.area = null;
     this.$element = $(element);
     this.element = this.$element[0];
-    this.setPosition(x,y);
+}
 
-    this.putShip(210, 153);
-    this.loaded = $.Deferred();
-    
-    var that = this;
-    $.when(
-        loadJSON("maps/world/tiles.json").then(function(data) {
-            that.tiles = data;
-        }),
-        loadJSON("maps/world/location.json").then(function(data) {
-            that.location = data;
-        })
-        ).then(function(data) {
-            that.loaded.resolve();
+Map.prototype.setLocation = function(l) {
+    this.location = l;
+    $.when(this.location.loaded).then(function() {
+        
     });
-}
-
-Map.prototype.takeShip = function() {
-    this.ship.remove();
-    this.ship = null;
-}
-
-Map.prototype.putShip = function(x,y) {
-    this.ship = new Character(this, "ship", x, y, Character.prototype.RIGHT);
 }
 
 Map.prototype.setScrollSpeed = function(speed) {
@@ -101,20 +83,20 @@ Map.prototype.show = function(x,y) {
 	}
 
     var tag = wrapOver(x, 16) + "x" + wrapOver(y,17);
-    if (!this.loaded[tag]) {
+    if (!this.areaCache[tag]) {
         console.log("loading map " + tag);
         html = '<img src="maps/world/' + tag + '.png" style="left: ' + (x*16*32) + 'px; top: ' + (y*15*32) + 'px" class="mapArea">';
-        var img = this.loaded[tag] = $(html)[0];
+        var img = this.areaCache[tag] = $(html)[0];
         this.element.appendChild(img);
     }
 }
 
 Map.prototype.unshow = function(x,y) {
     var tag = x + "x" + y;
-    if (this.loaded[tag]) {
+    if (this.areaCache[tag]) {
         console.log("releading map " + tag);
-        $(this.loaded[tag]).remove();
-        delete this.loaded[tag];
+        $(this.areaCache[tag]).remove();
+        delete this.areaCache[tag];
     }
 }
 
@@ -130,5 +112,12 @@ Map.prototype.update = function(character) {
         e.style.left = left;
         e.style.top = top;
     });
+}
+
+Map.prototype.clear = function() {
+    for (var tag in this.areaCache) {
+        $(this.areaCache[tag]).remove();
+    }
+    this.areaCache = {};
 }
 

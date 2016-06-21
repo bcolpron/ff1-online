@@ -1,13 +1,17 @@
-function Controller(map, character, server, manager, classPicker) {
+function Controller(map, character, server, manager) {
     this.map = map;
     this.character = character;
     this.server = server;
     this.manager = manager;
-    this.classPicker = classPicker;
     this.direction = this.NONE;
     this.moveTimer = null;
 
+    server.onConnect(function() {
+        server.send(character.dump());
+    });
+    
     map.setPosition(character.position.x - 7, character.position.y - 7);
+    this.putShip(210, 153);
 };
 
 Controller.prototype.NONE  = 0;
@@ -95,12 +99,12 @@ Controller.prototype.move = function() {
 	};
 	p = normalize(p);
 
-    if (character.traits.isMoveable(p.x, p.y, this.map.tiles)
+    if (character.traits.isMoveable(p.x, p.y, this.map.location.tiles)
         && this.manager.isFree(p.x, p.y)) {
-    } else if (this.map.ship && _.isEqual(p, this.map.ship.position)) {
+    } else if (this.ship && _.isEqual(p, this.ship.position)) {
         this.boardShip();
         this.stopMove();
-    } else if (this.map.tiles[p.x][p.y] & this.DOCKABLE) {
+    } else if (this.map.location.tiles[p.x][p.y] & this.DOCKABLE) {
         this.unboardShip();
         this.stopMove();
     } else {
@@ -108,7 +112,7 @@ Controller.prototype.move = function() {
         this.character.stopMoving();
     }
     
-    if (this.map.tiles[p.x][p.y] & this.DENSE_FOREST) {
+    if (this.map.location.tiles[p.x][p.y] & this.DENSE_FOREST) {
         var that = this;
         setTimeout(function() {that.character.setTruncated(true);}, 267/this.character.traits.speed);
     } else {
@@ -125,14 +129,28 @@ Controller.prototype.boardShip = function() {
     this.characterClass = this.character.class_;
     this.character.setClass("ship");
     this.character.stopMoving();
-    this.map.takeShip();
+    this.takeShip();
     this.map.setScrollSpeed(this.character.traits.speed);
     this.classPicker.enable(false);
 }
 
 Controller.prototype.unboardShip = function() {
     this.character.setClass(this.characterClass);
-    this.map.putShip(this.character.position.x, this.character.position.y);
+    this.putShip(this.character.position.x, this.character.position.y);
     this.map.setScrollSpeed(this.character.traits.speed);
     this.classPicker.enable(true);
+}
+
+Controller.prototype.setClass = function(class_) {
+    this.character.setClass(class_);
+    this.server.send(this.character.dump());
+}
+
+Controller.prototype.takeShip = function() {
+    this.ship.remove();
+    this.ship = null;
+}
+
+Controller.prototype.putShip = function(x,y) {
+    this.ship = new Character(this.map, "ship", x, y, Character.prototype.RIGHT);
 }
