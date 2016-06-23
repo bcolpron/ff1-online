@@ -202,6 +202,7 @@ function whenAllImagesLoaded() {
 <script type="text/javascript" src="js/Character.js"></script>
 <script type="text/javascript" src="js/KeyboardController.js"></script>
 <script type="text/javascript" src="js/Controller.js"></script>
+<script type="text/javascript" src="js/GameController.js"></script>
 <script type="text/javascript" src="js/Joystick.js"></script>
 <script type="text/javascript" src="js/ServerConnection.js"></script>
 <script type="text/javascript" src="js/CharacterManager.js"></script>
@@ -229,14 +230,15 @@ $(function(){
     var protocol = location.protocol === "https:" ? "wss" : "ws";
     window.ws = new ServerConnection(protocol + "://" + location.host + "/" + location.pathname + "/ws/foobar", guid(), manager);
 
-    window.controller = new Controller(map, character, ws, manager); 
-    new KeyboardController(controller);
-    new Joystick($(".joystick"), controller);
-    var picker = new CharacterPicker(controller);
+    window.game = new GameController();
     
-    // todo: fix me
-    window.controller.classPicker = picker;
-
+    window.controller = new Controller(map, character, ws, manager, game); 
+    
+    
+    new KeyboardController(game);
+    new Joystick($(".joystick"), controller);
+    var picker = new CharacterPicker(game);
+    
     $.when(location.loaded, whenAllImagesLoaded()).then(function() {
         $(".loading-box").hide();
         $(".curtain").height(0);
