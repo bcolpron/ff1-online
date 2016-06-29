@@ -13,7 +13,10 @@ function Controller(map, location, character, server, manager, game) {
     });
     
     map.setPosition(character.position.x - 7, character.position.y - 7);
-    this.putShip(210, 153);
+    
+    if (this.location.data.ship) {
+        this.putShip(this.location.data.ship.x, this.location.data.ship.y);
+    }
 };
 
 Controller.prototype.NONE  = 0;

@@ -37,8 +37,9 @@ GameController.prototype.loadLocation = function(name) {
     this.location = new Location("world");
     $.when(this.location.loaded).then($.proxy(function() {
         
+        var startPos = this.location.data.initialPosition;
         var charClass = Character.prototype.classes[Math.floor(Math.random() * 12)];
-        this.character = new Character(this.map, charClass, 153, 165);
+        this.character = new Character(this.map, charClass, startPos.x, startPos.y);
 
         this.locationController = new Controller(this.map, this.location, this.character, this.serverConnection, this.manager, this); 
 

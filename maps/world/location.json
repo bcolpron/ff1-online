@@ -1,5 +1,6 @@
 {
     "initialPosition": {"x": 153, "y": 165},
+    "ship": {"x": 210, "y": 153},
     "actions": [
         {
             "warp": {
