@@ -201,6 +201,7 @@ function whenAllImagesLoaded() {
 <script type="text/javascript" src="js/Location.js"></script>
 <script type="text/javascript" src="js/Character.js"></script>
 <script type="text/javascript" src="js/KeyboardController.js"></script>
+<script type="text/javascript" src="js/GameController.js"></script>
 <script type="text/javascript" src="js/Controller.js"></script>
 <script type="text/javascript" src="js/Joystick.js"></script>
 <script type="text/javascript" src="js/ServerConnection.js"></script>
@@ -217,6 +218,8 @@ $(function(){
 
     var area = $("#background");
     
+    window.game = new GameController();
+    
     window.map = new Map(area);
     window.manager = new CharacterManager(map);
     
@@ -229,10 +232,12 @@ $(function(){
     var protocol = location.protocol === "https:" ? "wss" : "ws";
     window.ws = new ServerConnection(protocol + "://" + location.host + "/" + location.pathname + "/ws/foobar", guid(), manager);
 
-    window.controller = new Controller(map, character, ws, manager); 
-    new KeyboardController(controller);
-    new Joystick($(".joystick"), controller);
-    var picker = new CharacterPicker(controller);
+    window.controller = new Controller(map, character, ws, manager, game); 
+    game.setController(controller);
+    
+    new KeyboardController(game);
+    new Joystick($(".joystick"), game);
+    var picker = new CharacterPicker(game);
     
     // todo: fix me
     window.controller.classPicker = picker;

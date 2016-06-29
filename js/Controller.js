@@ -1,4 +1,5 @@
-function Controller(map, character, server, manager) {
+function Controller(map, character, server, manager, game) {
+    this.game = game;
     this.map = map;
     this.character = character;
     this.server = server;
@@ -131,14 +132,14 @@ Controller.prototype.boardShip = function() {
     this.character.stopMoving();
     this.takeShip();
     this.map.setScrollSpeed(this.character.traits.speed);
-    this.classPicker.enable(false);
+    this.game.enableClassSelectionCallbacks.fire(false);
 }
 
 Controller.prototype.unboardShip = function() {
     this.character.setClass(this.characterClass);
     this.putShip(this.character.position.x, this.character.position.y);
     this.map.setScrollSpeed(this.character.traits.speed);
-    this.classPicker.enable(true);
+    this.game.enableClassSelectionCallbacks.fire(true);
 }
 
 Controller.prototype.setClass = function(class_) {

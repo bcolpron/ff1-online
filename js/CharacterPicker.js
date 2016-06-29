@@ -21,6 +21,8 @@ function CharacterPicker(controller) {
         $(".character-picker").hide();
         controller.setClass($(e.target).data().class);
     });
+    
+    controller.enableClassSelectionCallbacks.add($.proxy(this.enable, this));
 }
 
 CharacterPicker.prototype.enable = function(val) {
