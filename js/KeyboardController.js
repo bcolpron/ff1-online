@@ -31,30 +31,30 @@ KeyboardController.prototype.onkeyup = function(e) {
             break;
     }
     
-    if (this.mask & this.LEFT && ! (this.mask & this.RIGHT)) this.controller.left.fire();
-    else if (this.mask & this.RIGHT && ! (this.mask & this.LEFT)) this.controller.right.fire();
-    else if (this.mask & this.UP && ! (this.mask & this.DOWN)) this.controller.up.fire();
-    else if (this.mask & this.DOWN && ! (this.mask & this.UP)) this.controller.down.fire();
-    else this.controller.stop.fire();
+    if (this.mask & this.LEFT && ! (this.mask & this.RIGHT)) this.controller.left();
+    else if (this.mask & this.RIGHT && ! (this.mask & this.LEFT)) this.controller.right();
+    else if (this.mask & this.UP && ! (this.mask & this.DOWN)) this.controller.up();
+    else if (this.mask & this.DOWN && ! (this.mask & this.UP)) this.controller.down();
+    else this.controller.stop();
 };
 
 KeyboardController.prototype.onkeydown = function(e) {
     switch (e.keyCode) {
         case 37:
             this.mask |= this.LEFT;
-            this.controller.left.fire();
+            this.controller.left();
             break;
         case 38:
             this.mask |= this.UP;
-            this.controller.up.fire();
+            this.controller.up();
             break;
         case 39:
             this.mask |= this.RIGHT;
-            this.controller.right.fire();
+            this.controller.right();
             break;
         case 40:
             this.mask |= this.DOWN;
-            this.controller.down.fire();
+            this.controller.down();
             break;
     }
 };

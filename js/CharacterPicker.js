@@ -1,4 +1,4 @@
-function CharacterPicker(game) {
+function CharacterPicker(controller) {
 
     var that = this;
     this.enabled = true;
@@ -19,11 +19,7 @@ function CharacterPicker(game) {
     $(".character-button").on("click touchstart", "", function(e) {
         $(".dialog-background").hide();
         $(".character-picker").hide();
-        game.mainCharacterClassChange.fire($(e.target).data().class);
-    });
-    
-    game.classSelectionAvailable.add(function(val) {
-        that.enable(val);
+        controller.setClass($(e.target).data().class);
     });
 }
 

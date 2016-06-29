@@ -1,4 +1,4 @@
-function Controller(map, character, server, manager, game) {
+function Controller(map, character, server, manager) {
     this.map = map;
     this.character = character;
     this.server = server;
@@ -12,14 +12,6 @@ function Controller(map, character, server, manager, game) {
     
     map.setPosition(character.position.x - 7, character.position.y - 7);
     this.putShip(210, 153);
-    
-    this.game = game;
-    game.left.add(function() {$.proxy(this.left, this));
-    game.right.add($.proxy(this.right, this));
-    game.up.add($.proxy(this.up, this));
-    game.down.add($.proxy(this.down, this));
-    game.stop.add($.proxy(this.stop, this));
-    game.mainCharacterClassChange.add($.proxy(this.setClass, this));
 };
 
 Controller.prototype.NONE  = 0;
@@ -139,14 +131,14 @@ Controller.prototype.boardShip = function() {
     this.character.stopMoving();
     this.takeShip();
     this.map.setScrollSpeed(this.character.traits.speed);
-    this.game.classSelectionAvailable.fire(false);
+    this.classPicker.enable(false);
 }
 
 Controller.prototype.unboardShip = function() {
     this.character.setClass(this.characterClass);
     this.putShip(this.character.position.x, this.character.position.y);
     this.map.setScrollSpeed(this.character.traits.speed);
-    this.game.classSelectionAvailable.fire(true);
+    this.classPicker.enable(true);
 }
 
 Controller.prototype.setClass = function(class_) {
