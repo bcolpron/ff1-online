@@ -14,7 +14,7 @@ function Controller(map, character, server, manager, game) {
     this.putShip(210, 153);
     
     this.game = game;
-    game.left.add($.proxy(this.left, this));
+    game.left.add(function() {$.proxy(this.left, this));
     game.right.add($.proxy(this.right, this));
     game.up.add($.proxy(this.up, this));
     game.down.add($.proxy(this.down, this));
