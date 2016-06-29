@@ -1,5 +1,6 @@
-function Controller(map, character, server, manager, game) {
+function Controller(map, location, character, server, manager, game) {
     this.game = game;
+    this.location = location;
     this.map = map;
     this.character = character;
     this.server = server;
@@ -87,25 +88,25 @@ Controller.prototype.move = function() {
             return;
     }
     
-	function normalize(p) {
-		p = {x: p.x, y: p.y};
-		
-		if (p.x < 0) p.x += 256;
-		else if (p.x >= 256) p.x -= 256;
-		
-		if (p.y < 0) p.y += 255;
-		else if (p.y >= 255) p.y -= 255;
-		
-		return p;
-	};
-	p = normalize(p);
+    function normalize(p) {
+        p = {x: p.x, y: p.y};
+        
+        if (p.x < 0) p.x += 256;
+        else if (p.x >= 256) p.x -= 256;
+        
+        if (p.y < 0) p.y += 255;
+        else if (p.y >= 255) p.y -= 255;
+        
+        return p;
+    };
+    p = normalize(p);
 
-    if (character.traits.isMoveable(p.x, p.y, this.map.location.tiles)
+    if (this.character.traits.isMoveable(p.x, p.y, this.location.tiles)
         && this.manager.isFree(p.x, p.y)) {
     } else if (this.ship && _.isEqual(p, this.ship.position)) {
         this.boardShip();
         this.stopMove();
-    } else if (this.map.location.tiles[p.x][p.y] & this.DOCKABLE) {
+    } else if (this.location.tiles[p.x][p.y] & this.DOCKABLE) {
         this.unboardShip();
         this.stopMove();
     } else {
@@ -113,7 +114,7 @@ Controller.prototype.move = function() {
         this.character.stopMoving();
     }
     
-    if (this.map.location.tiles[p.x][p.y] & this.DENSE_FOREST) {
+    if (this.location.tiles[p.x][p.y] & this.DENSE_FOREST) {
         var that = this;
         setTimeout(function() {that.character.setTruncated(true);}, 267/this.character.traits.speed);
     } else {
