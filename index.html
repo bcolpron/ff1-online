@@ -1,161 +1,12 @@
 <html>
 <head>
 <meta name="mobile-web-app-capable" content="yes">
+<link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
 <script type="text/javascript" src="3rd/jquery-2.2.2.min.js"></script>
 <script type="text/javascript" src="3rd/lodash-4.7.0.min.js"></script>
-<style>
-    body {
-        height: 100%;
-        overflow: hidden;
-        background-color: black;
-    }
-    .main-panel {
-        position: relative;
-        margin:auto;
-        width: 832px;
-        height: 448px;
-        }
-    #viewport {
-        background-color: blue;
-        height: 448px;
-        width: 512;
-        position: relative;
-        overflow: hidden;
-        z-index: -1000;
-        float: left;
-    }
-    .character {
-        position: absolute;
-        transition: left 267ms, top 267ms;
-        transition-timing-function: linear;
-        overflow: hidden;
-    }
-    .mapArea {
-        position: absolute; 
-        z-index: -1;
-    }
-    #background {
-        position: absolute;
-        transition: left 267ms, top 267ms;
-        transition-timing-function: linear;
-        z-index: -2;
-    }
-    .curtain {
-        position: absolute;
-        height: 50%;
-        width: 100%;
-        background-color: black;
-        transition: height 1000ms;
-        transition-timing-function: linear;
-    }
-    .curtain-top {
-        top:0px;
-    }
-    .curtain-bottom {
-        bottom:0px;
-    }
-    .joystick {
-        position: absolute;
-        width: 100%;
-        bottom: 0px;
-        margin-bottom: 30px;
-    }
-    .left-border {
-        position: relative;
-        margin-right: 10px;
-        width: 150;
-        background-image: url("images/title.png");
-        background-repeat: no-repeat;
-        height: 100%;
-        float: left;
-    }
-    .right-border {
-        position: relative;
-        margin-left: 10px;
-        width: 150;
-        float: left;
-     }
-     .character-picker-button {
-        width: 64px;
-        height: 64px;
-        padding-bottom: 10px;
-        background-image: url("images/CharacterPickerButton.png");
-        background-repeat: no-repeat;
-    }
-    .left-border img {
-        display: block;
-        margin: auto;
-    }
-    .left-border img {
-        display: block;
-        margin: auto;
-    }
-    .status {
-        margin-top: 200px;
-        color: gray;
-        text-align: center;
-    }
-    .dialog-background {
-        width: 100%;
-        height: 100%;
-        left: 0px;
-        top: 0px;
-        position: absolute;
-        display: none;
-        background-color: rgba(0, 0, 0, 0.7);
-    }
-    .character-picker {
-        background-color: blue;
-        display: none;
-        position: absolute;
-        left: 0px;
-        right: 0px;
-        top: 0px;
-        bottom: 0px;
-        margin: auto;
-        width: 456px;
-        height: 272px;
-        border-style: solid;
-        border-width: 5px;
-        border-radius: 5px;
-    }
-    .loading-box {
-        background-color: blue;
-        position: absolute;
-        left: 0px;
-        right: 0px;
-        top: 0px;
-        bottom: 0px;
-        margin: auto;
-        width: 150px;
-        height: 75px;
-        text-align: center;
-        color: white;
-        border-style: solid;
-        border-width: 5px;
-        border-radius: 5px;
-        border-color: lightgray;
-    }
-    .character-button {
-        padding: 25px;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        float: left;
-    }
-    .copyright {
-        text-align: center;
-        margin-top: 25px;
-        color: darkgray;
-        font-size: xx-small;
-        clear: both;
-    }
-    .bridge {
-        position: absolute;
-        left: 4864;
-        top: 4864;
-        z-index: 2;
-    }
-</style>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
 <script type="text/javascript">
 
 function guid() {
@@ -219,6 +70,10 @@ $(function(){
     var area = $("#background");
     
     window.game = new GameController();
+    new KeyboardController(game);
+    new Joystick($(".joystick"), game);
+    var picker = new CharacterPicker(game);
+    
     
     window.map = new Map(area);
     window.manager = new CharacterManager(map);
@@ -235,9 +90,6 @@ $(function(){
     window.controller = new Controller(map, character, ws, manager, game); 
     game.setController(controller);
     
-    new KeyboardController(game);
-    new Joystick($(".joystick"), game);
-    var picker = new CharacterPicker(game);
     
     // todo: fix me
     window.controller.classPicker = picker;
