@@ -1,6 +1,6 @@
 {
     "initialPosition": {"x": 18, "y": 25},
-    actions: [
+    "actions": [
         {
             "warp": {
                 "to": "back",
