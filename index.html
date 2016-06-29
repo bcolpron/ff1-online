@@ -1,107 +1,28 @@
 <html>
 <head>
-<meta name="mobile-web-app-capable" content="yes">
-<link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
-<link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
-<script type="text/javascript" src="3rd/jquery-2.2.2.min.js"></script>
-<script type="text/javascript" src="3rd/lodash-4.7.0.min.js"></script>
-<link rel="stylesheet" type="text/css" href="css/style.css">
-
-<script type="text/javascript">
-
-function guid() {
-  function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
-  }
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-    s4() + '-' + s4() + s4() + s4();
-}
-
-function loadJSON(url) {
-    var loaded = $.Deferred();
-    $.getJSON(url, null, function(data) {
-        loaded.resolve(data);
-    });
-    return loaded;
-}
-
-function whenAllImagesLoaded() {
-    var deferred = $.Deferred();
-    var img$ = $("img");
-    var count = img$.length;
-    function imgLoaded() {
-        if (--count === 0) {
-            deferred.resolve();
-        }
-    }
-    img$.each(function() {
-        var $this = $(this);
-        $this.one("load", imgLoaded);
-        if (this.complete) {
-            $this.trigger("load");
-        }
-    });
-    console.log(count + " images still to load...");
-    return deferred;
-}
-
-</script>
-<script type="text/javascript" src="js/Map.js"></script>
-<script type="text/javascript" src="js/Location.js"></script>
-<script type="text/javascript" src="js/Character.js"></script>
-<script type="text/javascript" src="js/KeyboardController.js"></script>
-<script type="text/javascript" src="js/GameController.js"></script>
-<script type="text/javascript" src="js/Controller.js"></script>
-<script type="text/javascript" src="js/Joystick.js"></script>
-<script type="text/javascript" src="js/ServerConnection.js"></script>
-<script type="text/javascript" src="js/CharacterManager.js"></script>
-<script type="text/javascript" src="js/CharacterPicker.js"></script>
-<script type="text/javascript">
-
-$(function(){
-    function adjust() {
-        $("body").css("margin-top", ($("body").height() - $(".main-panel").height())/2);
-    }
-    $(window).resize(adjust);
-    adjust();
-
-    var area = $("#background");
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
     
-    window.game = new GameController();
-    new KeyboardController(game);
-    new Joystick($(".joystick"), game);
-    var picker = new CharacterPicker(game);
+    <script type="text/javascript" src="3rd/jquery-2.2.2.min.js"></script>
+    <script type="text/javascript" src="3rd/lodash-4.7.0.min.js"></script>
     
-    
-    window.map = new Map(area);
-    window.manager = new CharacterManager(map);
-    
-    var loc = new Location("world");
-    map.setLocation(loc);
-    
-    var charClass = Character.prototype.classes[Math.floor(Math.random() * 12)];
-    window.character = new Character(map, charClass, 153, 165);
-    
-    var protocol = location.protocol === "https:" ? "wss" : "ws";
-    window.ws = new ServerConnection(protocol + "://" + location.host + "/" + location.pathname + "/ws/foobar", guid(), manager);
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 
-    window.controller = new Controller(map, character, ws, manager, game); 
-    game.setController(controller);
-    
-    
-    // todo: fix me
-    window.controller.classPicker = picker;
-
-    $.when(location.loaded, whenAllImagesLoaded()).then(function() {
-        $(".loading-box").hide();
-        $(".curtain").height(0);
-    });
-});
-
-</script>
+    <script type="text/javascript" src="js/Utils.js"></script>
+    <script type="text/javascript" src="js/Map.js"></script>
+    <script type="text/javascript" src="js/Location.js"></script>
+    <script type="text/javascript" src="js/Character.js"></script>
+    <script type="text/javascript" src="js/KeyboardController.js"></script>
+    <script type="text/javascript" src="js/GameController.js"></script>
+    <script type="text/javascript" src="js/Controller.js"></script>
+    <script type="text/javascript" src="js/Joystick.js"></script>
+    <script type="text/javascript" src="js/ServerConnection.js"></script>
+    <script type="text/javascript" src="js/CharacterManager.js"></script>
+    <script type="text/javascript" src="js/CharacterPicker.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
 </head>
+
 <body>
     <div class="main-panel">
         <div class="left-border">
@@ -117,10 +38,11 @@ $(function(){
             <div class="curtain curtain-top"></div>
             <div class="curtain curtain-bottom"></div>
         </div>
-    <div class="right-border">
-        <div class="character-picker-button"></div>
+        <div class="right-border">
+            <div class="character-picker-button"></div>
+        </div>
     </div>
-    </div>
+    
     <div class="dialog-background">
         <div class="character-picker">
             <img class="character-button" data-class="fi" src="images/fifight.gif">
@@ -137,9 +59,11 @@ $(function(){
             <img class="character-button" data-class="bw" src="images/bwfight.gif">
         </div>
     </div>
+    
     <div class="loading-box">
         <br>Loading...
     </div>
+    
     <div class="copyright">Final Fantasy is copyright (c) SQUARE ENIX Co., Ltd.</div>
 </body>
 </html>
