@@ -85,7 +85,7 @@ Map.prototype.show = function(x,y) {
     var tag = wrapOver(x, 16) + "x" + wrapOver(y,17);
     if (!this.areaCache[tag]) {
         console.log("loading map " + tag);
-        html = '<img src="maps/world/' + tag + '.png" style="left: ' + (x*16*32) + 'px; top: ' + (y*15*32) + 'px" class="mapArea">';
+        html = '<img src="maps/' + this.location.name + '/' + tag + '.png" style="left: ' + (x*16*32) + 'px; top: ' + (y*15*32) + 'px" class="mapArea">';
         var img = this.areaCache[tag] = $(html)[0];
         this.element.appendChild(img);
     }

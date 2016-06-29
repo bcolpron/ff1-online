@@ -1,4 +1,5 @@
 function Location(name) {
+    this.name = name;
     this.loaded = $.Deferred();
     var that = this;
     $.when(

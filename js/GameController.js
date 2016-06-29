@@ -44,9 +44,11 @@ GameController.prototype.closeCurtains = function() {
 
 GameController.prototype.loadLocation = function(name) {
     this.closeCurtains();
-    this.location = new Location("world");
+    this.location = new Location(name);
     $.when(this.location.loaded).then($.proxy(function() {
-        
+
+        this.map.setLocation(this.location);
+
         var startPos = this.location.data.initialPosition;
         var charClass = Character.prototype.classes[Math.floor(Math.random() * 12)];
         this.character = new Character(this.map, charClass, startPos.x, startPos.y);
