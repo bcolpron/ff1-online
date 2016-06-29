@@ -7,9 +7,4 @@ $(function(){
 
     window.game = new GameController();
     var loc = game.loadLocation("world");
-    
-    $.when(loc.loaded, whenAllImagesLoaded()).then(function() {
-        $(".loading-box").hide();
-        $(".curtain").height(0);
-    });
 });

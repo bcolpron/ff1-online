@@ -33,7 +33,17 @@ GameController.prototype.setClass = function(class_) {
     this.locationController && this.locationController.setClass(class_);
 }
 
+GameController.prototype.openCurtains = function() {
+    $(".loading-box").hide();
+    $(".curtain").height(0);
+}
+
+GameController.prototype.closeCurtains = function() {
+    $(".curtain").height("50%");
+}
+
 GameController.prototype.loadLocation = function(name) {
+    this.closeCurtains();
     this.location = new Location("world");
     $.when(this.location.loaded).then($.proxy(function() {
         
@@ -42,6 +52,8 @@ GameController.prototype.loadLocation = function(name) {
         this.character = new Character(this.map, charClass, startPos.x, startPos.y);
 
         this.locationController = new Controller(this.map, this.location, this.character, this.serverConnection, this.manager, this); 
+
+        $.when(whenAllImagesLoaded()).then($.proxy(this.openCurtains, this));
 
     }, this));
     return this.location;
