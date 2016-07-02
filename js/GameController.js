@@ -44,19 +44,25 @@ GameController.prototype.closeCurtains = function() {
 
 GameController.prototype.loadLocation = function(name) {
     this.closeCurtains();
+    if (this.locationController) {
+        this.locationController.stop();
+        this.locationController = null;
+    }
     this.location = new Location(name);
-    $.when(this.location.loaded).then($.proxy(function() {
+    setTimeout($.proxy(function() {
+        $.when(this.location.loaded).then($.proxy(function() {
 
-        this.map.setLocation(this.location);
+            this.map.setLocation(this.location);
 
-        var startPos = this.location.data.initialPosition;
-        var charClass = Character.prototype.classes[Math.floor(Math.random() * 12)];
-        this.character = new Character(this.map, charClass, startPos.x, startPos.y);
+            var startPos = this.location.data.initialPosition;
+            var charClass = Character.prototype.classes[Math.floor(Math.random() * 12)];
+            this.character = new Character(this.map, charClass, startPos.x, startPos.y);
 
-        this.locationController = new Controller(this.map, this.location, this.character, this.serverConnection, this.manager, this); 
+            this.locationController = new Controller(this.map, this.location, this.character, this.serverConnection, this.manager, this); 
 
-        $.when(whenAllImagesLoaded()).then($.proxy(this.openCurtains, this));
+            $.when(whenAllImagesLoaded()).then($.proxy(this.openCurtains, this));
 
-    }, this));
+        }, this));
+    }, this), 1000);
     return this.location;
 }
