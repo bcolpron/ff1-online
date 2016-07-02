@@ -74,18 +74,13 @@ Map.prototype.showAreaAndAround = function(x,y) {
 }
 
 Map.prototype.show = function(x,y) {
-
-	// normalize
-	function wrapOver(v, max) {
-		if (v < 0) return v + max;
-		else if (v >= max) return v - max;
-		else return v;
-	}
-
-    var tag = wrapOver(x, 16) + "x" + wrapOver(y,17);
+    var tag = x + "x" + y;
+    
     if (!this.areaCache[tag]) {
+        var file = tag;
+        if (x < 0 || x >= this.location.data.extends.x || y < 0 || y >= this.location.data.extends.y) file = "padding";
         console.log("loading map " + tag);
-        html = '<img src="maps/' + this.location.name + '/' + tag + '.png" style="left: ' + (x*16*32) + 'px; top: ' + (y*15*32) + 'px" class="mapArea">';
+        html = '<img src="maps/' + this.location.name + '/' + file + '.png" style="left: ' + (x*16*32) + 'px; top: ' + (y*15*32) + 'px" class="mapArea">';
         var img = this.areaCache[tag] = $(html)[0];
         this.element.appendChild(img);
     }

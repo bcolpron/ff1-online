@@ -91,20 +91,12 @@ Controller.prototype.move = function() {
             return;
     }
     
-    function normalize(p) {
-        p = {x: p.x, y: p.y};
-        
-        if (p.x < 0) p.x += 256;
-        else if (p.x >= 256) p.x -= 256;
-        
-        if (p.y < 0) p.y += 255;
-        else if (p.y >= 255) p.y -= 255;
-        
-        return p;
-    };
-    p = normalize(p);
-
-    if (this.character.traits.isMoveable(p.x, p.y, this.location.tiles)
+    
+    if (p.x < 0 || p.x >= this.location.data.extends.x * 16 || p.y < 0 || p.y >= this.location.data.extends.y * 15) {
+        p = this.character.getPosition();
+        this.character.stopMoving();
+    }
+    else if (this.character.traits.isMoveable(p.x, p.y, this.location.tiles)
         && this.manager.isFree(p.x, p.y)) {
     } else if (this.ship && _.isEqual(p, this.ship.position)) {
         this.boardShip();

@@ -1,4 +1,5 @@
 {
+    "extends": {"x": 3, "y": 2},
     "initialPosition": {"x": 18, "y": 25},
     "actions": [
         {
