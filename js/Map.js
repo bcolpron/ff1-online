@@ -13,8 +13,12 @@ Map.prototype.setLocation = function(l) {
 }
 
 Map.prototype.setScrollSpeed = function(speed) {
-    this.$element.css({transition: "left " + 267/speed + "ms, top " + 267/speed + "ms",
-                       "transition-timing-function": "linear"});
+    if (speed != 0) {
+        this.$element.css({transition: "left " + 267/speed + "ms, top " + 267/speed + "ms",
+                           "transition-timing-function": "linear"});
+    } else {
+        this.$element.css({transition: "left 0ms, top 0ms"});
+    }
 }
 
 Map.prototype.setPosition = function(x,y) {

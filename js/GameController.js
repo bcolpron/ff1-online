@@ -48,6 +48,7 @@ GameController.prototype.loadLocation = function(name) {
         this.locationController.stop();
         this.locationController = null;
     }
+    this.map.setScrollSpeed(0);
     this.location = new Location(name);
     setTimeout($.proxy(function() {
         $.when(this.location.loaded).then($.proxy(function() {
@@ -60,8 +61,10 @@ GameController.prototype.loadLocation = function(name) {
 
             this.locationController = new Controller(this.map, this.location, this.character, this.serverConnection, this.manager, this); 
 
-            $.when(whenAllImagesLoaded()).then($.proxy(this.openCurtains, this));
-
+            $.when(whenAllImagesLoaded()).then($.proxy(function() {
+                this.openCurtains();
+                setTimeout($.proxy(this.map.setScrollSpeed, this.map, 1), 0);
+            }, this));
         }, this));
     }, this), 1000);
     return this.location;
