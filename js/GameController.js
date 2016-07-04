@@ -53,6 +53,11 @@ GameController.prototype.loadLocation = function(name) {
     setTimeout($.proxy(function() {
         $.when(this.location.loaded).then($.proxy(function() {
 
+            this.map.clear();
+            if(this.character) {
+                this.character.remove();
+            }
+            
             this.map.setLocation(this.location);
 
             var startPos = this.location.data.initialPosition;

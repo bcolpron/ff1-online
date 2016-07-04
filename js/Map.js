@@ -118,5 +118,6 @@ Map.prototype.clear = function() {
         $(this.areaCache[tag]).remove();
     }
     this.areaCache = {};
+    this.area = null;
 }
 
