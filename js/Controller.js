@@ -159,9 +159,9 @@ Controller.prototype.checkForLocationActions = function(x,y) {
             _.forEach(action.tiles, $.proxy(function(tile) {
                 if (x == tile.x && y == tile.y) {
                     if (action.name === "warp") {
-                        this.game.loadLocation(action.to);
+                        this.game.warpTo(action.to);
                     } else if (action.name === "back") {
-                        this.game.goBackLocation();
+                        this.game.warpBack();
                     }
                 }
             }, this));
