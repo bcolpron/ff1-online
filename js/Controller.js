@@ -108,7 +108,6 @@ Controller.prototype.move = function() {
         return;
     }
     
-    this.checkForLocationActions(p.x, p.y);
     
     if (this.location.tiles[p.x][p.y] & this.DENSE_FOREST) {
         var that = this;
@@ -120,6 +119,7 @@ Controller.prototype.move = function() {
     this.character.setPosition(p);
     this.map.setPosition(this.character.position.x - 7, this.character.position.y - 7);
     
+    this.checkForLocationActions(p.x, p.y);
     this.server.send(this.character.dump());
 }
 
@@ -159,9 +159,9 @@ Controller.prototype.checkForLocationActions = function(x,y) {
             _.forEach(action.tiles, $.proxy(function(tile) {
                 if (x == tile.x && y == tile.y) {
                     if (action.name === "warp") {
-                        setTimeout($.proxy(this.game.loadLocation, this.game, action.to), 267/this.character.traits.speed);
+                        this.game.loadLocation(action.to);
                     } else if (action.name === "back") {
-                        setTimeout($.proxy(this.game.goBackLocation, this.game), 267/this.character.traits.speed);
+                        this.game.goBackLocation();
                     }
                 }
             }, this));

@@ -45,20 +45,33 @@ GameController.prototype.openCurtains = function() {
 
 GameController.prototype.closeCurtains = function() {
     $(".curtain").height("50%");
+    var closed = $.Deferred();
+    setTimeout(function() {
+        closed.resolve();
+    }, 1000);
+    return closed;
 }
 
 GameController.prototype.loadLocation = function(name, position) {
-    this.closeCurtains();
     this.enableClassSelectionCallbacks.fire(false);
     if (this.locationController) {
         this.locationController.stop();
         this.locationController = null;
         
         this.locationStack.push({name: this.location.name, position: this.character.getPosition()});
+        
+        setTimeout($.proxy(this.doLoadLocation, this, name, position), 267/this.character.traits.speed);
+    } else {
+        this.doLoadLocation(name, position);
     }
+    return this.location;
+}
+
+GameController.prototype.doLoadLocation = function(name, position) {
+    var curtainsClosed = this.closeCurtains();
     this.map.setScrollSpeed(0);
     this.location = new Location(name);
-    setTimeout($.proxy(function() {
+    $.when(curtainsClosed).then($.proxy(function() {
         $.when(this.location.loaded).then($.proxy(function() {
 
             this.map.clear();
@@ -78,8 +91,7 @@ GameController.prototype.loadLocation = function(name, position) {
                 setTimeout($.proxy(this.map.setScrollSpeed, this.map, 1), 0);
             }, this));
         }, this));
-    }, this), 1000);
-    return this.location;
+    }, this));
 }
 
 GameController.prototype.goBackLocation = function() {
