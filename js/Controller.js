@@ -92,8 +92,8 @@ Controller.prototype.move = function() {
     }
     
     if (p.x < 0 || p.x >= this.location.data.extends.x * 16 || p.y < 0 || p.y >= this.location.data.extends.y * 15) {
-        p = this.character.getPosition();
         this.character.stopMoving();
+        return;
     }
     else if (this.character.traits.isMoveable(p.x, p.y, this.location.tiles)
         && this.manager.isFree(p.x, p.y)) {
@@ -104,8 +104,8 @@ Controller.prototype.move = function() {
         this.unboardShip();
         this.stopMove();
     } else {
-        p = this.character.getPosition();
         this.character.stopMoving();
+        return;
     }
     
     this.checkForLocationActions(p.x, p.y);
