@@ -14,6 +14,8 @@ function GameController() {
     this.serverConnection = new ServerConnection(protocol + "://" + window.location.host + "/" + window.location.pathname + "/ws/foobar", guid(), this.manager);
     
     this.setClass(Character.prototype.classes[Math.floor(Math.random() * 12)]);
+    
+    this.locationStack = [];
 };
 
 GameController.prototype.left = function() {
@@ -45,12 +47,14 @@ GameController.prototype.closeCurtains = function() {
     $(".curtain").height("50%");
 }
 
-GameController.prototype.loadLocation = function(name) {
+GameController.prototype.loadLocation = function(name, position) {
     this.closeCurtains();
     this.enableClassSelectionCallbacks.fire(false);
     if (this.locationController) {
         this.locationController.stop();
         this.locationController = null;
+        
+        this.locationStack.push({name: this.location.name, position: this.character.getPosition()});
     }
     this.map.setScrollSpeed(0);
     this.location = new Location(name);
@@ -63,7 +67,7 @@ GameController.prototype.loadLocation = function(name) {
             }
             
             this.map.setLocation(this.location);
-            var startPos = this.location.data.initialPosition;
+            var startPos = position || this.location.data.initialPosition;
             this.character = new Character(this.map, this.characterClass, startPos.x, startPos.y);
 
             this.locationController = new Controller(this.map, this.location, this.character, this.serverConnection, this.manager, this); 
@@ -76,4 +80,11 @@ GameController.prototype.loadLocation = function(name) {
         }, this));
     }, this), 1000);
     return this.location;
+}
+
+GameController.prototype.goBackLocation = function() {
+    var loc = this.locationStack.pop();
+    if (loc) {
+        this.loadLocation(loc.name, loc.position);
+    }
 }

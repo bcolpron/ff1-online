@@ -160,6 +160,8 @@ Controller.prototype.checkForLocationActions = function(x,y) {
                 if (x == tile.x && y == tile.y) {
                     if (action.name === "warp") {
                         setTimeout($.proxy(this.game.loadLocation, this.game, action.to), 267/this.character.traits.speed);
+                    } else if (action.name === "back") {
+                        setTimeout($.proxy(this.game.goBackLocation, this.game), 267/this.character.traits.speed);
                     }
                 }
             }, this));
