@@ -12,6 +12,8 @@ function GameController() {
     
     var protocol = location.protocol === "https:" ? "wss" : "ws";
     this.serverConnection = new ServerConnection(protocol + "://" + window.location.host + "/" + window.location.pathname + "/ws/foobar", guid(), this.manager);
+    
+    this.setClass(Character.prototype.classes[Math.floor(Math.random() * 12)]);
 };
 
 GameController.prototype.left = function() {
@@ -30,6 +32,7 @@ GameController.prototype.stop = function() {
     this.locationController && this.locationController.stop();
 }
 GameController.prototype.setClass = function(class_) {
+    this.characterClass = class_;
     this.locationController && this.locationController.setClass(class_);
 }
 
@@ -59,10 +62,8 @@ GameController.prototype.loadLocation = function(name) {
             }
             
             this.map.setLocation(this.location);
-
             var startPos = this.location.data.initialPosition;
-            var charClass = Character.prototype.classes[Math.floor(Math.random() * 12)];
-            this.character = new Character(this.map, charClass, startPos.x, startPos.y);
+            this.character = new Character(this.map, this.characterClass, startPos.x, startPos.y);
 
             this.locationController = new Controller(this.map, this.location, this.character, this.serverConnection, this.manager, this); 
 

@@ -91,7 +91,6 @@ Controller.prototype.move = function() {
             return;
     }
     
-    
     if (p.x < 0 || p.x >= this.location.data.extends.x * 16 || p.y < 0 || p.y >= this.location.data.extends.y * 15) {
         p = this.character.getPosition();
         this.character.stopMoving();
@@ -108,6 +107,8 @@ Controller.prototype.move = function() {
         p = this.character.getPosition();
         this.character.stopMoving();
     }
+    
+    this.checkForLocationActions(p.x, p.y);
     
     if (this.location.tiles[p.x][p.y] & this.DENSE_FOREST) {
         var that = this;
@@ -150,4 +151,18 @@ Controller.prototype.takeShip = function() {
 
 Controller.prototype.putShip = function(x,y) {
     this.ship = new Character(this.map, "ship", x, y, Character.prototype.RIGHT);
+}
+
+Controller.prototype.checkForLocationActions = function(x,y) {
+    if (this.location.data.actions) {
+        _.forEach(this.location.data.actions, $.proxy(function(action) {
+            _.forEach(action.tiles, $.proxy(function(tile) {
+                if (x == tile.x && y == tile.y) {
+                    if (action.name === "warp") {
+                        setTimeout($.proxy(this.game.loadLocation, this.game, action.to), 267/this.character.traits.speed);
+                    }
+                }
+            }, this));
+        }, this));
+    }
 }
