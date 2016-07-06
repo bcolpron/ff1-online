@@ -47,6 +47,7 @@ GameController.prototype.closeCurtains = function() {
 
 GameController.prototype.loadLocation = function(name) {
     this.closeCurtains();
+    this.enableClassSelectionCallbacks.fire(false);
     if (this.locationController) {
         this.locationController.stop();
         this.locationController = null;
@@ -69,6 +70,7 @@ GameController.prototype.loadLocation = function(name) {
 
             $.when(whenAllImagesLoaded()).then($.proxy(function() {
                 this.openCurtains();
+                this.enableClassSelectionCallbacks.fire(true);
                 setTimeout($.proxy(this.map.setScrollSpeed, this.map, 1), 0);
             }, this));
         }, this));
