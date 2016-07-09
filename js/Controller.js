@@ -98,26 +98,29 @@ Controller.prototype.move = function() {
             return;
     }
     
-    if (p.x < 0 || p.x >= this.location.data.extends.x * 16 || p.y < 0 || p.y >= this.location.data.extends.y * 15) {
-        this.character.stopMoving();
-        return;
-    }
-    else if (this.character.traits.isMoveable(p.x, p.y, this.location.tiles)
-        && this.manager.isFree(p.x, p.y)) {
-    } else if (this.ship && _.isEqual(p, this.ship.position)) {
-        this.boardShip();
-    } else if (this.location.tiles[p.x][p.y] & this.DOCKABLE) {
-        this.unboardShip();
+    if (this.isWithinLocationBoundaries(p.x, p.y) && this.manager.isFree(p.x, p.y)) {
+        if (!this.character.traits.isMoveable(p.x, p.y, this.location.tiles)) {
+            if (this.ship && _.isEqual(p, this.ship.position)) {
+                this.boardShip();
+            } else if (this.location.tiles[p.x][p.y] & this.DOCKABLE) {
+                this.unboardShip();
+            } else {
+                this.character.stopMoving();
+                return;
+            }
+        }
+        
+        this.character.setPosition(p);
+        this.map.setPosition(this.character.position.x - 7, this.character.position.y - 7);
+        this.checkForLocationActions(p.x, p.y);
+        this.server.send(this.character.dump());
     } else {
         this.character.stopMoving();
-        return;
     }
-    
-    this.character.setPosition(p);
-    this.map.setPosition(this.character.position.x - 7, this.character.position.y - 7);
-    
-    this.checkForLocationActions(p.x, p.y);
-    this.server.send(this.character.dump());
+}
+
+Controller.prototype.isWithinLocationBoundaries = function(x, y) {
+    return x >= 0 || x < this.location.data.extends.x * 16 || y >= 0 || y < this.location.data.extends.y * 15;
 }
 
 Controller.prototype.boardShip = function() {
