@@ -14,10 +14,11 @@ Character.prototype.LEFT    = 2;
 Character.prototype.RIGHT  = 3;
 Character.prototype.ANIM    = 4;
 Character.prototype.classes = ["fi", "bb", "th", "wm", "bm", "rm", "kn", "ma", "ni", "ww", "bw", "rw",
-                               "ship"];
+                               "ship", "canoe"];
 
 Character.prototype.WALKABLE = 1;
 Character.prototype.SAILABLE = 4;
+Character.prototype.CANOEABLE = 8;
 
 Character.prototype.CHARACTER_TRAITS = {
     verticalAdjustment: -6,
@@ -34,6 +35,15 @@ Character.prototype.SHIP_TRAITS = {
     zIndex: 1,
     isMoveable(x,y, tiles) {
         return tiles[x][y] & Character.prototype.SAILABLE;
+    }
+};
+
+Character.prototype.CANOE_TRAITS = {
+    verticalAdjustment: 0,
+    speed: 1,
+    zIndex: 1,
+    isMoveable(x,y, tiles) {
+        return tiles[x][y] & Character.prototype.CANOEABLE;
     }
 };
 
@@ -63,6 +73,8 @@ Character.prototype.setClass = function(class_) {
         this.traits = this.CHARACTER_TRAITS;
     } else if (class_ == "ship") {
         this.traits = this.SHIP_TRAITS;
+    } else if (class_ == "canoe") {
+        this.traits = this.CANOE_TRAITS;
     }
     
     this.sprites.css({"z-index": this.traits.zIndex});
