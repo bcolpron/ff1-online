@@ -29,6 +29,7 @@ Controller.prototype.RIGHT = 8;
 
 Controller.prototype.DENSE_FOREST = 2;
 Controller.prototype.DOCKABLE = 64;
+Controller.prototype.CANOEABLE = 8;
 
 Controller.prototype.startMove = function() {
     if (!this.moveTimer) {
@@ -102,6 +103,10 @@ Controller.prototype.move = function() {
         if (!this.character.traits.isMoveable(p.x, p.y, this.location.tiles)) {
             if (this.ship && _.isEqual(p, this.ship.position)) {
                 this.boardShip();
+            } else if (this.location.tiles[p.x][p.y] & this.CANOEABLE) {
+                this.boardCanoe();
+            } else if (this.character.class_ === "canoe" && Character.prototype.CHARACTER_TRAITS.isMoveable(p.x, p.y, this.location.tiles)) {
+                this.unboardCanoe();
             } else if (this.location.tiles[p.x][p.y] & this.DOCKABLE) {
                 this.unboardShip();
             } else {
@@ -177,3 +182,27 @@ Controller.prototype.checkForLocationActions = function(x,y) {
         }, this));
     }
 }
+
+Controller.prototype.boardCanoe = function() {
+    this.game.enableClassSelectionCallbacks.fire(false);
+    this.stopMove();
+    this.moveTimer = setTimeout($.proxy(function() {
+        this.characterClass = this.character.class_;
+        this.character.setClass("canoe");
+        this.character.stopMoving();
+        this.setMovementSpeed(this.character.traits.speed);
+        this.map.setScrollSpeed(this.character.traits.speed);
+        this.moveTimer = null;
+        this.startMove();
+    }, this), this.movementTime);
+}
+
+Controller.prototype.unboardCanoe = function() {
+    this.stopMove();
+    this.character.setClass(this.characterClass);
+    this.map.setScrollSpeed(this.character.traits.speed);
+    this.game.enableClassSelectionCallbacks.fire(true);
+    this.setMovementSpeed(this.character.traits.speed);
+    this.startMove();
+}
+
