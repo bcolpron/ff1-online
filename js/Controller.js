@@ -72,6 +72,8 @@ Controller.prototype.stop = function() {
 
 Controller.prototype.move = function() {
     var p = this.character.getPosition();
+    this.character.setTruncated(this.location.tiles[p.x][p.y] & this.DENSE_FOREST);
+    
     switch (this.direction) {
         case this.LEFT:
             p.x--;
@@ -111,14 +113,6 @@ Controller.prototype.move = function() {
         return;
     }
     
-    
-    if (this.location.tiles[p.x][p.y] & this.DENSE_FOREST) {
-        var that = this;
-        setTimeout(function() {that.character.setTruncated(true);}, this.movementTime);
-    } else {
-        this.character.setTruncated(false);
-    }
-        
     this.character.setPosition(p);
     this.map.setPosition(this.character.position.x - 7, this.character.position.y - 7);
     
