@@ -1,5 +1,6 @@
 function Character(map, class_, x, y, direction) {
     this.map = map;
+    this.position = {x:x, y:y};
     this.class_ = null;
     this.sprites = $('<div class="character"/>');
     this.map.add(this.sprites);
@@ -79,6 +80,7 @@ Character.prototype.setClass = function(class_) {
     
     this.sprites.css({"z-index": this.traits.zIndex});
     this.sprites.css({transition: "left " + 267/this.traits.speed + "ms, top " + 267/this.traits.speed + "ms", "transition-timing-function": "linear"});
+    this.map.update(this);
  }
 
 Character.prototype.getPosition = function() {
