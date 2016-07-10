@@ -105,11 +105,12 @@ Map.prototype.add = function(sprites) {
 
 Map.prototype.update = function(character) {
     var left = character.position.x * 32;
-    var top = character.position.y * 32 + character.traits.verticalAdjustment;
+    var top = character.position.y * 32;
 	
     character.sprites.each(function(i,e){
         e.style.left = left;
         e.style.top = top;
+        e.style["margin-top"] = character.traits.verticalAdjustment + "px";
     });
 }
 
