@@ -132,7 +132,9 @@ Controller.prototype.boardShip = function() {
     this.game.enableClassSelectionCallbacks.fire(false);
     this.stopMove();
     this.moveTimer = setTimeout($.proxy(function() {
-        this.characterClass = this.character.class_;
+        if (this.character.class_ !== "canoe") {
+            this.characterClass = this.character.class_;
+        }
         this.character.setClass("ship");
         this.character.stopMoving();
         this.takeShip();
@@ -185,9 +187,16 @@ Controller.prototype.checkForLocationActions = function(x,y) {
 
 Controller.prototype.boardCanoe = function() {
     this.game.enableClassSelectionCallbacks.fire(false);
+    
+    if (this.character.class_ === "ship") {
+        this.putShip(this.character.position.x, this.character.position.y);
+        this.character.setClass("canoe");
+    } else {
+        this.characterClass = this.character.class_;
+    }
+    
     this.stopMove();
     this.moveTimer = setTimeout($.proxy(function() {
-        this.characterClass = this.character.class_;
         this.character.setClass("canoe");
         this.character.stopMoving();
         this.setMovementSpeed(this.character.traits.speed);
