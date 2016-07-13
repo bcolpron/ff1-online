@@ -189,8 +189,34 @@ terrains = {
     "e71458a7d6abd8c91600f47301854cb3": 0,
     "eb266a0c789ed729ef664f133308eb84": 0,
     "ee882a3db4ef62978086bc8c496d0ec7": WALKABLE,
-    "f09156dba089dedb4e9a73c7fa9ce21d": 0
-
+    "f09156dba089dedb4e9a73c7fa9ce21d": 0,
+    
+    # Temple of fiends
+    "5e9fd02a05706bbd1656021825dee091": WALKABLE, # Floor
+    "2c7c5bdb671bbec0e37fcef4ad2b2b57": WALKABLE, # Door
+    "7900692e89d32cef1992bdf34069729c": WALKABLE, # Stair
+    "fe4c40208b1196a7a4dfb7c54acd1583": WALKABLE, # Black
+    "9e03e3017167b43b0df163c09e05ac19": WALKABLE, # Black with bottom shadow
+    "0518314298a079e4bc75e6f3bcac9a49": 0,  # room inner wall
+    "15fabd41c179cf3aa9ac3ecf25223359": 0,  # chest
+    "226034a0f5698fab4afd1d7a96c5891f": 0,  # wall corner
+    "2835d74f9021cb8458bad2db64fa49b3": 0,  # orb
+    "314064a0530fc6b18c86d30ca1aa931b": 0,  # room inner left wall
+    "43912550e079919efa7315c220c04494": 0,  # deco
+    "4d8bc238ac283d390133fc2fb2bc9021": 0,  # orb (main)
+    "53e5c54dc76968e3fa749ee50e0e0bca": 0,  # room inner left-botton wall
+    "5ba98931ca4d38a01484291566558a7d": 0,  # deco
+    "68036ef3bc5e9049a2724d0487cb7223": 0,  # wall
+    "68ad7d0c447cdda77b3602dc90ef797f": 0,  # wall
+    "701049054a92b6369450c3416b79a8cb": 0,  # wall
+    "a7f29a2db73861dfbabcbd249507b852": 0,  # wall corner
+    "bc68b07877fca2db121b5a2cb8a11f09": 0,  # statue
+    "c04ebe550ee8c80c8651f671fab11aa7": 0,  # pillar
+    "c71ea7f0742daec3694d6f9a4f7b3946": 0,  # room inner right wall
+    "dd4e6bc07262b34b803970ee7b3ded1f": 0,  # room inner wall
+    "dec3c393d694f5678b5c1ecfa9fb4d63": 0,  # room inner wall
+    "eccc0bb68214a51bc137482585206546": 0,  # statue
+    "fcadda9d8e69a0a6c836332663b77d1a": 0,  # room inner right-botton wall
     }
 
 tiles = {}
