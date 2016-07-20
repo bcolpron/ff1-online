@@ -1,0 +1,12 @@
+{
+    "extends": {"x": 3, "y": 3},
+    "initialPosition": {"x": 20, "y": 20},
+    "actions": [
+        {
+            "name": "back",
+            "tiles": [
+                {"x":20, "y": 30}
+            ]
+        }
+    ]
+}
