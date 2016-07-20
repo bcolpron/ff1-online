@@ -54,7 +54,7 @@ Character.prototype.setClass = function(class_) {
         return;
     }
     
-    if (!this.classes.find(function(e) { return e === class_; })) {
+    if (class_.startsWith("chars/") && !this.classes.find(function(e) { return e === class_; })) {
          throw new Error("invalid character class");
     }
     this.class_ = class_;
