@@ -105,7 +105,7 @@ Controller.prototype.move = function() {
                 this.boardShip();
             } else if (this.location.tiles[p.x][p.y] & this.CANOEABLE) {
                 this.boardCanoe();
-            } else if (this.character.class_ === "canoe" && Character.prototype.CHARACTER_TRAITS.isMoveable(p.x, p.y, this.location.tiles)) {
+            } else if (this.character.class_ === "chars/canoe" && Character.prototype.CHARACTER_TRAITS.isMoveable(p.x, p.y, this.location.tiles)) {
                 this.unboardCanoe();
             } else if (this.location.tiles[p.x][p.y] & this.DOCKABLE) {
                 this.unboardShip();
@@ -132,10 +132,10 @@ Controller.prototype.boardShip = function() {
     this.game.enableClassSelectionCallbacks.fire(false);
     this.stopMove();
     this.moveTimer = setTimeout($.proxy(function() {
-        if (this.character.class_ !== "canoe") {
+        if (this.character.class_ !== "chars/canoe") {
             this.characterClass = this.character.class_;
         }
-        this.character.setClass("ship");
+        this.character.setClass("chars/ship");
         this.character.stopMoving();
         this.takeShip();
         this.setMovementSpeed(this.character.traits.speed);
@@ -166,7 +166,7 @@ Controller.prototype.takeShip = function() {
 }
 
 Controller.prototype.putShip = function(x,y) {
-    this.ship = new Character(this.map, "ship", x, y, Character.prototype.RIGHT);
+    this.ship = new Character(this.map, "chars/ship", x, y, Character.prototype.RIGHT);
 }
 
 Controller.prototype.checkForLocationActions = function(x,y) {
@@ -188,16 +188,16 @@ Controller.prototype.checkForLocationActions = function(x,y) {
 Controller.prototype.boardCanoe = function() {
     this.game.enableClassSelectionCallbacks.fire(false);
     
-    if (this.character.class_ === "ship") {
+    if (this.character.class_ === "chars/ship") {
         this.putShip(this.character.position.x, this.character.position.y);
-        this.character.setClass("canoe");
+        this.character.setClass("chars/canoe");
     } else {
         this.characterClass = this.character.class_;
     }
     
     this.stopMove();
     this.moveTimer = setTimeout($.proxy(function() {
-        this.character.setClass("canoe");
+        this.character.setClass("chars/canoe");
         this.character.stopMoving();
         this.setMovementSpeed(this.character.traits.speed);
         this.map.setScrollSpeed(this.character.traits.speed);

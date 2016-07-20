@@ -14,8 +14,9 @@ Character.prototype.UP       = 1;
 Character.prototype.LEFT    = 2;
 Character.prototype.RIGHT  = 3;
 Character.prototype.ANIM    = 4;
-Character.prototype.classes = ["fi", "bb", "th", "wm", "bm", "rm", "kn", "ma", "ni", "ww", "bw", "rw",
-                               "ship", "canoe"];
+Character.prototype.classes = ["chars/fi", "chars/bb", "chars/th", "chars/wm", "chars/bm", "chars/rm",
+                               "chars/kn", "chars/ma", "chars/ni", "chars/ww", "chars/bw", "chars/rw",
+                               "chars/ship", "chars/canoe"];
 
 Character.prototype.WALKABLE = 1;
 Character.prototype.SAILABLE = 4;
@@ -72,9 +73,9 @@ Character.prototype.setClass = function(class_) {
 
     if (Character.prototype.classes.indexOf(class_) < 12) {
         this.traits = this.CHARACTER_TRAITS;
-    } else if (class_ == "ship") {
+    } else if (class_ == "chars/ship") {
         this.traits = this.SHIP_TRAITS;
-    } else if (class_ == "canoe") {
+    } else if (class_ == "chars/canoe") {
         this.traits = this.CANOE_TRAITS;
     }
     
