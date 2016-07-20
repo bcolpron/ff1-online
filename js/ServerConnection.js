@@ -33,7 +33,7 @@ ServerConnection.prototype.onConnect = function(callback) {
 ServerConnection.prototype._onmessage = function(e) {
     var data = JSON.parse(e.data);
     for(var i in data.update) {
-        this.manager.addOrUpdate(data.id, data.update[i]);
+        this.manager.addOrUpdate(data.update[i].id, data.update[i]);
     }
     for(var i in data.removal) {
         this.manager.remove(data.removal[i]);
@@ -41,7 +41,8 @@ ServerConnection.prototype._onmessage = function(e) {
 }
 
 ServerConnection.prototype.send = function(data) {
-    this.ws.send(JSON.stringify({id: this.id, update: [data], removal: [] }));
+    data.id = this.id;
+    this.ws.send(JSON.stringify({update: [data], removal: [] }));
 }
 
 ServerConnection.prototype._onclose = function() {
