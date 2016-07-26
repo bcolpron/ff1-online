@@ -1,6 +1,6 @@
 {
     "extends": {"x": 3, "y": 3},
-    "initialPosition": {"x": 20, "y": 20},
+    "initialPosition": {"x": 20, "y": 30},
     "actions": [
         {
             "name": "back",
