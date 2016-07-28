@@ -56,5 +56,8 @@ KeyboardController.prototype.onkeydown = function(e) {
             this.mask |= this.DOWN;
             this.controller.down();
             break;
+        case 32:
+            this.controller.action();
+            break;
     }
 };

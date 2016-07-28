@@ -2,10 +2,12 @@
 function GameController() {
     this.locationController = null;
     this.enableClassSelectionCallbacks = $.Callbacks();
+    this.enableActionsCallbacks = $.Callbacks();
 
     new KeyboardController(this);
     new Joystick($(".joystick"), this);
     new CharacterPicker(this);
+    new ActionButton(this);
     
     this.map = new Map($("#background"));
     this.manager = new CharacterManager(this.map);
@@ -36,6 +38,9 @@ GameController.prototype.stop = function() {
 GameController.prototype.setClass = function(class_) {
     this.characterClass = class_;
     this.locationController && this.locationController.setClass(class_);
+}
+GameController.prototype.action = function() {
+    this.locationController && this.locationController.action();
 }
 
 GameController.prototype.openCurtains = function() {

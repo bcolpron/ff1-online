@@ -67,13 +67,23 @@ body {
     position: relative;
     margin-left: 10px;
     width: 150;
+    height: 100%;
     float: left;
  }
  .character-picker-button {
-    width: 64px;
-    height: 64px;
+    width: 96px;
+    height: 96px;
     padding-bottom: 10px;
     background-image: url("../images/CharacterPickerButton.png");
+    background-repeat: no-repeat;
+}
+.action-button {
+    width: 96px;
+    height: 96px;
+    position: absolute;
+    bottom: 0px;
+    margin-bottom: 30px;
+    background-image: url("../images/button.png");
     background-repeat: no-repeat;
 }
 .left-border img {

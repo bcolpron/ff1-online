@@ -71,6 +71,9 @@ Controller.prototype.stop = function() {
     this.direction = this.NONE;
 }
 
+Controller.prototype.action = function() {
+}
+
 Controller.prototype.move = function() {
     var p = this.character.getPosition();
     this.character.setTruncated(this.location.tiles[p.x][p.y] & this.DENSE_FOREST);
