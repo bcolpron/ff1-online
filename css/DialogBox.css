@@ -1,0 +1,148 @@
+.glyph {
+  height: 16px;
+  width: 16px;
+  background-image: url('images/font/fontX2.png');
+  background-repeat: no-repeat;
+  background-position: -144px -80px;
+  display: inline-block;
+}
+
+.char-A { background-position:  0px   0px; }
+.char-B { background-position: -16px  0px; }
+.char-C { background-position: -32px  0px; }
+.char-D { background-position: -48px  0px; }
+.char-E { background-position: -64px  0px; }
+.char-F { background-position: -80px  0px; }
+.char-G { background-position: -96px  0px; }
+.char-H { background-position: -112px 0px; }
+.char-I { background-position: -128px 0px; }
+.char-J { background-position: -144px 0px; }
+.char-K { background-position:  0px   -16px; }
+.char-L { background-position: -16px  -16px; }
+.char-M { background-position: -32px  -16px; }
+.char-N { background-position: -48px  -16px; }
+.char-O { background-position: -64px  -16px; }
+.char-P { background-position: -80px  -16px; }
+.char-Q { background-position: -96px  -16px; }
+.char-R { background-position: -112px -16px; }
+.char-S { background-position: -128px -16px; }
+.char-T { background-position: -144px -16px; }
+.char-U { background-position:  0px   -32px }
+.char-V { background-position: -16px  -32px }
+.char-W { background-position: -32px  -32px }
+.char-X { background-position: -48px  -32px }
+.char-Y { background-position: -64px  -32px }
+.char-Z { background-position: -80px  -32px }
+.char-a_lo { background-position: -96px  -32px }
+.char-b_lo { background-position: -112px -32px }
+.char-c_lo { background-position: -128px -32px }
+.char-d_lo { background-position: -144px -32px }
+.char-e_lo { background-position:  0px   -48px }
+.char-f_lo { background-position: -16px  -48px }
+.char-g_lo { background-position: -32px  -48px }
+.char-h_lo { background-position: -48px  -48px }
+.char-i_lo { background-position: -64px  -48px }
+.char-j_lo { background-position: -80px  -48px }
+.char-k_lo { background-position: -96px  -48px }
+.char-l_lo { background-position: -112px -48px }
+.char-m_lo { background-position: -128px -48px }
+.char-n_lo { background-position: -144px -48px }
+.char-o_lo { background-position:  0px   -64px }
+.char-p_lo { background-position: -16px  -64px }
+.char-q_lo { background-position: -32px  -64px }
+.char-r_lo { background-position: -48px  -64px }
+.char-s_lo { background-position: -64px  -64px }
+.char-t_lo { background-position: -80px  -64px }
+.char-u_lo { background-position: -96px  -64px }
+.char-v_lo { background-position: -112px -64px }
+.char-w_lo { background-position: -128px -64px }
+.char-x_lo { background-position: -144px -64px }
+.char-y_lo { background-position:  0px   -80px }
+.char-z_lo { background-position: -16px  -80px }
+.char-period { background-position: -32px  -80px }
+.char-comma { background-position: -48px  -80px }
+.char-ellipsis { background-position: -64px  -80px }
+.char-exclamation { background-position: -80px  -80px }
+.char-apostrophe { background-position: -96px  -80px }
+.char-question { background-position: -112px -80px }
+.char-dash { background-position: -128px -80px }
+.char-unknown { background-position: -144px -80px }
+.char-0 { background-position:  0px   -96px }
+.char-1 { background-position: -16px  -96px }
+.char-2 { background-position: -32px  -96px }
+.char-3 { background-position: -48px  -96px }
+.char-4 { background-position: -64px  -96px }
+.char-5 { background-position: -80px  -96px }
+.char-6 { background-position: -96px  -96px }
+.char-7 { background-position: -112px -96px }
+.char-8 { background-position: -128px -96px }
+.char-9 { background-position: -144px -96px }
+
+.char-whitespace {
+  height: 16px;
+  width: 16px;
+  background: none;
+  display: inline-block;
+}
+
+.dialog-content {
+    background-color: #0000FF;
+    width: 384px;
+    height: 114px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    padding-left: 22px;
+    padding-right: 22px;
+}
+
+.dialogbox {
+    background-color: black;
+    position: absolute;
+    width: 448px;
+    height: 176px;
+    left: 32px;
+    top: 16px;
+    overflow: hidden;
+    transition: height 1000ms;
+    transition-timing-function: linear;
+    display: none;
+}
+.dialogbox>div {
+    background-color: #7F7F7F;
+    width: 444px;
+    height: 168px;
+    position: relative;
+    margin-top: 6px;
+    margin-bottom: 2px;
+    margin-left: 2px;
+    margin-right: 2px;
+    display: inline-block;
+}
+.dialogbox>div>img {
+    position: absolute;
+}
+.dialogbox>div>img.topleft {
+    top: 0px;
+    left: 0px;
+}
+.dialogbox>div>img.topright {
+    top: 0px;
+    right: 0px;
+}
+.dialogbox>div>img.bottomleft {
+    bottom: 0px;
+    left: 0px;
+}
+.dialogbox>div>img.bottomright {
+    bottom: 0px;
+    right: 0px;
+}
+.dialogbox>div>div {
+    border-color: white;
+    border-style: solid;
+    border-width: 2px;
+    width: 428px;
+    height: 152px;
+    margin: 2px;
+    padding: 4px;
+}
