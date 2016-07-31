@@ -72,6 +72,7 @@ Controller.prototype.stop = function() {
 }
 
 Controller.prototype.action = function() {
+    this.game.showDialogBox("__"); 
 }
 
 Controller.prototype.move = function() {

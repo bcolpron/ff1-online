@@ -2,6 +2,9 @@
 function DialogBox(element) {
     this.$element = $(element);
     this.$element.height(20);
+    this._visible = false;
+    this._closing = false;
+    this.dismissedCallbacks = $.Callbacks();
 }
 
 DialogBox.prototype.fontGlyphes = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,_!'?-";
@@ -39,11 +42,22 @@ DialogBox.prototype.show = function(text) {
     this.fillTextBox(this.$element.find("div>div>div"), text);
     this.$element.show();
     this.$element.height(176);
+    this._visible = true;
 }
 
 DialogBox.prototype.hide = function() {
-    this.$element.height(20);
-    setTimeout($.proxy(function() {
-        this.$element.hide();
-    }, this), 1000);
+    if (!this._closing) {
+        this.$element.height(20);
+        this._closing = true;
+        setTimeout($.proxy(function() {
+            this.$element.hide();
+            this._visible = false;
+            this._closing = false;
+            this.dismissedCallbacks.fire();
+        }, this), 1000);
+    }
 };
+
+DialogBox.prototype.isVisible = function() {
+    return this._visible;
+}
