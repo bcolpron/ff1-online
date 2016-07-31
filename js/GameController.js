@@ -8,6 +8,7 @@ function GameController() {
     new Joystick($(".joystick"), this);
     new CharacterPicker(this);
     new ActionButton(this);
+    this.dialogBox = new DialogBox(".dialogbox");
     
     this.map = new Map($("#background"));
     this.manager = new CharacterManager(this.map);

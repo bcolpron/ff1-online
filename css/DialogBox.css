@@ -1,7 +1,7 @@
 .glyph {
   height: 16px;
   width: 16px;
-  background-image: url('images/font/fontX2.png');
+  background-image: url('../images/font/fontX2.png');
   background-repeat: no-repeat;
   background-position: -144px -80px;
   display: inline-block;

@@ -1,6 +1,7 @@
 
 function DialogBox(element) {
     this.$element = $(element);
+    this.$element.height(20);
 }
 
 DialogBox.prototype.fontGlyphes = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,_!'?-";
@@ -34,8 +35,15 @@ DialogBox.prototype.fillTextBox = function(dest, text) {
     }
 }
 
-DialogBox.prototype.dialog = function(text) {
+DialogBox.prototype.show = function(text) {
     this.fillTextBox(this.$element.find("div>div>div"), text);
     this.$element.show();
     this.$element.height(176);
 }
+
+DialogBox.prototype.hide = function() {
+    this.$element.height(20);
+    setTimeout($.proxy(function() {
+        this.$element.hide();
+    }, this), 1000);
+};
