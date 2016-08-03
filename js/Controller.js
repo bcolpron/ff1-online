@@ -19,6 +19,12 @@ function Controller(map, location, character, server, manager, game) {
     }
     
     this.setMovementSpeed(this.character.traits.speed);
+    
+    this.dialogBox = new DialogBox(".dialogbox");
+    this.dialogBox.dismissedCallbacks.add($.proxy(function() {
+        this.game.enableClassSelectionCallbacks.fire(true);
+        this.startMove();
+    }, this));
 };
 
 Controller.prototype.NONE  = 0;
@@ -52,27 +58,53 @@ Controller.prototype.setMovementSpeed = function(speed) {
 }
 
 Controller.prototype.left = function() {
-    this.direction = this.LEFT;
-    this.startMove();
+    if (!this.dialogBox.isVisible()) {
+        this.direction = this.LEFT;
+        this.startMove();
+    }
+    else {
+        this.dialogBox.hide();
+    }
 }
 Controller.prototype.right = function() {
-    this.direction = this.RIGHT;
-    this.startMove();
+    if (!this.dialogBox.isVisible()) {
+        this.direction = this.RIGHT;
+        this.startMove();
+    }
+    else {
+        this.dialogBox.hide();
+    }
 }
 Controller.prototype.up = function() {
-    this.direction = this.UP;
-    this.startMove();
+    if (!this.dialogBox.isVisible()) {
+        this.direction = this.UP;
+        this.startMove();
+    }
+    else {
+        this.dialogBox.hide();
+    }
 }
 Controller.prototype.down = function() {
-    this.direction = this.DOWN;
-    this.startMove();
+    if (!this.dialogBox.isVisible()) {
+        this.direction = this.DOWN;
+        this.startMove();
+    }
+    else {
+        this.dialogBox.hide();
+    }
 }
 Controller.prototype.stop = function() {
     this.direction = this.NONE;
 }
 
 Controller.prototype.action = function() {
-    this.game.showDialogBox("__"); 
+    if (this.dialogBox.isVisible()) {
+        this.dialogBox.hide();
+    } else {
+        this.dialogBox.show("__");
+        this.stopMove();
+        this.game.enableClassSelectionCallbacks.fire(false);
+    }
 }
 
 Controller.prototype.move = function() {

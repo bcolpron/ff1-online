@@ -3,7 +3,7 @@ function DialogBox(element) {
     this.$element = $(element);
     this.$element.height(20);
     this._visible = false;
-    this._closing = false;
+    this._animating = false;
     this.dismissedCallbacks = $.Callbacks();
 }
 
@@ -43,16 +43,20 @@ DialogBox.prototype.show = function(text) {
     this.$element.show();
     this.$element.height(176);
     this._visible = true;
+    this._animating = true;
+    setTimeout($.proxy(function() {
+        this._animating = false;
+    }, this), 1000);
 }
 
 DialogBox.prototype.hide = function() {
-    if (!this._closing) {
+    if (!this._animating && this._visible) {
         this.$element.height(20);
-        this._closing = true;
+        this._animating = true;
         setTimeout($.proxy(function() {
             this.$element.hide();
             this._visible = false;
-            this._closing = false;
+            this._animating = false;
             this.dismissedCallbacks.fire();
         }, this), 1000);
     }

@@ -9,11 +9,6 @@ function GameController() {
     new CharacterPicker(this);
     new ActionButton(this);
     
-    this.dialogBox = new DialogBox(".dialogbox");
-    this.dialogBox.dismissedCallbacks.add($.proxy(function() {
-        this.enableClassSelectionCallbacks.fire(true);
-    }, this));
-    
     this.map = new Map($("#background"));
     this.manager = new CharacterManager(this.map);
     
@@ -26,24 +21,16 @@ function GameController() {
 };
 
 GameController.prototype.left = function() {
-    if (this.locationController && !this.dialogBox.isVisible()) {
-        this.locationController.left();
-    }
+    this.locationController && this.locationController.left();
 }
 GameController.prototype.right = function() {
-    if (this.locationController && !this.dialogBox.isVisible()) {
-        this.locationController.right();
-    }
+    this.locationController && this.locationController.right();
 }
 GameController.prototype.up = function() {
-    if (this.locationController && !this.dialogBox.isVisible()) {
-        this.locationController.up();
-    }
+    this.locationController && this.locationController.up();
 }
 GameController.prototype.down = function() {
-    if (this.locationController && !this.dialogBox.isVisible()) {
-        this.locationController.down();
-    }
+    this.locationController && this.locationController.down();
 }
 GameController.prototype.stop = function() {
     this.locationController && this.locationController.stop();
@@ -53,18 +40,7 @@ GameController.prototype.setClass = function(class_) {
     this.locationController && this.locationController.setClass(class_);
 }
 GameController.prototype.action = function() {
-    if (this.locationController && !this.dismissDialog()) {
-        this.locationController.stop();
-        this.locationController.action();
-    }
-}
-
-GameController.prototype.dismissDialog = function() {
-    if (this.dialogBox.isVisible()) {
-        this.dialogBox.hide();
-        return true;
-    }
-    return false;
+    this.locationController && this.locationController.action();
 }
 
 GameController.prototype.openCurtains = function() {
@@ -132,9 +108,4 @@ GameController.prototype.warpBack = function() {
     if (loc) {
         this.warpTo(loc.name, loc.position);
     }
-}
-
-GameController.prototype.showDialogBox = function(text) {
-    this.dialogBox.show(text);
-    this.enableClassSelectionCallbacks.fire(false);
 }
