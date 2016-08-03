@@ -102,6 +102,7 @@ Controller.prototype.action = function() {
         this.dialogBox.hide();
     } else {
         this.dialogBox.show("__");
+        this.character.stopMoving();
         this.stopMove();
         this.game.enableClassSelectionCallbacks.fire(false);
     }
