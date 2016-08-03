@@ -217,6 +217,63 @@ terrains = {
     "dec3c393d694f5678b5c1ecfa9fb4d63": 0,  # room inner wall
     "eccc0bb68214a51bc137482585206546": 0,  # statue
     "fcadda9d8e69a0a6c836332663b77d1a": 0,  # room inner right-botton wall
+
+    # Coneria castle
+    "0a97486ad18167a551525d31fe5ab31f": 0, #
+    "1fb5f3948bca05e8db0b9b68adbc651a": WALKABLE, # grass
+    "2385b25acb9e130de364d66fb03a5b80": WALKABLE, # room floor
+    "317d46637aa1b9a36d57c54f23bd596e": 0, #
+    "36fa5224c520be76dd8e848e50b84f7e": 0, #
+    "3cfac331a81820eb70f5ba9eda38d743": 0, #
+    "4060f3f4cae0784525779824f6636cca": 0, # left wall
+    "422dd133c374ed15a63b8ba5073af11f": 0, # botton right corner
+    "4231a9701b4e3310b5cbf64b12ae5760": 0, #
+    "528262f739e835608354d75e3312c232": 0, # bottom left corner
+    "59c3f36bc139ab5992c2ba44b88f9bf2": 0, #
+    "5a9c5a19871306ce732d4552c2fc2099": WALKABLE, # floor
+    "5daa5ec53d4896414796a04947ef8491": 0, # right wall
+    "5f49e391f38bd4fd7cb4ab99c7589d81": 0, #
+    "60c242411ab6536590c58d20ed755992": 0, #
+    "67a0b0f669191ae2cd9abdcfeeb293c1": WALKABLE, # bottom wall
+    "6953c200bf427ad907ae2e987e163097": WALKABLE, #  stair
+    "7ff10486fecd7941e9bcfd70fbab3c9d": WALKABLE, # DOOR
+    "89e61eb6005bbef838f9ba3e7b7b4dc0": 0, #
+    "9d0368d14abbd925d9fe3aa83aa63fad": 0, #
+    "9e2b06d9a4b12e60290178c5a288ebcf": 0, #
+    "a1c47e30d568c9681e635ddc94ef549f": 0, #
+    "a96944d7570c776710ec11b4562bf086": 0, #
+    "aa6669326110c5b381a40f2bf94e233c": 0, #
+    "cb2bc8001fdab32e360662c69683a9b2": 0, #
+    "e23f39351b588f0204ed6df0c067af0c": 0, #
+    "e505ed0bc7077991a43c7da0aac92d6a": 0, #
+    "e71d7d210651a6360d2a3a1130ca6450": 0, #
+    "e9bd267eba052e60340bb775e78d6180": 0, #
+    "064aaa7e1a7037cc089371998aabaf1b": 0, #
+    "124565ab3b302a896a630d55bda81da0": 0, #
+    "17b2a7a3283b53eb88dcf58adb6a3429": 0, #
+    "1b683e715a7bb6d20bf860b7e8ce493b": WALKABLE, # bottom wall
+    "267b70d39f1de3380c8fdb38d5c1c273": 0, #
+    "2fad981d341b9120b6361218fc2fdb00": 0, #
+    "3146317b75452304e2fef2614351b957": 0, #
+    "3eb2fcf3bbdfde6c486fa50c6de50887": WALKABLE, # door
+    "43159292b5b196e30e97422bbefcf641": 0, #
+    "50e3becfc1c49ddce07d567878a1e480": 0, #
+    "5d634476e6cea54c0b3e2057c732048d": 0, #
+    "6396a8b70e735b501f43ff85e741e9d4": 0, #
+    "70cccac7000bc67aeffc6f73a0dd4000": 0, #
+    "79129fc6c14ea85c1e101ff9832514a0": 0, #
+    "829268f6961ed6094650c3aec7826f72": 0, # right wall
+    "8c0682c9162d2aa91a1935047be3b08a": 0, #
+    "9ebec53c5d86aa1fa0e46837f6d6957d": 0, # bottom left corner
+    "a44ba26713085829053a0c80027a04c1": 0, #
+    "c52a1d96b81e7ddcbde17b657b8d50fa": 0, # left wall
+    "c7f5a25d655b5eefab3e5f06a4f101b2": 0, #
+    "c8676e8e77035a7b1fff859972c8e4cf": 0, #
+    "cbd595a9aba3065a844faf3399ef3fa1": 0, #
+    "d500acf0a20b7284955785bea15f11d9": WALKABLE, # floor
+    "d7c23bcdfb05a56e3d801236bd9c0f79": 0, #
+    "d915772a0f17fd1ad58ba44b250b2e79": WALKABLE, # stair
+    "fcc9352af41567f1a3432fa23f86d789": 0, #
     }
 
 tiles = {}
