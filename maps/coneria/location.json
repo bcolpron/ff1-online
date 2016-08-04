@@ -10,5 +10,14 @@
                 {"x":18, "y": 1}
             ]
         }
+    ],
+    "actionTargets": [
+        {
+            "name": "talk",
+            "text": "This is a well. You\nmight think that there\nis something to it__\nBut in fact it is just\n an ordinary well.",
+            "tiles": [
+                {"x":4, "y": 15}
+            ]
+        }
     ]
 }
