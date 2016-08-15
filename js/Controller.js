@@ -1,16 +1,17 @@
-function Controller(map, location, character, server, manager, game) {
+function Controller(map, location, character, manager, game) {
     this.game = game;
     this.location = location;
     this.map = map;
     this.character = character;
-    this.server = server;
     this.manager = manager;
     this.direction = this.NONE;
     this.moveTimer = null;
 
-    server.onConnect(function() {
-        server.send(character.dump());
-    });
+    var protocol = location.protocol === "https:" ? "wss" : "ws";
+    this.server = new ServerConnection(protocol + "://" + window.location.host + "/" + window.location.pathname + "/ws/?location=" + location.name, guid(), this.manager);
+    this.server.onConnect($.proxy(function() {
+        this.server.send(character.dump());
+    }, this));
     
     map.setPosition(character.position.x - 7, character.position.y - 7);
     
@@ -212,7 +213,7 @@ Controller.prototype.checkForLocationActions = function(x,y) {
             _.forEach(action.tiles, $.proxy(function(tile) {
                 if (x == tile.x && y == tile.y) {
                     if (action.name === "warp") {
-                        this.game.warpTo(action.to);
+                        this.game.warp(action.to);
                     } else if (action.name === "back") {
                         this.game.warpBack();
                     }
@@ -252,3 +253,6 @@ Controller.prototype.unboardCanoe = function() {
     this.startMove();
 }
 
+Controller.prototype.close = function() {
+    this.server.close();
+}

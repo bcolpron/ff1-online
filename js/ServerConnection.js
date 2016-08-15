@@ -1,6 +1,7 @@
 function ServerConnection(url, id, manager) {
     this.url = url;
     this.id = id;
+    this.closing = false;
     this.manager = manager;
     this._onConnectCallback = function() {};
     this.connect();
@@ -25,7 +26,7 @@ ServerConnection.prototype._onopen = function() {
 
 ServerConnection.prototype.onConnect = function(callback) {
     this._onConnectCallback = callback;
-    if (this.ws.readyState === this.ws.OPEN) {
+    if (this.ws && this.ws.readyState === this.ws.OPEN) {
         callback();
     }
 }
@@ -42,14 +43,24 @@ ServerConnection.prototype._onmessage = function(e) {
 
 ServerConnection.prototype.send = function(data) {
     data.id = this.id;
-    this.ws.send(JSON.stringify({update: [data], removal: [] }));
+    if (this.ws) {
+        this.ws.send(JSON.stringify({update: [data], removal: [] }));
+    }
 }
 
 ServerConnection.prototype._onclose = function() {
+    if (this.closing) return;
     console.log("connection closed. Reconnecting...")
     $(".status").text("Disconnected");
-    var that = this;
-    setTimeout(function() {
-        that.connect();
-    }, 1000);
+    setTimeout($.proxy(function() {
+        this.connect();
+    }, this), 1000);
+}
+
+ServerConnection.prototype.close = function() {
+    this.closing = true;
+    if (this.ws) {
+        this.ws.close();
+        this.ws = null;
+    }
 }

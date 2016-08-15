@@ -12,10 +12,8 @@ function GameController() {
     this.map = new Map($("#background"));
     this.manager = new CharacterManager(this.map);
     
-    var protocol = location.protocol === "https:" ? "wss" : "ws";
-    this.serverConnection = new ServerConnection(protocol + "://" + window.location.host + "/" + window.location.pathname + "/ws/foobar", guid(), this.manager);
-    
     this.setClass(Character.prototype.classes[Math.floor(Math.random() * 12)]);
+    
     
     this.locationStack = [];
 };
@@ -57,19 +55,21 @@ GameController.prototype.closeCurtains = function() {
     return closed;
 }
 
-GameController.prototype.warpTo = function(name, position) {
+GameController.prototype.warp = function(name, position, stack) {
+    this.warpTo(name, null, true);
+}
+
+GameController.prototype.warpTo = function(name, position, stack) {
     this.enableClassSelectionCallbacks.fire(false);
-    if (this.locationController) {
-        this.locationController.stop();
-        this.locationController = null;
-        
+    this.locationController.stop();
+    this.locationController.close();
+    this.locationController = null;
+
+    if (stack) {
         this.locationStack.push({name: this.location.name, position: this.character.getPosition()});
-        
-        setTimeout($.proxy(this.closeCurtainsAndLoadLocation, this, name, position), 267/this.character.traits.speed);
-    } else {
-        this.closeCurtainsAndLoadLocation(name, position);
     }
-    return this.location;
+    
+    setTimeout($.proxy(this.closeCurtainsAndLoadLocation, this, name, position), 267/this.character.traits.speed);
 }
 
 GameController.prototype.loadLocation = function(name, position) {
@@ -81,7 +81,7 @@ GameController.prototype.doLoadLocation = function(name, position) {
     this.map.setLocation(this.location);
     var startPos = position || this.location.data.initialPosition;
     this.character = new Character(this.map, this.characterClass, startPos.x, startPos.y);
-    this.locationController = new Controller(this.map, this.location, this.character, this.serverConnection, this.manager, this); 
+    this.locationController = new Controller(this.map, this.location, this.character, this.manager, this); 
 
     $.when(whenAllImagesLoaded()).then($.proxy(function() {
         this.openCurtains();
@@ -106,6 +106,6 @@ GameController.prototype.closeCurtainsAndLoadLocation = function(name, position)
 GameController.prototype.warpBack = function() {
     var loc = this.locationStack.pop();
     if (loc) {
-        this.warpTo(loc.name, loc.position);
+        this.warpTo(loc.name, loc.position, false);
     }
 }
