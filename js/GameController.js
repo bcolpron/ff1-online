@@ -44,6 +44,11 @@ GameController.prototype.action = function() {
 GameController.prototype.openCurtains = function() {
     $(".loading-box").hide();
     $(".curtain").height(0);
+    var done = $.Deferred();
+    setTimeout(function() {
+        done.resolve();
+    }, 1000);
+    return done;
 }
 
 GameController.prototype.closeCurtains = function() {
@@ -81,12 +86,14 @@ GameController.prototype.doLoadLocation = function(name, position) {
     this.map.setLocation(this.location);
     var startPos = position || this.location.data.initialPosition;
     this.character = new Character(this.map, this.characterClass, startPos.x, startPos.y);
-    this.locationController = new Controller(this.map, this.location, this.character, this.manager, this); 
+    var loc = new Controller(this.map, this.location, this.character, this.manager, this); 
 
     $.when(whenAllImagesLoaded()).then($.proxy(function() {
-        this.openCurtains();
-        this.enableClassSelectionCallbacks.fire(true);
-        setTimeout($.proxy(this.map.setScrollSpeed, this.map, 1), 0);
+        $.when(this.openCurtains()).then($.proxy(function () {
+            this.enableClassSelectionCallbacks.fire(true);
+            setTimeout($.proxy(this.map.setScrollSpeed, this.map, 1), 0);
+            this.locationController = loc;
+        }, this));
     }, this));
 }
 
@@ -107,5 +114,8 @@ GameController.prototype.warpBack = function() {
     var loc = this.locationStack.pop();
     if (loc) {
         this.warpTo(loc.name, loc.position, false);
+    }
+    else {
+        throw new Error("no previous location");
     }
 }
