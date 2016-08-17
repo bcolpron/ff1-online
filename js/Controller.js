@@ -7,7 +7,7 @@ function Controller(map, location, character, manager, game) {
     this.direction = this.NONE;
     this.moveTimer = null;
 
-    var protocol = location.protocol === "https:" ? "wss" : "ws";
+    var protocol = window.location.protocol === "https:" ? "wss" : "ws";
     this.server = new ServerConnection(protocol + "://" + window.location.host + "/" + window.location.pathname + "/ws/?location=" + location.name, guid(), this.manager);
     this.server.onConnect($.proxy(function() {
         this.server.send(character.dump());
