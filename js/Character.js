@@ -145,3 +145,16 @@ Character.prototype.update = function(dump) {
 Character.prototype.setTruncated = function(value) {
     this.sprites.height(value ? 16 : 32);
 }
+
+Character.prototype.getTargetPosition = function() {
+    switch(this.direction  & 0x3) {
+        case this.UP:
+            return {x: this.position.x, y: this.position.y - 1};
+        case this.DOWN:
+            return {x: this.position.x, y: this.position.y + 1};
+        case this.LEFT:
+            return {x: this.position.x - 1, y: this.position.y};
+        case this.RIGHT:
+            return {x: this.position.x + 1, y: this.position.y};
+    }
+}

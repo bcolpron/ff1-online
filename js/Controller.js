@@ -102,11 +102,31 @@ Controller.prototype.action = function() {
     if (this.dialogBox.isVisible()) {
         this.dialogBox.hide();
     } else {
-        this.dialogBox.show("__");
-        this.character.stopMoving();
-        this.stopMove();
-        this.game.enableClassSelectionCallbacks.fire(false);
+        var action = this.findActionTarget(this.character.getTargetPosition())
+        if (action && action.name == "talk") {
+            this.showDialog(action.text);
+        } else {
+            this.showDialog("Nothing here.");
+        }
     }
+}
+
+Controller.prototype.findActionTarget = function(pos) {
+    if (this.location.data.actionTargets) {
+        return _.find(this.location.data.actionTargets, function(action) {
+            return _.find(action.tiles, function(tile) {
+                return (pos.x == tile.x && pos.y == tile.y);
+            }) !== undefined;
+        });
+    }
+    return null;
+}
+
+Controller.prototype.showDialog = function(msg) {
+    this.dialogBox.show(msg);
+    this.character.stopMoving();
+    this.stopMove();
+    this.game.enableClassSelectionCallbacks.fire(false);
 }
 
 Controller.prototype.move = function() {
