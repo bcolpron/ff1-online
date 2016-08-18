@@ -13,7 +13,7 @@ ServerConnection.prototype.connect = function() {
 
     this.ws.onopen = $.proxy(this._onopen, this);
     this.ws.onclose = $.proxy(this._onclose, this);
-    this.ws.onerror = function(e) {console.error("ws error: " + e);};
+    this.ws.onerror = function(e) {console.error("ws error");};
     this.ws.onmessage = $.proxy(this._onmessage, this);
 }
 
@@ -44,7 +44,11 @@ ServerConnection.prototype._onmessage = function(e) {
 ServerConnection.prototype.send = function(data) {
     data.id = this.id;
     if (this.ws) {
-        this.ws.send(JSON.stringify({update: [data], removal: [] }));
+        try {
+            this.ws.send(JSON.stringify({update: [data], removal: [] }));
+        } catch (e) {
+            console.error("failed to send update to server: " + e.message);
+        }
     }
 }
 
