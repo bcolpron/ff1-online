@@ -112,7 +112,10 @@ Controller.prototype.action = function() {
 }
 
 Controller.prototype.findActionTarget = function(pos) {
-    if (this.location.data.actionTargets) {
+    if (this.manager.findCharacterAt(pos.x, pos.y)) {
+        return {name: "talk", text: "I am a bot. Please don't\nstand in my way."};
+    }
+    else if (this.location.data.actionTargets) {
         return _.find(this.location.data.actionTargets, function(action) {
             return _.find(action.tiles, function(tile) {
                 return (pos.x == tile.x && pos.y == tile.y);

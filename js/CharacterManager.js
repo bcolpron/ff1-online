@@ -36,3 +36,9 @@ CharacterManager.prototype.isFree = function(x, y) {
     }
     return true;
 }
+
+CharacterManager.prototype.findCharacterAt = function(x, y) {
+    return _.find(this.characters, function(c) {
+        return (c.position.x == x && c.position.y == y);
+    });
+}
