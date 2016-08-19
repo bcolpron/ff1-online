@@ -46,7 +46,7 @@ DialogBox.prototype.show = function(text) {
     this._animating = true;
     setTimeout($.proxy(function() {
         this._animating = false;
-    }, this), 1000);
+    }, this), 800);
 }
 
 DialogBox.prototype.hide = function() {
@@ -58,7 +58,7 @@ DialogBox.prototype.hide = function() {
             this._visible = false;
             this._animating = false;
             this.dismissedCallbacks.fire();
-        }, this), 1000);
+        }, this), 800);
     }
 };
 
