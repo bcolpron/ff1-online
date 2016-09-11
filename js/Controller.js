@@ -196,7 +196,7 @@ Controller.prototype.boardShip = function() {
         if (this.character.class_ !== "chars/canoe") {
             this.characterClass = this.character.class_;
         }
-        this.character.setClass("chars/ship");
+        this.setClass("chars/ship");
         this.character.stopMoving();
         this.takeShip();
         this.setMovementSpeed(this.character.traits.speed);
@@ -208,7 +208,7 @@ Controller.prototype.boardShip = function() {
 
 Controller.prototype.unboardShip = function() {
     this.stopMove();
-    this.character.setClass(this.characterClass);
+    this.setClass(this.characterClass);
     this.putShip(this.character.position.x, this.character.position.y);
     this.map.setScrollSpeed(this.character.traits.speed);
     this.game.enableClassSelectionCallbacks.fire(true);
@@ -251,14 +251,14 @@ Controller.prototype.boardCanoe = function() {
     
     if (this.character.class_ === "chars/ship") {
         this.putShip(this.character.position.x, this.character.position.y);
-        this.character.setClass("chars/canoe");
+        this.setClass("chars/canoe");
     } else {
         this.characterClass = this.character.class_;
     }
     
     this.stopMove();
     this.moveTimer = setTimeout($.proxy(function() {
-        this.character.setClass("chars/canoe");
+        this.setClass("chars/canoe");
         this.character.stopMoving();
         this.setMovementSpeed(this.character.traits.speed);
         this.map.setScrollSpeed(this.character.traits.speed);
@@ -269,7 +269,7 @@ Controller.prototype.boardCanoe = function() {
 
 Controller.prototype.unboardCanoe = function() {
     this.stopMove();
-    this.character.setClass(this.characterClass);
+    this.setClass(this.characterClass);
     this.map.setScrollSpeed(this.character.traits.speed);
     this.game.enableClassSelectionCallbacks.fire(true);
     this.setMovementSpeed(this.character.traits.speed);
