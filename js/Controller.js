@@ -198,7 +198,7 @@ Controller.prototype.boardShip = function() {
         }
         this.setClass("chars/ship");
         this.character.stopMoving();
-        this.takeShip();
+        this.removeShip();
         this.setMovementSpeed(this.character.traits.speed);
         this.map.setScrollSpeed(this.character.traits.speed);
         this.moveTimer = null;
@@ -221,7 +221,7 @@ Controller.prototype.setClass = function(class_) {
     this.server.send(this.character.dump());
 }
 
-Controller.prototype.takeShip = function() {
+Controller.prototype.removeShip = function() {
     this.ship.remove();
     this.ship = null;
 }
@@ -278,4 +278,7 @@ Controller.prototype.unboardCanoe = function() {
 
 Controller.prototype.close = function() {
     this.server.close();
+    if (this.ship) {
+        this.removeShip();
+    }
 }
